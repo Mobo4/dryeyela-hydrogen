@@ -1,14 +1,14 @@
 import clsx from 'clsx';
-import {flattenConnection, Image, Money, useMoney} from '@shopify/hydrogen';
-import type {MoneyV2, Product} from '@shopify/hydrogen/storefront-api-types';
+import { flattenConnection, Image, Money, useMoney } from '@shopify/hydrogen';
+import type { MoneyV2, Product } from '@shopify/hydrogen/storefront-api-types';
 
-import type {ProductCardFragment} from 'storefrontapi.generated';
-import {Text} from '~/components/Text';
-import {Link} from '~/components/Link';
-import {Button} from '~/components/Button';
-import {AddToCartButton} from '~/components/AddToCartButton';
-import {isDiscounted, isNewArrival} from '~/lib/utils';
-import {getProductPlaceholder} from '~/lib/placeholders';
+import type { ProductCardFragment } from 'storefrontapi.generated';
+import { Text } from '~/components/Text';
+import { Link } from '~/components/Link';
+import { Button } from '~/components/Button';
+import { AddToCartButton } from '~/components/AddToCartButton';
+import { isDiscounted, isNewArrival } from '~/lib/utils';
+import { getProductPlaceholder } from '~/lib/placeholders';
 
 export function ProductCard({
   product,
@@ -35,7 +35,7 @@ export function ProductCard({
   const firstVariant = flattenConnection(cardProduct.variants)[0];
 
   if (!firstVariant) return null;
-  const {image, price, compareAtPrice} = firstVariant;
+  const { image, price, compareAtPrice } = firstVariant;
 
   if (label) {
     cardLabel = label;
@@ -52,11 +52,11 @@ export function ProductCard({
         to={`/products/${product.handle}`}
         prefetch="viewport"
       >
-        <div className={clsx('grid gap-4', className)}>
-          <div className="card-image aspect-[4/5] bg-primary/5">
+        <div className={clsx('grid gap-4 group', className)}>
+          <div className="card-image aspect-[4/5] bg-besilos-cream/30 rounded-2xl overflow-hidden relative transition-all duration-300 group-hover:shadow-lg group-hover:shadow-besilos-sage/10 box-border border border-transparent group-hover:border-besilos-sage/20">
             {image && (
               <Image
-                className="object-cover w-full fadeIn"
+                className="object-cover w-full h-full fadeIn transition-transform duration-700 group-hover:scale-105"
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
                 aspectRatio="4/5"
                 data={image}
@@ -74,17 +74,17 @@ export function ProductCard({
           </div>
           <div className="grid gap-1">
             <Text
-              className="w-full overflow-hidden whitespace-nowrap text-ellipsis "
+              className="w-full overflow-hidden whitespace-nowrap text-ellipsis font-serif text-besilos-navy text-lg group-hover:text-besilos-sage transition-colors"
               as="h3"
             >
               {product.title}
             </Text>
             <div className="flex gap-4">
-              <Text className="flex gap-4">
+              <Text className="flex gap-4 font-medium text-besilos-navy/80">
                 <Money withoutTrailingZeros data={price!} />
                 {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
-                    className={'opacity-50'}
+                    className={'text-besilos-navy/40'}
                     data={compareAtPrice as MoneyV2}
                   />
                 )}
@@ -97,16 +97,13 @@ export function ProductCard({
         <AddToCartButton
           lines={[
             {
-              quantity: 1,
               merchandiseId: firstVariant.id,
+              quantity: 1,
             },
           ]}
-          variant="secondary"
-          className="mt-2"
+          className="w-full mt-3 bg-besilos-primary text-white hover:bg-besilos-primary/90 font-medium py-2 rounded-lg transition-colors shadow-sm"
         >
-          <Text as="span" className="flex items-center justify-center gap-2">
-            Add to Cart
-          </Text>
+          Add to Bag
         </AddToCartButton>
       )}
       {quickAdd && !firstVariant.availableForSale && (
@@ -127,7 +124,7 @@ function CompareAtPrice({
   data: MoneyV2;
   className?: string;
 }) {
-  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} =
+  const { currencyNarrowSymbol, withoutTrailingZerosAndCurrency } =
     useMoney(data);
 
   const styles = clsx('strike', className);

@@ -2,43 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tokens */
+/* Tokens - Besilos "Premium Soft" Aesthetic */
 :root {
-  --color-primary: 20 20 20; /* Text, buttons, etc. */
-  --color-contrast: 250 250 249; /* Backgrounds, borders, etc. */
-  --color-accent: 191 72 0; /* Labels like "On sale" */
-  --font-size-fine: 0.75rem; /* text-xs */
-  --font-size-copy: 1rem; /* text-base */
-  --font-size-lead: 1.125rem; /* text-lg */
-  --font-size-heading: 2rem; /* text-2xl */
-  --font-size-display: 3rem; /* text-4xl */
+  /* Core colors - Navy/Cream palette */
+  --color-primary: 44 62 80;
+  /* #2C3E50 - Dark Navy (text) */
+  --color-contrast: 249 249 247;
+  /* #F9F9F7 - Warm Cream (bg) */
+  --color-accent: 168 188 161;
+  /* #A8BCA1 - Sage Green */
+
+  /* Typography */
+  --font-size-fine: 0.75rem;
+  --font-size-copy: 1rem;
+  --font-size-lead: 1.125rem;
+  --font-size-heading: 2rem;
+  --font-size-display: 3rem;
+
+  /* Shop Pay */
   --color-shop-pay: #5a31f4;
-  --shop-pay-button--width: 100%; /* Sets the width for the shop-pay-button web component */
+  --shop-pay-button--width: 100%;
+
+  /* Layout */
   --height-nav: 3rem;
   --screen-height: 100vh;
   --screen-height-dynamic: 100vh;
+  --radius: 0.75rem;
 
   @media (min-width: 32em) {
     --height-nav: 4rem;
   }
+
   @media (min-width: 48em) {
     --height-nav: 6rem;
-    --font-size-heading: 2.25rem; /* text-4xl */
-    --font-size-display: 3.75rem; /* text-6xl */
+    --font-size-heading: 2.25rem;
+    --font-size-display: 3.75rem;
   }
+
   @supports (height: 100svh) {
     --screen-height: 100svh;
   }
+
   @supports (height: 100dvh) {
     --screen-height-dynamic: 100dvh;
   }
 }
 
+/* Dark mode - inverted Besilos */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-primary: 250 250 250;
-    --color-contrast: 32 33 36;
-    --color-accent: 235 86 40;
+    --color-primary: 249 249 247;
+    /* Cream text */
+    --color-contrast: 44 62 80;
+    /* Navy background */
+    --color-accent: 168 188 161;
+    /* Sage stays */
   }
 }
 
@@ -46,6 +64,7 @@
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -90,6 +109,7 @@ shop-pay-button {
   }
 
   .prose {
+
     h1,
     h2,
     h3,
@@ -105,6 +125,7 @@ shop-pay-button {
 
 @layer components {
   .article {
+
     h2,
     h3,
     h4,
@@ -112,12 +133,15 @@ shop-pay-button {
     h6 {
       @apply font-sans text-primary;
     }
+
     @apply prose mx-auto mb-12 grid justify-center font-serif text-primary;
+
     p,
     ul,
     li {
       @apply mb-4 text-lg;
     }
+
     img {
       @apply md:-mx-8 lg:-mx-16;
 
@@ -125,6 +149,7 @@ shop-pay-button {
         width: calc(100% + 4rem);
         max-width: 100vw;
       }
+
       @media (min-width: 64em) {
         width: calc(100% + 8rem);
       }
@@ -144,6 +169,7 @@ shop-pay-button {
 
   .hiddenScroll {
     scrollbar-width: none;
+
     &::-webkit-scrollbar {
       display: none;
     }
@@ -155,6 +181,7 @@ shop-pay-button {
 
   .strike {
     position: relative;
+
     &::before {
       content: '';
       display: block;
@@ -171,10 +198,12 @@ shop-pay-button {
 
   .card-image {
     @apply relative flex items-center justify-center overflow-clip rounded;
+
     &::before {
       content: ' ';
       @apply absolute top-0 left-0 z-10 block h-full w-full rounded shadow-border;
     }
+
     img {
       @apply aspect-[inherit] w-full object-cover;
     }

@@ -1,6 +1,6 @@
-import type {HomepageFeaturedProductsQuery} from 'storefrontapi.generated';
-import {Section} from '~/components/Text';
-import {ProductCard} from '~/components/ProductCard';
+import type { HomepageFeaturedProductsQuery } from 'storefrontapi.generated';
+import { Section } from '~/components/Text';
+import { ProductCard } from '~/components/ProductCard';
 
 const mockProducts = {
   nodes: new Array(12).fill(''),
@@ -18,13 +18,14 @@ export function ProductSwimlane({
   ...props
 }: ProductSwimlaneProps) {
   return (
-    <Section heading={title} padding="y" {...props}>
+    <Section heading={title} padding="y" className="bg-besilos-frame/30" headingClassName="text-besilos-sage font-bold text-3xl mb-8" {...props}>
       <div className="swimlane hiddenScroll md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
         {products.nodes.map((product) => (
           <ProductCard
             product={product}
             key={product.id}
             className="snap-start w-80"
+            quickAdd={true}
           />
         ))}
       </div>

@@ -13,14 +13,21 @@ import {
 } from '@shopify/hydrogen';
 
 import {Grid} from '~/components/Grid';
-import {Heading, PageHeader, Section} from '~/components/Text';
+import {Heading, Section} from '~/components/Text';
 import {Link} from '~/components/Link';
 import {Button} from '~/components/Button';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders} from '~/data/cache';
+import {
+  HeroSection,
+  TrustBadgesSection,
+  CTASection,
+  CategoryCardsSection,
+} from '~/components/sections';
+import {SHOP_CATEGORIES, SYMPTOMS} from '~/data/navigation';
 
-const PAGINATION_SIZE = 4;
+const PAGINATION_SIZE = 12;
 
 export const headers = routeHeaders;
 
@@ -52,39 +59,110 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function Collections() {
   const {collections} = useLoaderData<typeof loader>();
 
+  // Category cards for quick navigation
+  const categoryCards = SHOP_CATEGORIES.map((cat) => ({
+    title: cat.title,
+    description: cat.description,
+    handle: cat.handle,
+    to: `/collections/${cat.handle}`,
+    keywords: cat.keywords.slice(0, 3),
+  }));
+
+  // Symptom cards for symptom-based shopping
+  const symptomCards = SYMPTOMS.slice(0, 3).map((symptom) => ({
+    title: symptom.title,
+    description: symptom.description,
+    handle: symptom.handle,
+    to: `/collections/${symptom.handle}`,
+    keywords: symptom.keywords.slice(0, 2),
+  }));
+
   return (
     <>
-      <PageHeader heading="Collections" />
-      <Section>
-        <Pagination connection={collections}>
-          {({nodes, isLoading, PreviousLink, NextLink}) => (
-            <>
-              <div className="flex items-center justify-center mb-6">
-                <Button as={PreviousLink} variant="secondary" width="full">
-                  {isLoading ? 'Loading...' : 'Previous collections'}
-                </Button>
-              </div>
-              <Grid
-                items={nodes.length === 3 ? 3 : 2}
-                data-test="collection-grid"
-              >
-                {nodes.map((collection, i) => (
-                  <CollectionCard
-                    collection={collection as Collection}
-                    key={collection.id}
-                    loading={getImageLoadingPriority(i, 2)}
-                  />
-                ))}
-              </Grid>
-              <div className="flex items-center justify-center mt-6">
-                <Button as={NextLink} variant="secondary" width="full">
-                  {isLoading ? 'Loading...' : 'Next collections'}
-                </Button>
-              </div>
-            </>
-          )}
-        </Pagination>
+      {/* Hero Section */}
+      <HeroSection
+        title="Shop All Collections"
+        description="Browse our complete selection of doctor-recommended dry eye products. From eye drops to supplements, we have everything you need for lasting relief."
+        variant="secondary"
+        breadcrumbs={[
+          {label: 'Home', to: '/'},
+          {label: 'Collections'},
+        ]}
+      />
+
+      {/* Trust Badges - Compact */}
+      <TrustBadgesSection variant="compact" />
+
+      {/* Shop by Category */}
+      <CategoryCardsSection
+        title="Shop by Category"
+        description="Find exactly what you need for your dry eye treatment"
+        cards={categoryCards}
+        columns={3}
+      />
+
+      {/* Shop by Symptom */}
+      <CategoryCardsSection
+        title="Shop by Symptom"
+        description="Not sure what you need? Start with your symptoms"
+        cards={symptomCards}
+        columns={3}
+        className="bg-besilos-cream/50"
+      />
+
+      {/* All Collections from Shopify */}
+      <Section className="py-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+          <div className="text-center mb-12">
+            <Heading as="h2" size="heading" className="text-besilos-navy mb-4">
+              All Product Collections
+            </Heading>
+          </div>
+
+          <Pagination connection={collections}>
+            {({nodes, isLoading, PreviousLink, NextLink}) => (
+              <>
+                {nodes.length > 0 && (
+                  <div className="flex items-center justify-center mb-6">
+                    <Button as={PreviousLink} variant="secondary" width="full">
+                      {isLoading ? 'Loading...' : 'Previous collections'}
+                    </Button>
+                  </div>
+                )}
+                <Grid
+                  items={nodes.length === 3 ? 3 : 2}
+                  data-test="collection-grid"
+                >
+                  {nodes.map((collection, i) => (
+                    <CollectionCard
+                      collection={collection as Collection}
+                      key={collection.id}
+                      loading={getImageLoadingPriority(i, 2)}
+                    />
+                  ))}
+                </Grid>
+                {nodes.length > 0 && (
+                  <div className="flex items-center justify-center mt-6">
+                    <Button as={NextLink} variant="secondary" width="full">
+                      {isLoading ? 'Loading...' : 'Next collections'}
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </Pagination>
+        </div>
       </Section>
+
+      {/* CTA Section */}
+      <CTASection
+        title="Need Help Finding Products?"
+        description="Our dry eye specialists can help you find the right treatment for your specific symptoms."
+        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+        secondaryCTA={{label: 'Learn About Dry Eye', to: '/pages/about'}}
+        variant="centered"
+        background="navy"
+      />
     </>
   );
 }
@@ -100,21 +178,50 @@ function CollectionCard({
     <Link
       prefetch="viewport"
       to={`/collections/${collection.handle}`}
-      className="grid gap-4"
+      className="group block bg-white rounded-2xl border border-besilos-sage/10 hover:border-besilos-sage/30 hover:shadow-lg transition-all duration-300 overflow-hidden"
     >
-      <div className="card-image bg-primary/5 aspect-[3/2]">
-        {collection?.image && (
+      <div className="aspect-[3/2] bg-besilos-cream/50 overflow-hidden">
+        {collection?.image ? (
           <Image
             data={collection.image}
             aspectRatio="6/4"
             sizes="(max-width: 32em) 100vw, 45vw"
             loading={loading}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <svg className="w-16 h-16 text-besilos-sage/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
         )}
       </div>
-      <Heading as="h3" size="copy">
-        {collection.title}
-      </Heading>
+      <div className="p-6">
+        <div className="flex items-center justify-between">
+          <Heading as="h3" size="lead" className="text-besilos-navy group-hover:text-besilos-sage transition-colors">
+            {collection.title}
+          </Heading>
+          <svg
+            className="w-5 h-5 text-besilos-sage opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </div>
+        {collection.description && (
+          <p className="mt-2 text-sm text-besilos-navy/60 line-clamp-2">
+            {collection.description}
+          </p>
+        )}
+      </div>
     </Link>
   );
 }

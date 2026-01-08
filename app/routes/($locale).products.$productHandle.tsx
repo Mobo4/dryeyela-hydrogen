@@ -39,6 +39,7 @@ import {seoPayload} from '~/lib/seo.server';
 import type {Storefront} from '~/lib/type';
 import {routeHeaders} from '~/data/cache';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
+import {TrustBadgesSection, CTASection} from '~/components/sections';
 
 export const headers = routeHeaders;
 
@@ -145,28 +146,80 @@ export default function Product() {
 
   return (
     <>
-      <Section className="px-0 md:px-8 lg:px-12">
-        <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
+      {/* Breadcrumb Navigation */}
+      <div className="bg-besilos-cream/50 border-b border-besilos-sage/10">
+        <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-4">
+          <nav className="flex items-center gap-2 text-sm text-besilos-navy/60">
+            <Link to="/" className="hover:text-besilos-sage transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <Link to="/collections/all" className="hover:text-besilos-sage transition-colors">
+              Products
+            </Link>
+            {vendor && (
+              <>
+                <span>/</span>
+                <Link to={`/collections/${vendor.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-besilos-sage transition-colors">
+                  {vendor}
+                </Link>
+              </>
+            )}
+            <span>/</span>
+            <span className="text-besilos-navy font-medium truncate max-w-[200px]">{title}</span>
+          </nav>
+        </div>
+      </div>
+
+      {/* Product Section */}
+      <Section className="px-0 md:px-8 lg:px-12 py-8 bg-white">
+        <div className="grid items-start md:gap-6 lg:gap-12 md:grid-cols-2 lg:grid-cols-3">
           <ProductGallery
             media={media.nodes}
             className="w-full lg:col-span-2"
           />
           <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
-            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
+            <section className="flex flex-col w-full max-w-xl gap-6 p-6 md:mx-auto md:max-w-sm md:px-0">
+              {/* Product Title & Vendor */}
               <div className="grid gap-2">
-                <Heading as="h1" className="whitespace-normal">
+                {vendor && (
+                  <Link
+                    to={`/collections/${vendor.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="text-sm font-medium text-besilos-sage hover:text-besilos-sage/80 transition-colors uppercase tracking-wide"
+                  >
+                    {vendor}
+                  </Link>
+                )}
+                <Heading as="h1" className="whitespace-normal text-besilos-navy text-2xl lg:text-3xl">
                   {title}
                 </Heading>
-                {vendor && (
-                  <Text className={'opacity-50 font-medium'}>{vendor}</Text>
-                )}
               </div>
+
+              {/* Product Form */}
               <ProductForm
                 productOptions={productOptions}
                 selectedVariant={selectedVariant}
                 storeDomain={storeDomain}
               />
-              <div className="grid gap-4 py-4">
+
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap gap-4 py-4 border-t border-besilos-sage/10">
+                <div className="flex items-center gap-2 text-sm text-besilos-navy/70">
+                  <svg className="w-5 h-5 text-besilos-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  Doctor Recommended
+                </div>
+                <div className="flex items-center gap-2 text-sm text-besilos-navy/70">
+                  <svg className="w-5 h-5 text-besilos-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                  </svg>
+                  Free Shipping $89+
+                </div>
+              </div>
+
+              {/* Product Details */}
+              <div className="grid gap-4 py-4 border-t border-besilos-sage/10">
                 {descriptionHtml && (
                   <ProductDetail
                     title="Product Details"
@@ -192,16 +245,32 @@ export default function Product() {
           </div>
         </div>
       </Section>
+
+      {/* Trust Badges */}
+      <TrustBadgesSection variant="expanded" />
+
+      {/* Related Products */}
       <Suspense fallback={<Skeleton className="h-32" />}>
         <Await
           errorElement="There was a problem loading related products"
           resolve={recommended}
         >
           {(products) => (
-            <ProductSwimlane title="Related Products" products={products} />
+            <ProductSwimlane title="You May Also Like" products={products} />
           )}
         </Await>
       </Suspense>
+
+      {/* CTA Section */}
+      <CTASection
+        title="Need Help Choosing?"
+        description="Our dry eye specialists can help you find the perfect products for your specific needs."
+        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+        secondaryCTA={{label: 'Shop All Products', to: '/collections/all'}}
+        variant="split"
+        background="navy"
+      />
+
       <Analytics.ProductView
         data={{
           products: [
@@ -240,17 +309,43 @@ export function ProductForm({
     selectedVariant?.price?.amount < selectedVariant?.compareAtPrice?.amount;
 
   return (
-    <div className="grid gap-10">
+    <div className="grid gap-6">
+      {/* Price Display */}
+      {selectedVariant && (
+        <div className="flex items-baseline gap-3">
+          <Money
+            withoutTrailingZeros
+            data={selectedVariant?.price!}
+            as="span"
+            className="text-2xl font-bold text-besilos-navy"
+          />
+          {isOnSale && (
+            <Money
+              withoutTrailingZeros
+              data={selectedVariant?.compareAtPrice!}
+              as="span"
+              className="text-lg text-besilos-navy/50 line-through"
+            />
+          )}
+          {isOnSale && (
+            <span className="bg-red-100 text-red-700 text-sm font-medium px-2 py-0.5 rounded">
+              Sale
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Product Options */}
       <div className="grid gap-4">
         {productOptions.map((option, optionIndex) => (
           <div
             key={option.name}
-            className="product-options flex flex-col flex-wrap mb-4 gap-y-2 last:mb-0"
+            className="product-options flex flex-col flex-wrap gap-y-2"
           >
-            <Heading as="legend" size="lead" className="min-w-[4rem]">
+            <Heading as="legend" size="copy" className="font-semibold text-besilos-navy">
               {option.name}
             </Heading>
-            <div className="flex flex-wrap items-baseline gap-4">
+            <div className="flex flex-wrap items-baseline gap-3">
               {option.optionValues.length > 7 ? (
                 <div className="relative w-full">
                   <Listbox>
@@ -259,13 +354,13 @@ export function ProductForm({
                         <Listbox.Button
                           ref={closeRef}
                           className={clsx(
-                            'flex items-center justify-between w-full py-3 px-4 border border-primary',
+                            'flex items-center justify-between w-full py-3 px-4 border border-besilos-sage/30 bg-white',
                             open
-                              ? 'rounded-b md:rounded-t md:rounded-b-none'
-                              : 'rounded',
+                              ? 'rounded-t'
+                              : 'rounded-lg',
                           )}
                         >
-                          <span>
+                          <span className="text-besilos-navy">
                             {
                               selectedVariant?.selectedOptions[optionIndex]
                                 .value
@@ -275,7 +370,7 @@ export function ProductForm({
                         </Listbox.Button>
                         <Listbox.Options
                           className={clsx(
-                            'border-primary bg-contrast absolute bottom-12 z-30 grid h-48 w-full overflow-y-scroll rounded-t border px-2 py-2 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b',
+                            'border-besilos-sage/30 bg-white absolute bottom-12 z-30 grid h-48 w-full overflow-y-scroll rounded-t border px-2 py-2 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b',
                             open ? 'max-h-48' : 'max-h-0',
                           )}
                         >
@@ -300,8 +395,8 @@ export function ProductForm({
                                     to={`/products/${handle}?${variantUriQuery}`}
                                     preventScrollReset
                                     className={clsx(
-                                      'text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer',
-                                      selected && 'bg-primary/10',
+                                      'text-besilos-navy w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer hover:bg-besilos-sage/10',
+                                      selected && 'bg-besilos-sage/10',
                                     )}
                                     onClick={() => {
                                       if (!closeRef?.current) return;
@@ -310,7 +405,7 @@ export function ProductForm({
                                   >
                                     {name}
                                     {selected && (
-                                      <span className="ml-2">
+                                      <span className="ml-2 text-besilos-sage">
                                         <IconCheck />
                                       </span>
                                     )}
@@ -342,9 +437,11 @@ export function ProductForm({
                       prefetch="intent"
                       replace
                       className={clsx(
-                        'leading-none py-1 border-b-[1.5px] cursor-pointer transition-all duration-200',
-                        selected ? 'border-primary/50' : 'border-primary/0',
-                        available ? 'opacity-100' : 'opacity-50',
+                        'px-4 py-2 border rounded-lg transition-all duration-200',
+                        selected
+                          ? 'border-besilos-sage bg-besilos-sage/10 text-besilos-navy'
+                          : 'border-besilos-sage/30 text-besilos-navy/70 hover:border-besilos-sage/50',
+                        !available && 'opacity-50 cursor-not-allowed',
                       )}
                     >
                       <ProductOptionSwatch swatch={swatch} name={name} />
@@ -355,11 +452,13 @@ export function ProductForm({
             </div>
           </div>
         ))}
+
+        {/* Add to Cart */}
         {selectedVariant && (
-          <div className="grid items-stretch gap-4">
+          <div className="grid items-stretch gap-3 mt-2">
             {isOutOfStock ? (
-              <Button variant="secondary" disabled>
-                <Text>Sold out</Text>
+              <Button variant="secondary" disabled className="w-full py-4 rounded-full">
+                <Text>Sold Out</Text>
               </Button>
             ) : (
               <AddToCartButton
@@ -371,26 +470,13 @@ export function ProductForm({
                 ]}
                 variant="primary"
                 data-test="add-to-cart"
+                className="w-full py-4 bg-besilos-sage text-white font-semibold rounded-full hover:bg-besilos-sage/90 transition-colors"
               >
                 <Text
                   as="span"
                   className="flex items-center justify-center gap-2"
                 >
-                  <span>Add to Cart</span> <span>·</span>{' '}
-                  <Money
-                    withoutTrailingZeros
-                    data={selectedVariant?.price!}
-                    as="span"
-                    data-test="price"
-                  />
-                  {isOnSale && (
-                    <Money
-                      withoutTrailingZeros
-                      data={selectedVariant?.compareAtPrice!}
-                      as="span"
-                      className="opacity-50 strike"
-                    />
-                  )}
+                  <span>Add to Cart</span>
                 </Text>
               </AddToCartButton>
             )}
@@ -423,12 +509,12 @@ function ProductOptionSwatch({
   return (
     <div
       aria-label={name}
-      className="w-8 h-8"
+      className="w-8 h-8 rounded"
       style={{
         backgroundColor: color || 'transparent',
       }}
     >
-      {!!image && <img src={image} alt={name} />}
+      {!!image && <img src={image} alt={name} className="rounded" />}
     </div>
   );
 }
@@ -447,13 +533,13 @@ function ProductDetail({
       {({open}) => (
         <>
           <Disclosure.Button className="text-left">
-            <div className="flex justify-between">
-              <Text size="lead" as="h4">
+            <div className="flex justify-between items-center py-2">
+              <Text size="lead" as="h4" className="font-semibold text-besilos-navy">
                 {title}
               </Text>
               <IconClose
                 className={clsx(
-                  'transition-transform transform-gpu duration-200',
+                  'transition-transform transform-gpu duration-200 text-besilos-sage',
                   !open && 'rotate-[45deg]',
                 )}
               />
@@ -462,13 +548,13 @@ function ProductDetail({
 
           <Disclosure.Panel className={'pb-4 pt-2 grid gap-2'}>
             <div
-              className="prose dark:prose-invert"
+              className="prose prose-sm max-w-none text-besilos-navy/70"
               dangerouslySetInnerHTML={{__html: content}}
             />
             {learnMore && (
-              <div className="">
+              <div className="mt-2">
                 <Link
-                  className="pb-px border-b border-primary/30 text-primary/50"
+                  className="text-sm text-besilos-sage hover:text-besilos-sage/80 underline"
                   to={learnMore}
                 >
                   Learn more

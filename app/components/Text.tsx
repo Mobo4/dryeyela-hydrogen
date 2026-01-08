@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import {missingClass, formatText} from '~/lib/utils';
+import { missingClass, formatText } from '~/lib/utils';
 
 export function Text({
   as: Component = 'span',
@@ -105,6 +105,7 @@ export function Section({
   divider = 'none',
   display = 'grid',
   heading,
+  headingClassName,
   padding = 'all',
   ...props
 }: {
@@ -147,7 +148,7 @@ export function Section({
   return (
     <Component {...props} className={styles}>
       {heading && (
-        <Heading size="lead" className={padding === 'y' ? paddings['x'] : ''}>
+        <Heading size="heading" className={clsx('pb-4 text-besilos-sage', headingClassName)}>
           {heading}
         </Heading>
       )}

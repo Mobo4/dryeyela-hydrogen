@@ -30,10 +30,10 @@ function root({
   url: Request['url'];
 }): SeoConfig {
   return {
-    title: shop?.name,
-    titleTemplate: '%s | Hydrogen Demo Store',
-    description: truncate(shop?.description ?? ''),
-    handle: '@shopify',
+    title: shop?.name || 'DryEyeLA',
+    titleTemplate: '%s | DryEyeLA - Los Angeles Dry Eye Specialists',
+    description: truncate(shop?.description ?? 'Los Angeles Premier Dry Eye Products Store - Doctor recommended eye drops, supplements, and treatments for dry eye relief. Free shipping on orders over $89.'),
+    handle: '@dryeyela',
     url,
     robots: {
       noIndex: false,
@@ -42,14 +42,11 @@ function root({
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: shop.name,
+      name: shop.name || 'DryEyeLA',
       logo: shop.brand?.logo?.image?.url,
       sameAs: [
-        'https://twitter.com/shopify',
-        'https://facebook.com/shopify',
-        'https://instagram.com/shopify',
-        'https://youtube.com/shopify',
-        'https://tiktok.com/@shopify',
+        'https://www.instagram.com/dryeyela',
+        'https://www.facebook.com/dryeyela',
       ],
       url,
       potentialAction: {
@@ -63,9 +60,9 @@ function root({
 
 function home({url}: {url: Request['url']}): SeoConfig {
   return {
-    title: 'Home',
-    titleTemplate: '%s | Hydrogen Demo Store',
-    description: 'The best place to buy snowboarding products',
+    title: 'Los Angeles Premier Dry Eye Products Store',
+    titleTemplate: '%s | DryEyeLA',
+    description: 'Shop doctor-recommended dry eye products: preservative-free eye drops, omega-3 supplements, eyelid cleansers, and heated eye masks. Fast shipping to Los Angeles and nationwide. Trusted by dry eye specialists.',
     url,
     robots: {
       noIndex: false,
@@ -74,7 +71,7 @@ function home({url}: {url: Request['url']}): SeoConfig {
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Home page',
+      name: 'DryEyeLA - Los Angeles Premier Dry Eye Products Store',
     },
   };
 }

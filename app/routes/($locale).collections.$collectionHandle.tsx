@@ -18,9 +18,8 @@ import {
   Analytics,
   getSeoMeta,
 } from '@shopify/hydrogen';
-import invariant from 'tiny-invariant';
 
-import {PageHeader, Section, Text} from '~/components/Text';
+import {Section, Text} from '~/components/Text';
 import {Grid} from '~/components/Grid';
 import {Button} from '~/components/Button';
 import {ProductCard} from '~/components/ProductCard';
@@ -31,17 +30,27 @@ import {seoPayload} from '~/lib/seo.server';
 import {FILTER_URL_PREFIX} from '~/components/SortFilter';
 import {getImageLoadingPriority} from '~/lib/const';
 import {parseAsCurrency} from '~/lib/utils';
+import {
+  HeroSection,
+  TrustBadgesSection,
+  CTASection,
+  EmptyState,
+  CategoryCardsSection,
+} from '~/components/sections';
+import {getFallbackCollection, getRelatedCollections} from '~/data/collections';
 
 export const headers = routeHeaders;
 
 export async function loader({params, request, context}: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+    pageBy: 12,
   });
   const {collectionHandle} = params;
   const locale = context.storefront.i18n;
 
-  invariant(collectionHandle, 'Missing collectionHandle param');
+  if (!collectionHandle) {
+    throw new Response('Missing collectionHandle param', {status: 400});
+  }
 
   const searchParams = new URL(request.url).searchParams;
 
@@ -76,8 +85,49 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
     },
   );
 
+  // Get fallback metadata for missing collections
+  const fallbackMeta = getFallbackCollection(collectionHandle);
+  const relatedCollections = getRelatedCollections(collectionHandle, 3);
+
+  // If collection doesn't exist in Shopify, return fallback data
   if (!collection) {
-    throw new Response('collection', {status: 404});
+    // Create a minimal SEO config for missing collections
+    const seo = {
+      title: fallbackMeta.title,
+      description: fallbackMeta.description,
+      titleTemplate: '%s | Collection',
+      url: request.url,
+      media: undefined,
+      jsonLd: [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Collections',
+              item: `${new URL(request.url).origin}/collections`,
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: fallbackMeta.title,
+            },
+          ],
+        },
+      ],
+    };
+
+    return json({
+      collection: null,
+      collectionHandle,
+      fallbackMeta,
+      relatedCollections,
+      appliedFilters: [],
+      collections: flattenConnection(collections),
+      seo,
+    });
   }
 
   const seo = seoPayload.collection({collection, url: request.url});
@@ -90,26 +140,19 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
     .map((filter) => {
       const foundValue = allFilterValues.find((value) => {
         const valueInput = JSON.parse(value.input as string) as ProductFilter;
-        // special case for price, the user can enter something freeform (still a number, though)
-        // that may not make sense for the locale/currency.
-        // Basically just check if the price filter is applied at all.
         if (valueInput.price && filter.price) {
           return true;
         }
         return (
-          // This comparison should be okay as long as we're not manipulating the input we
-          // get from the API before using it as a URL param.
           JSON.stringify(valueInput) === JSON.stringify(filter)
         );
       });
       if (!foundValue) {
-        // eslint-disable-next-line no-console
         console.error('Could not find filter value for filter', filter);
         return null;
       }
 
       if (foundValue.id === 'filter.v.price') {
-        // Special case for price, we want to show the min and max values as the label.
         const input = JSON.parse(foundValue.input as string) as ProductFilter;
         const min = parseAsCurrency(input.price?.min ?? 0, locale);
         const max = input.price?.max
@@ -131,6 +174,9 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
 
   return json({
     collection,
+    collectionHandle,
+    fallbackMeta,
+    relatedCollections,
     appliedFilters,
     collections: flattenConnection(collections),
     seo,
@@ -142,25 +188,89 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function Collection() {
-  const {collection, collections, appliedFilters} =
+  const {collection, collectionHandle, fallbackMeta, relatedCollections, collections, appliedFilters} =
     useLoaderData<typeof loader>();
 
   const {ref, inView} = useInView();
 
+  // Collection doesn't exist in Shopify - show coming soon state
+  if (!collection) {
+    return (
+      <>
+        {/* Hero Section */}
+        <HeroSection
+          title={fallbackMeta.heroTitle}
+          description={fallbackMeta.heroDescription}
+          variant="secondary"
+          breadcrumbs={[
+            {label: 'Home', to: '/'},
+            {label: 'Collections', to: '/collections'},
+            {label: fallbackMeta.title},
+          ]}
+        />
+
+        {/* Coming Soon Empty State */}
+        <EmptyState
+          title="Coming Soon"
+          description={`We're preparing our ${fallbackMeta.title.toLowerCase()} collection. Check back soon or explore our other products below.`}
+          icon="coming-soon"
+          primaryCTA={{label: 'Shop All Products', to: '/collections/all'}}
+          secondaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+        />
+
+        {/* Related Collections */}
+        {relatedCollections.length > 0 && (
+          <CategoryCardsSection
+            title="Explore Related Collections"
+            description="Browse these related product categories"
+            cards={relatedCollections.map((col) => ({
+              title: col.title,
+              description: col.description,
+              handle: col.handle,
+              to: `/collections/${col.handle}`,
+              keywords: col.keywords.slice(0, 3),
+            }))}
+            columns={3}
+          />
+        )}
+
+        {/* Trust Badges */}
+        <TrustBadgesSection variant="compact" />
+
+        {/* CTA Section */}
+        <CTASection
+          title="Need Help Finding Products?"
+          description="Our dry eye specialists can help you find the right products for your needs."
+          primaryCTA={{label: 'Contact Support', to: '/pages/contact'}}
+          secondaryCTA={{label: 'Learn About Dry Eye', to: '/pages/about'}}
+          background="cream"
+        />
+      </>
+    );
+  }
+
+  const productCount = collection.products.nodes.length;
+
   return (
     <>
-      <PageHeader heading={collection.title}>
-        {collection?.description && (
-          <div className="flex items-baseline justify-between w-full">
-            <div>
-              <Text format width="narrow" as="p" className="inline-block">
-                {collection.description}
-              </Text>
-            </div>
-          </div>
-        )}
-      </PageHeader>
-      <Section>
+      {/* Hero Section */}
+      <HeroSection
+        title={collection.title}
+        description={collection.description || fallbackMeta.heroDescription}
+        variant="secondary"
+        breadcrumbs={[
+          {label: 'Home', to: '/'},
+          {label: 'Collections', to: '/collections'},
+          {label: collection.title},
+        ]}
+        badge={productCount > 0 ? `${productCount}+ Products` : undefined}
+      />
+
+      {/* Trust Badges - Compact */}
+      <TrustBadgesSection variant="compact" />
+
+      {/* Products Section */}
+      <Section className="py-12">
         <SortFilter
           filters={collection.products.filters as Filter[]}
           appliedFilters={appliedFilters}
@@ -177,33 +287,71 @@ export default function Collection() {
               state,
             }) => (
               <>
-                <div className="flex items-center justify-center mb-6">
-                  <Button as={PreviousLink} variant="secondary" width="full">
-                    {isLoading ? 'Loading...' : 'Load previous'}
-                  </Button>
-                </div>
-                <ProductsLoadedOnScroll
-                  nodes={nodes}
-                  inView={inView}
-                  nextPageUrl={nextPageUrl}
-                  hasNextPage={hasNextPage}
-                  state={state}
-                />
-                <div className="flex items-center justify-center mt-6">
-                  <Button
-                    ref={ref}
-                    as={NextLink}
-                    variant="secondary"
-                    width="full"
-                  >
-                    {isLoading ? 'Loading...' : 'Load more products'}
-                  </Button>
-                </div>
+                {nodes.length > 0 ? (
+                  <>
+                    <div className="flex items-center justify-center mb-6">
+                      <Button as={PreviousLink} variant="secondary" width="full">
+                        {isLoading ? 'Loading...' : 'Load previous'}
+                      </Button>
+                    </div>
+                    <ProductsLoadedOnScroll
+                      nodes={nodes}
+                      inView={inView}
+                      nextPageUrl={nextPageUrl}
+                      hasNextPage={hasNextPage}
+                      state={state}
+                    />
+                    <div className="flex items-center justify-center mt-6">
+                      <Button
+                        ref={ref}
+                        as={NextLink}
+                        variant="secondary"
+                        width="full"
+                      >
+                        {isLoading ? 'Loading...' : 'Load more products'}
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <EmptyState
+                    title="No Products Found"
+                    description="This collection doesn't have any products yet. Try removing some filters or check back later."
+                    icon="products"
+                    primaryCTA={{label: 'Shop All Products', to: '/collections/all'}}
+                  />
+                )}
               </>
             )}
           </Pagination>
         </SortFilter>
       </Section>
+
+      {/* Related Collections */}
+      {relatedCollections.length > 0 && (
+        <CategoryCardsSection
+          title="Related Collections"
+          description="Explore more dry eye products"
+          cards={relatedCollections.map((col) => ({
+            title: col.title,
+            description: col.description,
+            handle: col.handle,
+            to: `/collections/${col.handle}`,
+            keywords: col.keywords.slice(0, 3),
+          }))}
+          columns={3}
+        />
+      )}
+
+      {/* CTA Section */}
+      <CTASection
+        title="Questions About Our Products?"
+        description="Our dry eye specialists are here to help you find the right treatment."
+        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+        secondaryCTA={{label: 'View All Products', to: '/collections/all'}}
+        variant="split"
+        background="navy"
+      />
+
       <Analytics.CollectionView
         data={{
           collection: {

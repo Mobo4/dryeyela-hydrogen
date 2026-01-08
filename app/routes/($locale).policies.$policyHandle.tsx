@@ -7,10 +7,14 @@ import {useLoaderData} from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import {getSeoMeta} from '@shopify/hydrogen';
 
-import {PageHeader, Section} from '~/components/Text';
-import {Button} from '~/components/Button';
+import {Link} from '~/components/Link';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {
+  HeroSection,
+  TrustBadgesSection,
+  CTASection,
+} from '~/components/sections';
 
 export const headers = routeHeaders;
 
@@ -49,35 +53,64 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
-export default function Policies() {
+export default function PolicyPage() {
   const {policy} = useLoaderData<typeof loader>();
 
   return (
     <>
-      <Section
-        padding="all"
-        display="flex"
-        className="flex-col items-baseline w-full gap-8 md:flex-row"
-      >
-        <PageHeader
-          heading={policy.title}
-          className="grid items-start flex-grow gap-4 md:sticky top-36 md:w-5/12"
-        >
-          <Button
-            className="justify-self-start"
-            variant="inline"
-            to={'/policies'}
+      {/* Hero Section */}
+      <HeroSection
+        title={policy.title}
+        breadcrumbs={[
+          {label: 'Home', to: '/'},
+          {label: 'Policies', to: '/policies'},
+          {label: policy.title},
+        ]}
+        size="small"
+        background="cream"
+      />
+
+      {/* Policy Content */}
+      <section className="py-12 md:py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12">
+          {/* Back Link */}
+          <Link
+            to="/policies"
+            className="inline-flex items-center gap-2 text-besilos-sage hover:text-besilos-sage/80 mb-8 transition-colors"
           >
-            &larr; Back to Policies
-          </Button>
-        </PageHeader>
-        <div className="flex-grow w-full md:w-7/12">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Policies
+          </Link>
+
+          {/* Policy Body */}
           <div
             dangerouslySetInnerHTML={{__html: policy.body}}
-            className="prose dark:prose-invert"
+            className="prose prose-lg max-w-none prose-headings:text-besilos-navy prose-headings:font-bold prose-p:text-besilos-navy/80 prose-a:text-besilos-sage prose-a:no-underline hover:prose-a:underline prose-strong:text-besilos-navy prose-ul:text-besilos-navy/80 prose-ol:text-besilos-navy/80 prose-li:marker:text-besilos-sage"
           />
+
+          {/* Last Updated */}
+          <div className="mt-12 pt-6 border-t border-besilos-sage/10">
+            <p className="text-sm text-besilos-navy/60">
+              This policy was last updated and is effective immediately.
+            </p>
+          </div>
         </div>
-      </Section>
+      </section>
+
+      {/* Trust Badges */}
+      <TrustBadgesSection variant="compact" />
+
+      {/* CTA Section */}
+      <CTASection
+        title="Questions About This Policy?"
+        description="Our team is here to help clarify any questions you may have."
+        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+        secondaryCTA={{label: 'Shop Products', to: '/collections/all'}}
+        variant="centered"
+        background="navy"
+      />
     </>
   );
 }

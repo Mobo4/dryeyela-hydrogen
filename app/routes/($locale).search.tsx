@@ -12,15 +12,22 @@ import {
   getSeoMeta,
 } from '@shopify/hydrogen';
 
-import {Heading, PageHeader, Section, Text} from '~/components/Text';
+import {Section, Text} from '~/components/Text';
 import {Input} from '~/components/Input';
 import {Grid} from '~/components/Grid';
+import {Button} from '~/components/Button';
 import {ProductCard} from '~/components/ProductCard';
 import {ProductSwimlane} from '~/components/ProductSwimlane';
 import {FeaturedCollections} from '~/components/FeaturedCollections';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getImageLoadingPriority, PAGINATION_SIZE} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
+import {
+  HeroSection,
+  TrustBadgesSection,
+  CTASection,
+  EmptyState,
+} from '~/components/sections';
 
 import {
   getFeaturedData,
@@ -33,7 +40,7 @@ export async function loader({
 }: LoaderFunctionArgs) {
   const searchParams = new URL(request.url).searchParams;
   const searchTerm = searchParams.get('q')!;
-  const variables = getPaginationVariables(request, {pageBy: 8});
+  const variables = getPaginationVariables(request, {pageBy: 12});
 
   const {products} = await storefront.query(SEARCH_QUERY, {
     variables: {
@@ -82,62 +89,103 @@ export default function Search() {
   const {searchTerm, products, noResultRecommendations} =
     useLoaderData<typeof loader>();
   const noResults = products?.nodes?.length === 0;
+  const hasResults = products?.nodes?.length > 0;
 
   return (
     <>
-      <PageHeader>
-        <Heading as="h1" size="copy">
-          Search
-        </Heading>
-        <Form method="get" className="relative flex w-full text-heading">
-          <Input
-            defaultValue={searchTerm}
-            name="q"
-            placeholder="Search…"
-            type="search"
-            variant="search"
-          />
-          <button className="absolute right-0 py-2" type="submit">
-            Go
-          </button>
-        </Form>
-      </PageHeader>
+      {/* Hero Section with Search */}
+      <section className="bg-besilos-cream py-12 md:py-16">
+        <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-besilos-navy mb-4">
+              {searchTerm ? `Results for "${searchTerm}"` : 'Search Products'}
+            </h1>
+            <p className="text-besilos-navy/70 mb-8">
+              Find the right dry eye products for your needs
+            </p>
+          </div>
+
+          {/* Search Form */}
+          <Form method="get" className="relative max-w-2xl mx-auto">
+            <Input
+              defaultValue={searchTerm}
+              name="q"
+              placeholder="Search for eye drops, supplements, brands..."
+              type="search"
+              className="w-full px-6 py-4 pr-24 rounded-full border-2 border-besilos-sage/30 focus:border-besilos-sage bg-white text-besilos-navy placeholder:text-besilos-navy/50"
+            />
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-besilos-sage text-white font-medium rounded-full hover:bg-besilos-sage/90 transition-colors"
+              type="submit"
+            >
+              Search
+            </button>
+          </Form>
+
+          {hasResults && (
+            <p className="text-center mt-4 text-besilos-navy/60">
+              Found {products.nodes.length} products
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* Trust Badges */}
+      <TrustBadgesSection variant="compact" />
+
+      {/* Results or No Results */}
       {!searchTerm || noResults ? (
         <NoResults
           noResults={noResults}
+          searchTerm={searchTerm}
           recommendations={noResultRecommendations}
         />
       ) : (
-        <Section>
-          <Pagination connection={products}>
-            {({nodes, isLoading, NextLink, PreviousLink}) => {
-              const itemsMarkup = nodes.map((product, i) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  loading={getImageLoadingPriority(i)}
-                />
-              ));
+        <Section className="py-12">
+          <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+            <Pagination connection={products}>
+              {({nodes, isLoading, NextLink, PreviousLink}) => {
+                const itemsMarkup = nodes.map((product, i) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    loading={getImageLoadingPriority(i)}
+                  />
+                ));
 
-              return (
-                <>
-                  <div className="flex items-center justify-center mt-6">
-                    <PreviousLink className="inline-block rounded font-medium text-center py-3 px-6 border border-primary/10 bg-contrast text-primary w-full">
-                      {isLoading ? 'Loading...' : 'Previous'}
-                    </PreviousLink>
-                  </div>
-                  <Grid data-test="product-grid">{itemsMarkup}</Grid>
-                  <div className="flex items-center justify-center mt-6">
-                    <NextLink className="inline-block rounded font-medium text-center py-3 px-6 border border-primary/10 bg-contrast text-primary w-full">
-                      {isLoading ? 'Loading...' : 'Next'}
-                    </NextLink>
-                  </div>
-                </>
-              );
-            }}
-          </Pagination>
+                return (
+                  <>
+                    <div className="flex items-center justify-center mb-6">
+                      <Button as={PreviousLink} variant="secondary" width="full">
+                        {isLoading ? 'Loading...' : 'Previous'}
+                      </Button>
+                    </div>
+                    <Grid data-test="product-grid" layout="products">
+                      {itemsMarkup}
+                    </Grid>
+                    <div className="flex items-center justify-center mt-6">
+                      <Button as={NextLink} variant="secondary" width="full">
+                        {isLoading ? 'Loading...' : 'Load More'}
+                      </Button>
+                    </div>
+                  </>
+                );
+              }}
+            </Pagination>
+          </div>
         </Section>
       )}
+
+      {/* CTA Section */}
+      <CTASection
+        title="Can't Find What You're Looking For?"
+        description="Our dry eye specialists can help you find the right products."
+        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+        secondaryCTA={{label: 'Browse All Products', to: '/collections/all'}}
+        variant="centered"
+        background="navy"
+      />
+
       <Analytics.SearchView data={{searchTerm, searchResults: products}} />
     </>
   );
@@ -145,18 +193,31 @@ export default function Search() {
 
 function NoResults({
   noResults,
+  searchTerm,
   recommendations,
 }: {
   noResults: boolean;
+  searchTerm: string;
   recommendations: Promise<null | FeaturedData>;
 }) {
   return (
     <>
-      {noResults && (
-        <Section padding="x">
-          <Text className="opacity-50">
-            No results, try a different search.
-          </Text>
+      {noResults && searchTerm && (
+        <EmptyState
+          title="No Results Found"
+          description={`We couldn't find any products matching "${searchTerm}". Try a different search or browse our collections.`}
+          icon="search"
+          primaryCTA={{label: 'Shop All Products', to: '/collections/all'}}
+          secondaryCTA={{label: 'Contact Support', to: '/pages/contact'}}
+        />
+      )}
+      {!searchTerm && (
+        <Section className="py-8">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <Text className="text-besilos-navy/60">
+              Start typing to search for dry eye products, brands, or treatments.
+            </Text>
+          </div>
         </Section>
       )}
       <Suspense>
@@ -171,7 +232,7 @@ function NoResults({
             return (
               <>
                 <FeaturedCollections
-                  title="Trending Collections"
+                  title="Popular Collections"
                   collections={featuredCollections}
                 />
                 <ProductSwimlane

@@ -11,15 +11,23 @@ import {
   getSeoMeta,
 } from '@shopify/hydrogen';
 
-import {PageHeader, Section} from '~/components/Text';
+import {Section} from '~/components/Text';
 import {ProductCard} from '~/components/ProductCard';
 import {Grid} from '~/components/Grid';
+import {Button} from '~/components/Button';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders} from '~/data/cache';
+import {
+  HeroSection,
+  TrustBadgesSection,
+  CTASection,
+  CategoryCardsSection,
+} from '~/components/sections';
+import {SHOP_CATEGORIES} from '~/data/navigation';
 
-const PAGE_BY = 8;
+const PAGE_BY = 12;
 
 export const headers = routeHeaders;
 
@@ -45,11 +53,11 @@ export async function loader({
       id: 'all-products',
       title: 'All Products',
       handle: 'products',
-      descriptionHtml: 'All the store products',
-      description: 'All the store products',
+      descriptionHtml: 'Browse our complete selection of doctor-recommended dry eye products.',
+      description: 'Browse our complete selection of doctor-recommended dry eye products.',
       seo: {
-        title: 'All Products',
-        description: 'All the store products',
+        title: 'All Dry Eye Products',
+        description: 'Shop our complete collection of dry eye treatments, eye drops, supplements, and more.',
       },
       metafields: [],
       products: data.products,
@@ -70,38 +78,89 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function AllProducts() {
   const {products} = useLoaderData<typeof loader>();
 
+  // Category cards for quick navigation
+  const categoryCards = SHOP_CATEGORIES.slice(0, 6).map((cat) => ({
+    title: cat.title,
+    description: cat.description,
+    handle: cat.handle,
+    to: `/collections/${cat.handle}`,
+    keywords: cat.keywords.slice(0, 2),
+  }));
+
   return (
     <>
-      <PageHeader heading="All Products" variant="allCollections" />
-      <Section>
-        <Pagination connection={products}>
-          {({nodes, isLoading, NextLink, PreviousLink}) => {
-            const itemsMarkup = nodes.map((product, i) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                loading={getImageLoadingPriority(i)}
-              />
-            ));
+      {/* Hero Section */}
+      <HeroSection
+        title="All Products"
+        description="Browse our complete selection of doctor-recommended dry eye products. From eye drops to supplements, find everything you need for lasting relief."
+        variant="secondary"
+        breadcrumbs={[
+          {label: 'Home', to: '/'},
+          {label: 'Products'},
+        ]}
+        badge={`${products.nodes.length}+ Products`}
+      />
 
-            return (
-              <>
-                <div className="flex items-center justify-center mt-6">
-                  <PreviousLink className="inline-block rounded font-medium text-center py-3 px-6 border border-primary/10 bg-contrast text-primary w-full">
-                    {isLoading ? 'Loading...' : 'Previous'}
-                  </PreviousLink>
-                </div>
-                <Grid data-test="product-grid">{itemsMarkup}</Grid>
-                <div className="flex items-center justify-center mt-6">
-                  <NextLink className="inline-block rounded font-medium text-center py-3 px-6 border border-primary/10 bg-contrast text-primary w-full">
-                    {isLoading ? 'Loading...' : 'Next'}
-                  </NextLink>
-                </div>
-              </>
-            );
-          }}
-        </Pagination>
+      {/* Trust Badges - Compact */}
+      <TrustBadgesSection variant="compact" />
+
+      {/* Quick Category Navigation */}
+      <CategoryCardsSection
+        title="Shop by Category"
+        description="Find exactly what you need"
+        cards={categoryCards}
+        columns={3}
+      />
+
+      {/* Products Grid */}
+      <Section className="py-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-besilos-navy mb-2">All Products</h2>
+            <p className="text-besilos-navy/60">Doctor-recommended treatments for dry eye relief</p>
+          </div>
+
+          <Pagination connection={products}>
+            {({nodes, isLoading, NextLink, PreviousLink}) => {
+              const itemsMarkup = nodes.map((product, i) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  loading={getImageLoadingPriority(i)}
+                />
+              ));
+
+              return (
+                <>
+                  <div className="flex items-center justify-center mb-6">
+                    <Button as={PreviousLink} variant="secondary" width="full">
+                      {isLoading ? 'Loading...' : 'Previous'}
+                    </Button>
+                  </div>
+                  <Grid data-test="product-grid" layout="products">
+                    {itemsMarkup}
+                  </Grid>
+                  <div className="flex items-center justify-center mt-6">
+                    <Button as={NextLink} variant="secondary" width="full">
+                      {isLoading ? 'Loading...' : 'Load More Products'}
+                    </Button>
+                  </div>
+                </>
+              );
+            }}
+          </Pagination>
+        </div>
       </Section>
+
+      {/* CTA Section */}
+      <CTASection
+        title="Need Help Finding the Right Product?"
+        description="Our dry eye specialists can help you find the perfect treatment for your specific needs."
+        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+        secondaryCTA={{label: 'Take Our Quiz', to: '/pages/dry-eye-quiz'}}
+        variant="split"
+        background="navy"
+      />
     </>
   );
 }

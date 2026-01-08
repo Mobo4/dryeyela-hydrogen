@@ -1,0 +1,39 @@
+{
+  "totalProducts": 397,
+  "byVendor": {
+    "Menicon": 7,
+    "Unknown": 252,
+    "ACUVUE": 3,
+    "Alaway": 3,
+    "Systane": 6,
+    "Avenova": 7,
+    "Bausch": 1,
+    "Biotrue": 2,
+    "BioTrue": 2,
+    "Blephadex": 5,
+    "Bruder": 14,
+    "PRN": 8,
+    "Refresh": 11,
+    "Heyedrate": 10,
+    "Optase": 19,
+    "Lumify": 3,
+    "MacuHealth": 5,
+    "Oasis": 10,
+    "Ocusoft": 16,
+    "OCuSOFT": 4,
+    "REFRESH": 1,
+    "Retaine": 4,
+    "Tangible": 4
+  },
+  "byType": {
+    "Contact Lens Solution": 52,
+    "Eye Drops": 85,
+    "Supplements": 74,
+    "Eye Mask": 42,
+    "Eyelid Cleanser": 46,
+    "Uncategorized": 96,
+    "Allergy Relief": 2
+  },
+  "withImages": 397,
+  "withPrices": 397
+}
