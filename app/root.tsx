@@ -164,6 +164,24 @@ function Layout({ children }: { children?: React.ReactNode }) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="msvalidate.01" content="A352E6A0AF9A652267361BBB572B8468" />
         <link rel="stylesheet" href={styles}></link>
+
+        {/* Google Ads & GA4 Tracking */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QGDE01YBEP"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              
+              // GA4
+              gtag('config', 'G-QGDE01YBEP');
+              
+              // Google Ads
+              gtag('config', 'AW-1420984243');
+            `,
+          }}
+        />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <Meta />
         <Links />

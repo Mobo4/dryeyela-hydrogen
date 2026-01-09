@@ -13,6 +13,10 @@ export default {
         notice: 'rgb(var(--color-accent) / <alpha-value>)',
         shopPay: 'rgb(var(--color-shop-pay) / <alpha-value>)',
         'besilos-primary': '#56BACD', // RESCUE: Teal Class
+        'besilos-cream': '#F9F8F6',
+        'prn-blue': '#152C52',
+        'prn-gold': '#FACE52',
+        'prn-gray': '#F4F4F4',
 
         // Besilos-inspired "Premium Soft" palette
         besilos: {
