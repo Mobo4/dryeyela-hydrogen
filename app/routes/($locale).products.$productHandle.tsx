@@ -1,11 +1,11 @@
-import {useRef, Suspense} from 'react';
-import {Disclosure, Listbox} from '@headlessui/react';
+import { useRef, Suspense } from 'react';
+import { Disclosure, Listbox } from '@headlessui/react';
 import {
   defer,
   type MetaArgs,
   type LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData, Await} from '@remix-run/react';
+import { useLoaderData, Await } from '@remix-run/react';
 import {
   getSeoMeta,
   Money,
@@ -25,26 +25,26 @@ import type {
   ProductOptionValueSwatch,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import type {ProductFragment} from 'storefrontapi.generated';
-import {Heading, Section, Text} from '~/components/Text';
-import {Link} from '~/components/Link';
-import {Button} from '~/components/Button';
-import {AddToCartButton} from '~/components/AddToCartButton';
-import {Skeleton} from '~/components/Skeleton';
-import {ProductSwimlane} from '~/components/ProductSwimlane';
-import {ProductGallery} from '~/components/ProductGallery';
-import {IconCaret, IconCheck, IconClose} from '~/components/Icon';
-import {getExcerpt} from '~/lib/utils';
-import {seoPayload} from '~/lib/seo.server';
-import type {Storefront} from '~/lib/type';
-import {routeHeaders} from '~/data/cache';
-import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
-import {TrustBadgesSection, CTASection} from '~/components/sections';
+import type { ProductFragment } from 'storefrontapi.generated';
+import { Heading, Section, Text } from '~/components/Text';
+import { Link } from '~/components/Link';
+import { Button } from '~/components/Button';
+import { AddToCartButton } from '~/components/AddToCartButton';
+import { Skeleton } from '~/components/Skeleton';
+import { ProductSwimlane } from '~/components/ProductSwimlane';
+import { ProductGallery } from '~/components/ProductGallery';
+import { IconCaret, IconCheck, IconClose } from '~/components/Icon';
+import { getExcerpt } from '~/lib/utils';
+import { seoPayload } from '~/lib/seo.server';
+import type { Storefront } from '~/lib/type';
+import { routeHeaders } from '~/data/cache';
+import { MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/data/fragments';
+import { TrustBadgesSection, CTASection } from '~/components/sections';
 
 export const headers = routeHeaders;
 
 export async function loader(args: LoaderFunctionArgs) {
-  const {productHandle} = args.params;
+  const { productHandle } = args.params;
   invariant(productHandle, 'Missing productHandle param, check route filename');
 
   // Start fetching non-critical data without blocking time to first byte
@@ -53,7 +53,7 @@ export async function loader(args: LoaderFunctionArgs) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return defer({...deferredData, ...criticalData});
+  return defer({ ...deferredData, ...criticalData });
 }
 
 /**
@@ -65,12 +65,12 @@ async function loadCriticalData({
   request,
   context,
 }: LoaderFunctionArgs) {
-  const {productHandle} = params;
+  const { productHandle } = params;
   invariant(productHandle, 'Missing productHandle param, check route filename');
 
   const selectedOptions = getSelectedProductOptions(request);
 
-  const [{shop, product}] = await Promise.all([
+  const [{ shop, product }] = await Promise.all([
     context.storefront.query(PRODUCT_QUERY, {
       variables: {
         handle: productHandle,
@@ -83,7 +83,7 @@ async function loadCriticalData({
   ]);
 
   if (!product?.id) {
-    throw new Response('product', {status: 404});
+    throw new Response('product', { status: 404 });
   }
 
   const recommended = getRecommendedProducts(context.storefront, product.id);
@@ -91,7 +91,7 @@ async function loadCriticalData({
   const variants = getAdjacentAndFirstAvailableVariants(product);
 
   const seo = seoPayload.product({
-    product: {...product, variants},
+    product: { ...product, variants },
     selectedVariant,
     url: request.url,
   });
@@ -118,15 +118,15 @@ function loadDeferredData(args: LoaderFunctionArgs) {
   return {};
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({ matches }: MetaArgs<typeof loader>) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
 export default function Product() {
-  const {product, shop, recommended, variants, storeDomain} =
+  const { product, shop, recommended, variants, storeDomain } =
     useLoaderData<typeof loader>();
-  const {media, title, vendor, descriptionHtml} = product;
-  const {shippingPolicy, refundPolicy} = shop;
+  const { media, title, vendor, descriptionHtml, metafield } = product;
+  const { shippingPolicy, refundPolicy } = shop;
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -202,6 +202,9 @@ export default function Product() {
                 storeDomain={storeDomain}
               />
 
+              {/* Clinical Insight (Doctor's Take) */}
+              {metafield?.value && <ClinicalInsight content={metafield.value} />}
+
               {/* Trust Indicators */}
               <div className="flex flex-wrap gap-4 py-4 border-t border-besilos-sage/10">
                 <div className="flex items-center gap-2 text-sm text-besilos-navy/70">
@@ -265,8 +268,8 @@ export default function Product() {
       <CTASection
         title="Need Help Choosing?"
         description="Our dry eye specialists can help you find the perfect products for your specific needs."
-        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
-        secondaryCTA={{label: 'Shop All Products', to: '/collections/all'}}
+        primaryCTA={{ label: 'Contact Us', to: '/pages/contact' }}
+        secondaryCTA={{ label: 'Shop All Products', to: '/collections/all' }}
         variant="split"
         background="navy"
       />
@@ -349,7 +352,7 @@ export function ProductForm({
               {option.optionValues.length > 7 ? (
                 <div className="relative w-full">
                   <Listbox>
-                    {({open}) => (
+                    {({ open }) => (
                       <>
                         <Listbox.Button
                           ref={closeRef}
@@ -390,7 +393,7 @@ export function ProductForm({
                                 >
                                   <Link
                                     {...(!isDifferentProduct
-                                      ? {rel: 'nofollow'}
+                                      ? { rel: 'nofollow' }
                                       : {})}
                                     to={`/products/${handle}?${variantUriQuery}`}
                                     preventScrollReset
@@ -431,7 +434,7 @@ export function ProductForm({
                   }) => (
                     <Link
                       key={option.name + name}
-                      {...(!isDifferentProduct ? {rel: 'nofollow'} : {})}
+                      {...(!isDifferentProduct ? { rel: 'nofollow' } : {})}
                       to={`/products/${handle}?${variantUriQuery}`}
                       preventScrollReset
                       prefetch="intent"
@@ -530,7 +533,7 @@ function ProductDetail({
 }) {
   return (
     <Disclosure key={title} as="div" className="grid w-full gap-2">
-      {({open}) => (
+      {({ open }) => (
         <>
           <Disclosure.Button className="text-left">
             <div className="flex justify-between items-center py-2">
@@ -549,7 +552,7 @@ function ProductDetail({
           <Disclosure.Panel className={'pb-4 pt-2 grid gap-2'}>
             <div
               className="prose prose-sm max-w-none text-besilos-navy/70"
-              dangerouslySetInnerHTML={{__html: content}}
+              dangerouslySetInnerHTML={{ __html: content }}
             />
             {learnMore && (
               <div className="mt-2">
@@ -641,6 +644,9 @@ const PRODUCT_FRAGMENT = `#graphql
       description
       title
     }
+    metafield(namespace: "custom", key: "doctors_take") {
+      value
+    }
     media(first: 7) {
       nodes {
         ...Media
@@ -649,6 +655,26 @@ const PRODUCT_FRAGMENT = `#graphql
   }
   ${PRODUCT_VARIANT_FRAGMENT}
 ` as const;
+
+function ClinicalInsight({ content }: { content: string }) {
+  return (
+    <div className="bg-besilos-sage/5 border border-besilos-sage/20 rounded-xl p-6 my-6">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="bg-besilos-sage/10 p-2 rounded-full">
+          <svg className="w-5 h-5 text-besilos-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <Heading as="h4" size="copy" className="font-semibold text-besilos-navy">
+          Doctor&apos;s Take
+        </Heading>
+      </div>
+      <div className="prose prose-sm max-w-none text-besilos-navy/80">
+        <p>{content}</p>
+      </div>
+    </div>
+  );
+}
 
 const PRODUCT_QUERY = `#graphql
   query Product(
@@ -703,7 +729,7 @@ async function getRecommendedProducts(
   productId: string,
 ) {
   const products = await storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
-    variables: {productId, count: 12},
+    variables: { productId, count: 12 },
   });
 
   invariant(products, 'No data returned from Shopify API');
@@ -721,5 +747,5 @@ async function getRecommendedProducts(
 
   mergedProducts.splice(originalProduct, 1);
 
-  return {nodes: mergedProducts};
+  return { nodes: mergedProducts };
 }
