@@ -841,6 +841,9 @@ function Footer({ menu }: { menu?: EnhancedMenu }) {
               <Link to="/policies/privacy-policy" className="text-besilos-cream/50 hover:text-besilos-sage text-xs">
                 Privacy Policy
               </Link>
+              <Link to="/policies/refund-policy" className="text-besilos-cream/50 hover:text-besilos-sage text-xs">
+                Refund Policy
+              </Link>
               <Link to="/policies/terms-of-service" className="text-besilos-cream/50 hover:text-besilos-sage text-xs">
                 Terms of Service
               </Link>
