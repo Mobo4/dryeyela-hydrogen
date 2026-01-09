@@ -30,6 +30,7 @@ fs.createReadStream(INPUT_CSV)
         const newFields = [
             'Status',
             'Variant Inventory Policy',
+            'Variant Inventory Qty', // Add Quantity
             'Variant Inventory Tracker',
             'Variant Fulfillment Service',
             'SEO Title',
@@ -50,6 +51,7 @@ fs.createReadStream(INPUT_CSV)
             // 1. Enforce Active & Inventory
             row['Status'] = 'active'; // Ensure product is live
             row['Variant Inventory Policy'] = 'continue'; // Don't stop selling when 0
+            row['Variant Inventory Qty'] = '10'; // Default stock as requested
             row['Variant Inventory Tracker'] = 'shopify';
             row['Variant Fulfillment Service'] = 'manual';
 

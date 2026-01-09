@@ -3,7 +3,7 @@ const path = require('path');
 const { createObjectCsvWriter } = require('csv-writer');
 const csv = require('csv-parser');
 
-const INPUT_CSV = 'final_import_catalog.csv';
+const INPUT_CSV = 'processed_catalog.csv';
 const OUTPUT_CSV = 'final_fixed_import.csv';
 
 const results = [];
