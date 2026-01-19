@@ -1,6 +1,6 @@
 /**
  * DryEyeLA Navigation Configuration
- * Based on dryeyerescue.com structure for SEO dominance
+ * Los Angeles Premier Dry Eye Products Store
  */
 
 export const SHOP_CATEGORIES = [
@@ -57,6 +57,9 @@ export const BRANDS = [
   { name: 'Menicon', handle: 'menicon', description: 'Menicon Lacripure saline solution' },
   { name: 'Tangible', handle: 'tangible', description: 'Tangible scleral lens care' },
   { name: 'Heyedrate', handle: 'heyedrate', description: 'Heyedrate eyelid cleanser and supplements' },
+  { name: 'EyePromise', handle: 'eyepromise', description: 'EyePromise eye vitamins' },
+  { name: 'Cliradex', handle: 'cliradex', description: 'Cliradex eyelid cleansers' },
+  { name: 'Eye Eco', handle: 'eyeeco', description: 'Eye Eco moisture products' },
 ];
 
 export const SYMPTOMS = [
@@ -153,7 +156,7 @@ export const MAIN_NAVIGATION = {
     items: BRANDS,
   },
   symptoms: {
-    title: 'Symptoms',
+    title: 'Shop by Symptom',
     items: SYMPTOMS,
   },
   ingredients: {

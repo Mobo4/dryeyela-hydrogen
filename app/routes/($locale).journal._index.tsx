@@ -3,14 +3,14 @@ import {
   type MetaArgs,
   type LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
-import {flattenConnection, getSeoMeta, Image} from '@shopify/hydrogen';
+import { useLoaderData } from '@remix-run/react';
+import { flattenConnection, getSeoMeta, Image } from '@shopify/hydrogen';
 
-import {Link} from '~/components/Link';
-import {getImageLoadingPriority, PAGINATION_SIZE} from '~/lib/const';
-import {seoPayload} from '~/lib/seo.server';
-import {routeHeaders} from '~/data/cache';
-import type {ArticleFragment} from 'storefrontapi.generated';
+import { Link } from '~/components/Link';
+import { getImageLoadingPriority, PAGINATION_SIZE } from '~/lib/const';
+import { seoPayload } from '~/lib/seo.server';
+import { routeHeaders } from '~/data/cache';
+import type { ArticleFragment } from 'storefrontapi.generated';
 import {
   HeroSection,
   TrustBadgesSection,
@@ -23,12 +23,12 @@ export const headers = routeHeaders;
 
 export const loader = async ({
   request,
-  context: {storefront},
+  context: { storefront },
 }: LoaderFunctionArgs) => {
-  const {language, country} = storefront.i18n;
+  const { language, country } = storefront.i18n;
 
   try {
-    const {blog} = await storefront.query(BLOGS_QUERY, {
+    const { blog } = await storefront.query(BLOGS_QUERY, {
       variables: {
         blogHandle: BLOG_HANDLE,
         pageBy: PAGINATION_SIZE,
@@ -48,7 +48,7 @@ export const loader = async ({
     }
 
     const articles = flattenConnection(blog.articles).map((article) => {
-      const {publishedAt} = article!;
+      const { publishedAt } = article!;
       return {
         ...article,
         publishedAt: new Intl.DateTimeFormat(`${language}-${country}`, {
@@ -59,9 +59,28 @@ export const loader = async ({
       };
     });
 
-    const seo = seoPayload.blog({blog, url: request.url});
+    // Inject Static Article: Deseyne FDA Clearance
+    articles.unshift({
+      id: 'static-deseyne-clearance',
+      title: 'FDA Clears First Daily Disposable Soft EDOF Contact Lens for Presbyopia',
+      handle: 'fda-clears-deseyne-edof-lens', // Matches the static route filename
+      publishedAt: 'December 24, 2025',
+      image: {
+        id: 'static-img-deseyne',
+        url: '/assets/deseyne-edof-lens.png',
+        altText: 'Futuristic Close-up of EDOF Contact Lens',
+        width: 1024,
+        height: 1024,
+      },
+      author: {
+        name: 'Dr. Alex Bonakdar',
+      },
+      contentHtml: '', // Not needed for the card
+    } as any);
 
-    return json({articles, seo});
+    const seo = seoPayload.blog({ blog, url: request.url });
+
+    return json({ articles, seo });
   } catch (error) {
     // Handle case where blog doesn't exist
     return json({
@@ -74,12 +93,12 @@ export const loader = async ({
   }
 };
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({ matches }: MetaArgs<typeof loader>) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
 export default function Journals() {
-  const {articles} = useLoaderData<typeof loader>();
+  const { articles } = useLoaderData<typeof loader>();
   const hasArticles = articles.length > 0;
 
   return (
@@ -89,8 +108,8 @@ export default function Journals() {
         title="Dry Eye Journal"
         subtitle="Expert insights, tips, and guides for managing dry eye and maintaining optimal eye health"
         breadcrumbs={[
-          {label: 'Home', to: '/'},
-          {label: 'Journal'},
+          { label: 'Home', to: '/' },
+          { label: 'Journal' },
         ]}
         size="small"
         background="cream"
@@ -160,8 +179,8 @@ export default function Journals() {
       <CTASection
         title="Have Questions About Dry Eye?"
         description="Our team of dry eye specialists is here to help you find the right products and treatments."
-        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
-        secondaryCTA={{label: 'Shop Products', to: '/collections/all'}}
+        primaryCTA={{ label: 'Contact Us', to: '/pages/contact' }}
+        secondaryCTA={{ label: 'Shop Products', to: '/collections/all' }}
         variant="centered"
         background="navy"
       />

@@ -22,12 +22,13 @@ fs.createReadStream(SOURCE_EXPORT)
             imageMap.get(row.Handle).push({
                 src: row['Image Src'],
                 pos: row['Image Position'],
-                alt: row['Image Alt Text']
+                alt: row['Image Alt Text'],
+                price: row['Variant Price'] // Storing price from source
             });
         }
     })
     .on('end', () => {
-        console.log(`Loaded images for ${imageMap.size} unique handles.`);
+        console.log(`Loaded images & prices for ${imageMap.size} unique handles.`);
         processTarget();
     });
 
@@ -43,11 +44,17 @@ function processTarget() {
 
             if (originalImages && originalImages.length > 0) {
                 // PRIMARY ROW
-                // Update the main row with the FIRST image
+                // Update the main row with the FIRST image AND Price
                 const mainImg = originalImages[0];
                 row['Image Src'] = mainImg.src;
                 row['Image Position'] = mainImg.pos || '1';
                 row['Image Alt Text'] = mainImg.alt;
+
+                // RESTORE PRICE if available
+                if (mainImg.price) {
+                    row['Variant Price'] = mainImg.price;
+                }
+
                 row['Variant Inventory Qty'] = '10'; // Enforce stock
 
                 allRecords.push(row);

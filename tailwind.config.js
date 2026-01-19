@@ -12,19 +12,26 @@ export default {
         contrast: 'rgb(var(--color-contrast) / <alpha-value>)',
         notice: 'rgb(var(--color-accent) / <alpha-value>)',
         shopPay: 'rgb(var(--color-shop-pay) / <alpha-value>)',
-        'besilos-primary': '#56BACD', // RESCUE: Teal Class
-        'besilos-cream': '#F9F8F6',
-        'prn-blue': '#152C52',
-        'prn-gold': '#FACE52',
-        'prn-gray': '#F4F4F4',
+        // PRN Vision Palette
+        'besilos-navy': '#152c52',
+        'besilos-blue': '#009ade',
+        'besilos-gold': '#eba310',
+        'besilos-cream': '#f7fafe',
+        'besilos-yellow': '#face52',
+        // Semantic aliases
+        navy: '#152c52',
+        blue: '#009ade',
+        gold: '#eba310',
+        cream: '#f7fafe',
+        yellow: '#face52',
 
         // Besilos-inspired "Premium Soft" palette
         besilos: {
-          cream: '#FFFFFF',   // Canvas
-          navy: '#2A2B2A',    // RESCUE: Charcoal Background
-          sage: '#574171',    // RESCUE: Purple Headings
-          clay: '#56BACD',    // RESCUE: Teal Accents/Buttons
-          frame: '#EEECE1',   // RESCUE: Warm Gray Backgrounds
+          cream: '#f7fafe',   // PRN Cream
+          navy: '#152c52',    // PRN Navy
+          sage: '#6b7280',
+          clay: '#009ade',
+          frame: '#EEECE1',
           white: '#FFFFFF'
         },
 
@@ -66,9 +73,10 @@ export default {
         mobileGallery: 'calc(100vw - 3rem)',
       },
       fontFamily: {
-        // Besilos audit: 'Nature' heading is Geometric Sans
-        sans: ['Poppins', 'Rubik', 'Helvetica Neue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        serif: ['Playfair Display', 'IBMPlexSerif', 'Palatino', 'ui-serif'],
+        sans: ['Montserrat', 'sans-serif', 'ui-sans-serif', 'system-ui'],
+        serif: ['Fira Sans', 'sans-serif'], // PRN uses Fira Sans for headings
+        body: ['Montserrat', 'sans-serif'],
+        heading: ['Fira Sans', 'sans-serif'],
       },
       fontSize: {
         display: ['var(--font-size-display)', '1.1'],
@@ -95,4 +103,3 @@ export default {
   },
   plugins: [formsPlugin, typographyPlugin],
 };
-

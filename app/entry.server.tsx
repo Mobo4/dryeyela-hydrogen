@@ -1,8 +1,8 @@
-import type {AppLoadContext, EntryContext} from '@shopify/remix-oxygen';
-import {RemixServer} from '@remix-run/react';
+import type { AppLoadContext, EntryContext } from '@shopify/remix-oxygen';
+import { RemixServer } from '@remix-run/react';
 import isbot from 'isbot';
-import {renderToReadableStream} from 'react-dom/server';
-import {createContentSecurityPolicy} from '@shopify/hydrogen';
+import { renderToReadableStream } from 'react-dom/server';
+import { createContentSecurityPolicy } from '@shopify/hydrogen';
 
 export default async function handleRequest(
   request: Request,
@@ -11,7 +11,7 @@ export default async function handleRequest(
   remixContext: EntryContext,
   context: AppLoadContext,
 ) {
-  const {nonce, header, NonceProvider} = createContentSecurityPolicy({
+  const { nonce, header, NonceProvider } = createContentSecurityPolicy({
     shop: {
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
@@ -23,6 +23,25 @@ export default async function handleRequest(
       'https://www.google-analytics.com',
       'https://www.googletagmanager.com',
       ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:*'] : []),
+    ],
+    imgSrc: [
+      'self',
+      'http://localhost:*',
+      'https://cdn.shopify.com',
+      'https://prnvision.com',
+      'https://*.prnvision.com',
+      'http://prnvision.com', // Legacy images
+      'data:',
+    ],
+    fontSrc: [
+      'self',
+      'https://fonts.gstatic.com',
+      'https://prnvision.com',
+    ],
+    styleSrc: [
+      'self',
+      'https://fonts.googleapis.com',
+      'unsafe-inline', // Required for some Hydrogen styles if nonce isn't perfect
     ],
   });
 

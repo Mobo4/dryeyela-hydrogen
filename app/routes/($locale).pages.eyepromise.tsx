@@ -10,7 +10,7 @@ export const headers = routeHeaders;
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const seo = seoPayload.customPage({
         url: request.url,
-        title: 'EyePromise - PRN Vision Group',
+        title: 'EyePromise - DryEyeLA',
         description: 'Upgrade Your Eyes. Protect and enhance your sight with science based nutritional support.',
     });
     return json({ seo });

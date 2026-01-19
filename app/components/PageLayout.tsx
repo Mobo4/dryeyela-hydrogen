@@ -60,6 +60,8 @@ export function PageLayout({ children, layout }: LayoutProps) {
   );
 }
 
+import { UnifiedHeader } from '~/components/UnifiedHeader';
+
 function Header({ title, menu }: { title: string; menu?: EnhancedMenu }) {
   const isHome = useIsHomePath();
 
@@ -89,15 +91,7 @@ function Header({ title, menu }: { title: string; menu?: EnhancedMenu }) {
       {menu && (
         <MenuDrawer isOpen={isMenuOpen} onClose={closeMenu} menu={menu} />
       )}
-      <DesktopHeader
-        isHome={isHome}
-        title={title}
-        menu={menu}
-        openCart={openCart}
-      />
-      <MobileHeader
-        isHome={isHome}
-        title={title}
+      <UnifiedHeader
         openCart={openCart}
         openMenu={openMenu}
       />
@@ -149,16 +143,25 @@ function MenuMobileNav({
 }) {
   return (
     <nav className="grid gap-2 p-6 sm:px-12 sm:py-8">
-      {/* Shop Section */}
+      {/* Shop All Link */}
+      <Link
+        to="/collections/all"
+        onClick={onClose}
+        className="py-3 font-semibold text-besilos-navy border-b border-besilos-sage/20"
+      >
+        Shop All
+      </Link>
+
+      {/* By Product Type Section */}
       <Disclosure>
         {({ open }) => (
           <>
-            <Disclosure.Button className="flex justify-between items-center w-full py-3 text-left font-semibold text-besilos-navy">
-              Shop
+            <Disclosure.Button className="flex justify-between items-center w-full py-3 text-left font-semibold text-besilos-navy border-b border-besilos-sage/20">
+              By Product Type
               <IconCaret direction={open ? 'up' : 'down'} />
             </Disclosure.Button>
-            <Disclosure.Panel className="pl-4 pb-4">
-              <div className="grid gap-2">
+            <Disclosure.Panel className="pl-4 pb-4 bg-besilos-sage/5 rounded-b-lg">
+              <div className="grid gap-2 mt-2">
                 {SHOP_CATEGORIES.map((category) => (
                   <Link
                     key={category.handle}
@@ -169,148 +172,56 @@ function MenuMobileNav({
                     {category.title}
                   </Link>
                 ))}
-                <Link
-                  to="/collections/all"
-                  onClick={onClose}
-                  className="py-2 text-besilos-sage font-medium"
-                >
-                  View All Products →
-                </Link>
               </div>
             </Disclosure.Panel>
           </>
         )}
       </Disclosure>
 
-      {/* Brands Section */}
+      {/* By Brand Section */}
       <Disclosure>
         {({ open }) => (
           <>
-            <Disclosure.Button className="flex justify-between items-center w-full py-3 text-left font-semibold text-besilos-navy border-t border-besilos-sage/20">
-              Brands
+            <Disclosure.Button className="flex justify-between items-center w-full py-3 text-left font-semibold text-besilos-navy border-b border-besilos-sage/20">
+              By Brand
               <IconCaret direction={open ? 'up' : 'down'} />
             </Disclosure.Button>
-            <Disclosure.Panel className="pl-4 pb-4">
-              <div className="grid grid-cols-2 gap-2">
+            <Disclosure.Panel className="pl-4 pb-4 bg-besilos-sage/5 rounded-b-lg">
+              <div className="grid gap-2 mt-2">
                 {BRANDS.map((brand) => (
                   <Link
                     key={brand.handle}
-                    to={`/brands/${brand.handle}`}
+                    to={`/pages/${brand.handle}`}
                     onClick={onClose}
-                    className="py-2 text-besilos-navy/70 hover:text-besilos-sage text-sm"
+                    className="py-2 text-besilos-navy/70 hover:text-besilos-sage"
                   >
                     {brand.name}
                   </Link>
                 ))}
               </div>
-              <Link
-                to="/brands"
-                onClick={onClose}
-                className="block py-2 mt-2 text-besilos-sage font-medium"
-              >
-                View All Brands →
-              </Link>
             </Disclosure.Panel>
           </>
         )}
       </Disclosure>
 
-      {/* Symptoms Section */}
-      <Disclosure>
-        {({ open }) => (
-          <>
-            <Disclosure.Button className="flex justify-between items-center w-full py-3 text-left font-semibold text-besilos-navy border-t border-besilos-sage/20">
-              Symptoms
-              <IconCaret direction={open ? 'up' : 'down'} />
-            </Disclosure.Button>
-            <Disclosure.Panel className="pl-4 pb-4">
-              <div className="grid gap-2">
-                {SYMPTOMS.map((symptom) => (
-                  <Link
-                    key={symptom.handle}
-                    to={`/symptoms/${symptom.handle}`}
-                    onClick={onClose}
-                    className="py-2 text-besilos-navy/70 hover:text-besilos-sage"
-                  >
-                    {symptom.title}
-                  </Link>
-                ))}
-                <Link
-                  to="/symptoms"
-                  onClick={onClose}
-                  className="py-2 text-besilos-sage font-medium"
-                >
-                  View All Symptoms →
-                </Link>
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-
-      {/* Ingredients Section */}
-      <Disclosure>
-        {({ open }) => (
-          <>
-            <Disclosure.Button className="flex justify-between items-center w-full py-3 text-left font-semibold text-besilos-navy border-t border-besilos-sage/20">
-              Ingredients
-              <IconCaret direction={open ? 'up' : 'down'} />
-            </Disclosure.Button>
-            <Disclosure.Panel className="pl-4 pb-4">
-              <div className="grid gap-2">
-                {INGREDIENTS.map((ingredient) => (
-                  <Link
-                    key={ingredient.handle}
-                    to={`/ingredients/${ingredient.handle}`}
-                    onClick={onClose}
-                    className="py-2 text-besilos-navy/70 hover:text-besilos-sage"
-                  >
-                    {ingredient.title}
-                  </Link>
-                ))}
-                <Link
-                  to="/ingredients"
-                  onClick={onClose}
-                  className="py-2 text-besilos-sage font-medium"
-                >
-                  View All Ingredients →
-                </Link>
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-
-      {/* Learn Link */}
-      <Link
-        to="/pages/dry-eye-guide"
-        onClick={onClose}
-        className="py-3 font-semibold text-besilos-navy border-t border-besilos-sage/20"
+      {/* For Doctors */}
+      <a
+        href="https://www.prnphysicianportal.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="py-3 font-semibold text-besilos-navy border-b border-besilos-sage/20"
       >
-        Learn
-      </Link>
+        For Doctors
+      </a>
 
-      {/* Original menu items from Shopify */}
-      {(menu?.items || []).length > 0 && (
-        <div className="border-t border-besilos-sage/20 pt-4 mt-2">
-          <Text as="span" size="fine" className="text-besilos-navy/50 uppercase tracking-wide">
-            More
-          </Text>
-          <div className="grid gap-2 mt-2">
-            {(menu?.items || []).map((item) => (
-              <Link
-                key={item.id}
-                to={item.to}
-                target={item.target}
-                onClick={onClose}
-                className="py-2 text-besilos-navy/70 hover:text-besilos-sage"
-              >
-                {item.title}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Contact Us */}
+      <Link
+        to="/pages/contact"
+        onClick={onClose}
+        className="py-3 font-semibold text-besilos-navy"
+      >
+        Contact Us
+      </Link>
     </nav>
   );
 }
@@ -416,138 +327,87 @@ function DesktopHeader({
           {title}
         </Link>
         <nav className="flex gap-1 items-center">
-          {/* Shop Megamenu */}
-          <MegaMenuDropdown
-            title="Shop"
-            isHome={isHome}
-          >
-            <div className="grid grid-cols-2 gap-4 p-8 w-[600px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5">
-              <div className="col-span-1">
-                <h3 className="font-semibold text-besilos-navy mb-3 text-sm uppercase tracking-wide">By Category</h3>
-                <ul className="space-y-2">
-                  {SHOP_CATEGORIES.map((category) => (
-                    <li key={category.handle}>
-                      <Link
-                        to={`/collections/${category.handle}`}
-                        className="text-besilos-navy/80 hover:text-besilos-sage transition-colors text-sm"
-                        prefetch="intent"
-                      >
-                        {category.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-besilos-navy mb-3 text-sm uppercase tracking-wide">Featured</h3>
-                <div className="space-y-3">
-                  <Link to="/collections/all" className="block p-3 bg-besilos-sage/10 rounded-lg hover:bg-besilos-sage/20 transition-colors">
-                    <span className="font-medium text-besilos-navy">All Products</span>
-                    <p className="text-xs text-besilos-navy/60 mt-1">Browse our complete catalog</p>
-                  </Link>
-                  <Link to="/collections/best-sellers" className="block p-3 bg-besilos-sage/10 rounded-lg hover:bg-besilos-sage/20 transition-colors">
-                    <span className="font-medium text-besilos-navy">Best Sellers</span>
-                    <p className="text-xs text-besilos-navy/60 mt-1">Our most popular products</p>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </MegaMenuDropdown>
-
-          {/* Brands Megamenu */}
-          <MegaMenuDropdown
-            title="Brands"
-            isHome={isHome}
-          >
-            <div className="p-8 w-[700px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5">
-              <h3 className="font-semibold text-besilos-navy mb-4 text-sm uppercase tracking-wide">Shop by Brand</h3>
-              <div className="grid grid-cols-3 gap-3">
-                {BRANDS.map((brand) => (
-                  <Link
-                    key={brand.handle}
-                    to={`/brands/${brand.handle}`}
-                    className="p-2 rounded-lg text-besilos-navy/80 hover:bg-besilos-sage/10 hover:text-besilos-sage transition-colors text-sm"
-                    prefetch="intent"
-                  >
-                    {brand.name}
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-besilos-sage/20">
-                <Link to="/brands" className="text-besilos-sage hover:underline text-sm font-medium">
-                  View All Brands →
-                </Link>
-              </div>
-            </div>
-          </MegaMenuDropdown>
-
-          {/* Symptoms Megamenu */}
-          <MegaMenuDropdown
-            title="Symptoms"
-            isHome={isHome}
-          >
-            <div className="p-6 w-[500px]">
-              <h3 className="font-semibold text-besilos-navy mb-4 text-sm uppercase tracking-wide">Shop by Symptom</h3>
-              <div className="space-y-3">
-                {SYMPTOMS.map((symptom) => (
-                  <Link
-                    key={symptom.handle}
-                    to={`/symptoms/${symptom.handle}`}
-                    className="block p-3 rounded-lg hover:bg-besilos-sage/10 transition-colors"
-                    prefetch="intent"
-                  >
-                    <span className="font-medium text-besilos-navy">{symptom.title}</span>
-                    <p className="text-xs text-besilos-navy/60 mt-1 line-clamp-1">{symptom.description}</p>
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-besilos-sage/20">
-                <Link to="/symptoms" className="text-besilos-sage hover:underline text-sm font-medium">
-                  View All Symptoms →
-                </Link>
-              </div>
-            </div>
-          </MegaMenuDropdown>
-
-          {/* Ingredients Megamenu */}
-          <MegaMenuDropdown
-            title="Ingredients"
-            isHome={isHome}
-          >
-            <div className="p-6 w-[400px]">
-              <h3 className="font-semibold text-besilos-navy mb-4 text-sm uppercase tracking-wide">Shop by Ingredient</h3>
-              <div className="space-y-3">
-                {INGREDIENTS.map((ingredient) => (
-                  <Link
-                    key={ingredient.handle}
-                    to={`/ingredients/${ingredient.handle}`}
-                    className="block p-3 rounded-lg hover:bg-besilos-sage/10 transition-colors"
-                    prefetch="intent"
-                  >
-                    <span className="font-medium text-besilos-navy">{ingredient.title}</span>
-                    <p className="text-xs text-besilos-navy/60 mt-1 line-clamp-1">{ingredient.description}</p>
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-besilos-sage/20">
-                <Link to="/ingredients" className="text-besilos-sage hover:underline text-sm font-medium">
-                  View All Ingredients →
-                </Link>
-              </div>
-            </div>
-          </MegaMenuDropdown>
-
-          {/* Learn Link */}
+          {/* Shop All */}
           <Link
-            to="/pages/dry-eye-guide"
+            to="/collections/all"
             prefetch="intent"
-            className={`px-4 py-2 rounded-md transition-colors ${isHome
+            className={`px-4 py-2 rounded-md transition-colors font-medium ${isHome
               ? 'hover:bg-besilos-cream/10 text-besilos-cream'
               : 'hover:bg-besilos-navy/10 text-besilos-navy'
               }`}
           >
-            Learn
+            Shop All
           </Link>
+
+          {/* By Product Type Megamenu */}
+          <MegaMenuDropdown
+            title="By Product Type"
+            isHome={isHome}
+          >
+            <div className="p-6 w-[350px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5">
+              <ul className="space-y-2">
+                {SHOP_CATEGORIES.map((category) => (
+                  <li key={category.handle}>
+                    <Link
+                      to={`/collections/${category.handle}`}
+                      className="block p-2 rounded-lg text-besilos-navy/80 hover:bg-besilos-sage/10 hover:text-besilos-sage transition-colors text-sm"
+                      prefetch="intent"
+                    >
+                      {category.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </MegaMenuDropdown>
+
+          {/* By Brand Megamenu */}
+          <MegaMenuDropdown
+            title="By Brand"
+            isHome={isHome}
+          >
+            <div className="p-6 w-[250px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5">
+              <ul className="space-y-2">
+                {BRANDS.map((brand) => (
+                  <li key={brand.handle}>
+                    <Link
+                      to={`/pages/${brand.handle}`}
+                      className="block p-2 rounded-lg text-besilos-navy/80 hover:bg-besilos-sage/10 hover:text-besilos-sage transition-colors text-sm"
+                      prefetch="intent"
+                    >
+                      {brand.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </MegaMenuDropdown>
+
+          {/* For Doctors */}
+          <a
+            href="https://www.prnphysicianportal.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`px-4 py-2 rounded-md transition-colors font-medium ${isHome
+              ? 'hover:bg-besilos-cream/10 text-besilos-cream'
+              : 'hover:bg-besilos-navy/10 text-besilos-navy'
+              }`}
+          >
+            For Doctors
+          </a>
+
+          {/* Contact */}
+          <Link
+            to="/pages/contact"
+            prefetch="intent"
+            className={`px-4 py-2 rounded-md transition-colors font-medium ${isHome
+              ? 'hover:bg-besilos-cream/10 text-besilos-cream'
+              : 'hover:bg-besilos-navy/10 text-besilos-navy'
+              }`}
+          >
+            Contact Us
+          </Link>
+
         </nav>
       </div>
       <div className="flex items-center gap-1">
@@ -574,7 +434,9 @@ function DesktopHeader({
             <IconSearch />
           </button>
         </Form>
-        <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
+        <Link to="/account/login" className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5">
+          <IconAccount />
+        </Link>
         <CartCount isHome={isHome} openCart={openCart} />
       </div>
     </header>
@@ -727,10 +589,10 @@ function Footer({ menu }: { menu?: EnhancedMenu }) {
           {/* Shop Categories */}
           <div>
             <Heading as="h3" size="lead" className="text-besilos-cream mb-4">
-              Shop Products
+              Shop
             </Heading>
             <ul className="space-y-2">
-              {SHOP_CATEGORIES.slice(0, 6).map((category) => (
+              {SHOP_CATEGORIES.slice(0, 8).map((category) => (
                 <li key={category.handle}>
                   <Link
                     to={`/collections/${category.handle}`}
@@ -741,19 +603,24 @@ function Footer({ menu }: { menu?: EnhancedMenu }) {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link to="/collections/all" className="text-besilos-sage hover:underline text-sm font-medium">
+                  Shop All →
+                </Link>
+              </li>
             </ul>
           </div>
 
           {/* Popular Brands */}
           <div>
             <Heading as="h3" size="lead" className="text-besilos-cream mb-4">
-              Popular Brands
+              Brands
             </Heading>
             <ul className="space-y-2">
-              {BRANDS.slice(0, 7).map((brand) => (
+              {BRANDS.map((brand) => (
                 <li key={brand.handle}>
                   <Link
-                    to={`/brands/${brand.handle}`}
+                    to={`/pages/${brand.handle}`}
                     className="text-besilos-cream/70 hover:text-besilos-sage transition-colors text-sm"
                     prefetch="intent"
                   >
@@ -761,70 +628,40 @@ function Footer({ menu }: { menu?: EnhancedMenu }) {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  to="/brands"
-                  className="text-besilos-sage hover:underline text-sm font-medium"
-                  prefetch="intent"
-                >
-                  View All Brands →
-                </Link>
-              </li>
             </ul>
           </div>
 
-          {/* Shop by Symptom */}
+          {/* Company */}
           <div>
             <Heading as="h3" size="lead" className="text-besilos-cream mb-4">
-              Shop by Symptom
+              Company
             </Heading>
             <ul className="space-y-2">
-              {SYMPTOMS.map((symptom) => (
-                <li key={symptom.handle}>
-                  <Link
-                    to={`/symptoms/${symptom.handle}`}
-                    className="text-besilos-cream/70 hover:text-besilos-sage transition-colors text-sm"
-                    prefetch="intent"
-                  >
-                    {symptom.title}
-                  </Link>
-                </li>
-              ))}
+              <li><Link to="/pages/about" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">About Us</Link></li>
+              <li><Link to="/pages/terms-conditions" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">Warranty</Link></li>
+              <li><Link to="/pages/careers" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">Careers</Link></li>
+              <li><Link to="/pages/contact" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">Contact Us</Link></li>
             </ul>
           </div>
 
-          {/* Company & Support */}
+          {/* Resources */}
           <div>
-            {/* Newsletter & Guide */}
-            <div>
-              <Heading as="h3" size="lead" className="text-besilos-cream mb-4">
-                Free Guide
-              </Heading>
-              <Text as="p" size="fine" className="text-besilos-cream/60">
-                Join our community for eye care tips.
-              </Text>
-            </div>
-          </div>
+            <Heading as="h3" size="lead" className="text-besilos-cream mb-4">
+              Resources
+            </Heading>
+            <ul className="space-y-2">
+              <li><Link to="/account" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">My Account</Link></li>
+              <li><Link to="/pages/shipping-returns" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">Shipping & Returns</Link></li>
+              <li><a href="https://www.prnphysicianportal.com/" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">For Healthcare Professionals</a></li>
+              <li><Link to="/journal" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">Journal</Link></li>
+              <li><Link to="/pages/faq" className="text-besilos-cream/70 hover:text-besilos-sage text-sm">FAQs</Link></li>
+            </ul>
 
-          {/* SEO Keywords Footer Section */}
-          <div className="mt-12 pt-8 border-t border-besilos-cream/20">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <Text as="p" size="fine" className="text-besilos-cream/50 leading-relaxed">
-                  <strong className="text-besilos-cream/70">Los Angeles Dry Eye Products:</strong>{' '}
-                  Shop doctor-recommended dry eye treatments including preservative-free eye drops, omega-3 supplements,
-                  eyelid cleansers, heated eye masks, and scleral lens solutions. We carry trusted brands like PRN,
-                  Optase, Bruder, Avenova, Oasis Tears, and more. Free shipping on orders over $89.
-                </Text>
-              </div>
-              <div>
-                <Text as="p" size="fine" className="text-besilos-cream/50 leading-relaxed">
-                  <strong className="text-besilos-cream/70">Expert Dry Eye Care:</strong>{' '}
-                  Find relief for dry eyes, burning eyes, eye redness, blepharitis, and meibomian gland dysfunction.
-                  Our products include hypochlorous acid sprays, tea tree oil cleansers, hyaluronic acid drops,
-                  and EPA/DHA omega-3 supplements recommended by eye care professionals.
-                </Text>
-              </div>
+            <div className="mt-8">
+              <Heading as="h4" size="copy" className="text-besilos-cream mb-2">Customer Service</Heading>
+              <Text className="text-besilos-cream/60 text-sm">
+                Questions? <Link to="/pages/contact" className="underline hover:text-besilos-sage">Contact us</Link>
+              </Text>
             </div>
           </div>
         </div>

@@ -1,0 +1,39 @@
+{
+    "hero": {
+        "title": "Premium Eye Care Essentials",
+        "subtitle": "Expertly Selected for Optimal Ocular Health",
+        "description": "Discover the gold standard in dry eye relief. Our curated collections bring together the most effective, doctor-recommended treatments for your vision health.",
+        "ctaText": "Explore All Products",
+        "ctaLink": "/collections/all",
+        "image": "/assets/hero-premium-v1.png",
+        "mobileImage": "/assets/hero-premium-mobile-v1.png"
+    },
+    "features": [
+        {
+            "label": "Free Shipping",
+            "icon": "shipping"
+        },
+        {
+            "label": "Specialist Curated",
+            "icon": "doctor"
+        },
+        {
+            "label": "Satisfaction Guarantee",
+            "icon": "shield"
+        }
+    ],
+    "education": {
+        "badge": "DryEyeLA Quality",
+        "title": "Why Trust Our Selection?",
+        "quote": "Every product in the DryEyeLA catalog is vetted by leading eye care professionals to ensure safety, purity, and clinical efficacy.",
+        "points": [
+            "Hand-picked by dry eye specialists",
+            "Clinically verified formulations",
+            "Premium pharmaceutical grade ingredients",
+            "Comprehensive relief for all symptoms"
+        ],
+        "image": "https://cdn.shopify.com/s/files/1/0815/3415/7037/files/AV-Doctor-Section_800x.jpg",
+        "ctaText": "The DryEyeLA Standard",
+        "ctaLink": "/pages/about"
+    }
+}
