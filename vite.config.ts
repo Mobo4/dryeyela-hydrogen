@@ -21,9 +21,8 @@ export default defineConfig({
   ],
   ssr: {
     optimizeDeps: {
-      include: ['@remix-run/node', 'typographic-base'],
+      include: ['typographic-base'],
     },
-    noExternal: ['crypto'], // Allow crypto in SSR
   },
   optimizeDeps: {
     include: [
