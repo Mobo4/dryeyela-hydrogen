@@ -2,7 +2,11 @@
 #! oxygen_storefront_id: 1000013955
 
 name: Storefront 1000013955
-on: [push]
+on:
+  push:
+    branches:
+      - feature/hybrid-data-sync  # Preview mode only - not live
+      # - main  # Commented out - prevents production deployments until ready
 
 permissions:
   contents: read
