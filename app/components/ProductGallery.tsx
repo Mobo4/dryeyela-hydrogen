@@ -34,11 +34,11 @@ export function ProductGallery({
           isFullWidth ? 'md:col-span-2' : 'md:col-span-1',
           isFirst || isFourth ? '' : 'md:aspect-[4/5]',
           // Clean grey background - Professional studio photography standard
-          'aspect-square snap-center card-image bg-[#F5F5F5] dark:bg-contrast/10 w-mobileGallery md:w-full shadow-lg border border-gray-200/50',
+          'aspect-square snap-center card-image w-mobileGallery md:w-full shadow-lg border border-gray-200/50',
         ].join(' ');
 
         return (
-          <div className={style} key={med.id || image?.id}>
+          <div className={style} key={med.id || image?.id} style={{ backgroundColor: '#F5F5F5' }}>
             {/* High resolution, sharp textures - Professional studio lighting */}
             {image && (
               <Image

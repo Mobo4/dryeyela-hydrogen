@@ -58,7 +58,7 @@ export function ProductCard({
       >
         <div className={clsx('grid gap-4', className)}>
           {/* Clean grey background - Professional studio photography standard */}
-          <div className="card-image aspect-[4/5] rounded-xl overflow-hidden relative shadow-lg transition-all duration-500 group-hover:shadow-xl border border-gray-200/50 bg-[#F5F5F5]">
+          <div className="card-image aspect-[4/5] rounded-xl overflow-hidden relative shadow-lg transition-all duration-500 group-hover:shadow-xl border border-gray-200/50" style={{ backgroundColor: '#F5F5F5' }}>
             
             {/* Primary Image - High resolution, sharp textures, professional studio lighting */}
             {image ? (

@@ -260,7 +260,7 @@ function CartLineItem({line}: {line: CartLine}) {
     >
       <div className="flex-shrink relative">
         {merchandise.image && (
-          <div className="w-24 h-24 md:w-28 md:h-28 rounded-lg overflow-hidden bg-[#F5F5F5] border border-gray-200/50 shadow-sm p-2 relative">
+          <div className="w-24 h-24 md:w-28 md:h-28 rounded-lg overflow-hidden border border-gray-200/50 shadow-sm p-2 relative" style={{ backgroundColor: '#F5F5F5' }}>
             <Image
               width={110}
               height={110}

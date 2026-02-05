@@ -132,7 +132,7 @@ export default function OrderRoute() {
                       <div className="flex gap-6">
                         {lineItem?.image && (
                           /* Clean grey background - Professional studio photography standard */
-                          <div className="w-24 card-image aspect-square rounded-lg overflow-hidden bg-[#F5F5F5] border border-gray-200/50 shadow-sm p-2 relative">
+                          <div className="w-24 card-image aspect-square rounded-lg overflow-hidden border border-gray-200/50 shadow-sm p-2 relative" style={{ backgroundColor: '#F5F5F5' }}>
                             <Image
                               data={lineItem.image}
                               width={96}

@@ -219,7 +219,7 @@ export default function GenericProductPage() {
 
           {/* Product Image Column - Clean grey background, professional studio photography */}
           <div className="lg:col-span-7 flex flex-col items-center">
-            <div className="relative w-full max-w-lg aspect-square rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden bg-[#F5F5F5] mb-8 group">
+            <div className="relative w-full max-w-lg aspect-square rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden mb-8 group" style={{ backgroundColor: '#F5F5F5' }}>
               {/* Product Image - High resolution, sharp textures, dramatic but clear professional studio lighting */}
               <img
                 key={selectedVariant?.id || 'main'}

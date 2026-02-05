@@ -33,12 +33,13 @@ export function ProductImage({
   if (!data) return null;
 
   return (
-    <div className={clsx(
-      "relative overflow-hidden",
-      // Clean grey background - professional studio standard
-      "bg-[#F5F5F5]", // Light grey background for product photography
-      className
-    )}>
+    <div 
+      className={clsx(
+        "relative overflow-hidden",
+        className
+      )}
+      style={{ backgroundColor: '#F5F5F5' }}
+    >
       {/* Ensure high quality rendering */}
       <Image
         data={data}
@@ -85,14 +86,15 @@ export function ProductImageCard({
   if (!data) return null;
 
   return (
-    <div className={clsx(
-      "relative overflow-hidden rounded-xl shadow-lg border border-gray-200/50",
-      // Clean grey background - professional studio standard
-      "bg-[#F5F5F5]",
-      // Hover effects
-      showHoverEffect && "group transition-all duration-500 hover:shadow-xl",
-      className
-    )}>
+    <div 
+      className={clsx(
+        "relative overflow-hidden rounded-xl shadow-lg border border-gray-200/50",
+        // Hover effects
+        showHoverEffect && "group transition-all duration-500 hover:shadow-xl",
+        className
+      )}
+      style={{ backgroundColor: '#F5F5F5' }}
+    >
       <ProductImage
         data={data}
         aspectRatio={aspectRatio}

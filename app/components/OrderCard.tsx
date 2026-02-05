@@ -23,7 +23,7 @@ export function OrderCard({order}: {order: OrderCardFragment}) {
         prefetch="intent"
       >
         {lineItems[0].image && (
-          <div className="card-image aspect-square rounded-lg overflow-hidden bg-[#F5F5F5] border border-gray-200/50 shadow-sm p-3 relative">
+          <div className="card-image aspect-square rounded-lg overflow-hidden border border-gray-200/50 shadow-sm p-3 relative" style={{ backgroundColor: '#F5F5F5' }}>
             <Image
               width={168}
               height={168}

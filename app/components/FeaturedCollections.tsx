@@ -31,7 +31,7 @@ export function FeaturedCollections({
             <Link key={collection.id} to={`/collections/${collection.handle}`} className="group">
               <div className="grid gap-4">
                 {/* Clean grey background - Professional studio photography standard */}
-                <div className="card-image aspect-[3/2] rounded-xl overflow-hidden relative bg-[#F5F5F5] shadow-lg border border-gray-200/50 group-hover:shadow-xl transition-all duration-300">
+                <div className="card-image aspect-[3/2] rounded-xl overflow-hidden relative shadow-lg border border-gray-200/50 group-hover:shadow-xl transition-all duration-300" style={{ backgroundColor: '#F5F5F5' }}>
                   {collection?.image && (
                     <Image
                       alt={`Image of ${collection.title}`}

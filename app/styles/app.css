@@ -218,14 +218,21 @@ shop-pay-button {
 
   .card-image {
     @apply relative flex items-center justify-center overflow-clip rounded;
+    /* Ensure grey background is visible */
+    background-color: #F5F5F5 !important;
 
     &::before {
       content: ' ';
-      @apply absolute top-0 left-0 z-10 block h-full w-full rounded shadow-border;
+      @apply absolute top-0 left-0 z-0 block h-full w-full rounded shadow-border;
+      /* Don't cover the background - lower z-index */
+      background-color: transparent;
     }
 
     img {
       @apply aspect-[inherit] w-full object-contain;
+      /* Ensure image doesn't cover background */
+      position: relative;
+      z-index: 1;
     }
   }
 

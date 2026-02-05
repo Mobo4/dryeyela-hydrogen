@@ -190,7 +190,7 @@ function CollectionCard({
       className="group block bg-white rounded-2xl border border-besilos-sage/10 hover:border-besilos-sage/30 hover:shadow-lg transition-all duration-300 overflow-hidden"
     >
       {/* Clean grey background - Professional studio photography standard */}
-      <div className="aspect-[3/2] overflow-hidden relative bg-[#F5F5F5]">
+      <div className="aspect-[3/2] overflow-hidden relative" style={{ backgroundColor: '#F5F5F5' }}>
         {collection?.image ? (
           <Image
             data={collection.image}

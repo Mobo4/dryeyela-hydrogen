@@ -151,7 +151,7 @@ export function SearchAutocomplete({
                     role="option"
                   >
                     {product.image?.url && (
-                      <div className="w-16 h-16 rounded-md flex-shrink-0 overflow-hidden bg-[#F5F5F5] border border-gray-200/50 p-1.5 shadow-sm">
+                      <div className="w-16 h-16 rounded-md flex-shrink-0 overflow-hidden border border-gray-200/50 p-1.5 shadow-sm" style={{ backgroundColor: '#F5F5F5' }}>
                         <img
                           src={product.image.url}
                           alt={product.image.altText || product.title}

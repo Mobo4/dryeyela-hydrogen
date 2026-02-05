@@ -25,7 +25,7 @@ export function ProductRecommendations({ products }: ProductRecommendationsProps
                             className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hover:shadow-md hover:border-blue-200 transition-all group flex flex-col"
                         >
                             {/* Clean grey background - Professional studio photography standard */}
-                            <div className="aspect-square rounded-lg mb-4 overflow-hidden p-4 flex items-center justify-center relative bg-[#F5F5F5] shadow-sm border border-gray-200/50 group-hover:shadow-md transition-all duration-300">
+                            <div className="aspect-square rounded-lg mb-4 overflow-hidden p-4 flex items-center justify-center relative shadow-sm border border-gray-200/50 group-hover:shadow-md transition-all duration-300" style={{ backgroundColor: '#F5F5F5' }}>
                                 <img
                                     src={product.images[0].src}
                                     alt={product.images[0].alt}
