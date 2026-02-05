@@ -1,8 +1,8 @@
-import type {AppLoadContext, EntryContext} from '@shopify/remix-oxygen';
-import {RemixServer} from '@remix-run/react';
+import type { AppLoadContext, EntryContext } from '@shopify/remix-oxygen';
+import { RemixServer } from '@remix-run/react';
 import isbot from 'isbot';
-import {renderToReadableStream} from 'react-dom/server';
-import {createContentSecurityPolicy} from '@shopify/hydrogen';
+import { renderToReadableStream } from 'react-dom/server';
+import { createContentSecurityPolicy } from '@shopify/hydrogen';
 
 export default async function handleRequest(
   request: Request,
@@ -11,7 +11,7 @@ export default async function handleRequest(
   remixContext: EntryContext,
   context: AppLoadContext,
 ) {
-  const {nonce, header, NonceProvider} = createContentSecurityPolicy({
+  const { nonce, header, NonceProvider } = createContentSecurityPolicy({
     shop: {
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
@@ -22,7 +22,36 @@ export default async function handleRequest(
       'https://shopify.com',
       'https://www.google-analytics.com',
       'https://www.googletagmanager.com',
+      'https://cdn.judge.me', // Judge.me reviews widget
+      'https://config.gorgias.chat', // Gorgias chat widget
+      'https://a.klaviyo.com', // Klaviyo analytics
       ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:*'] : []),
+    ],
+    connectSrc: [
+      'self',
+      'https://*.myshopify.com',
+      'https://api.judge.me', // Judge.me API
+      'https://api.gorgias.chat', // Gorgias API
+      'https://a.klaviyo.com', // Klaviyo API
+    ],
+    imgSrc: [
+      'self',
+      'http://localhost:*',
+      'https://cdn.shopify.com',
+      'https://prnvision.com',
+      'https://*.prnvision.com',
+      'http://prnvision.com', // Legacy images
+      'data:',
+    ],
+    fontSrc: [
+      'self',
+      'https://fonts.gstatic.com',
+      'https://prnvision.com',
+    ],
+    styleSrc: [
+      'self',
+      'https://fonts.googleapis.com',
+      'unsafe-inline', // Required for some Hydrogen styles if nonce isn't perfect
     ],
   });
 

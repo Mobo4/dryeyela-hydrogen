@@ -27,6 +27,8 @@ import {
   TrustBadgesSection,
   CTASection,
   EmptyState,
+  PageHero,
+  TrustBadges,
 } from '~/components/sections';
 
 import {
@@ -93,29 +95,30 @@ export default function Search() {
 
   return (
     <>
-      {/* Hero Section with Search */}
-      <section className="bg-besilos-cream py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-besilos-navy mb-4">
-              {searchTerm ? `Results for "${searchTerm}"` : 'Search Products'}
-            </h1>
-            <p className="text-besilos-navy/70 mb-8">
-              Find the right dry eye products for your needs
-            </p>
-          </div>
+      {/* Hero Section with Search - Eyepromise Style */}
+      <PageHero
+        title={searchTerm ? `Results for "${searchTerm}"` : 'Search Products'}
+        description="Find the right dry eye products for your needs"
+        breadcrumbs={[
+          {label: 'Home', to: '/'},
+          {label: 'Search'},
+        ]}
+        background="gradient"
+      />
 
-          {/* Search Form */}
+      {/* Search Form */}
+      <section className="py-8 bg-white border-b border-gray-100">
+        <div className="max-w-4xl mx-auto px-4 md:px-8">
           <Form method="get" className="relative max-w-2xl mx-auto">
             <Input
               defaultValue={searchTerm}
               name="q"
               placeholder="Search for eye drops, supplements, brands..."
               type="search"
-              className="w-full px-6 py-4 pr-24 rounded-full border-2 border-besilos-sage/30 focus:border-besilos-sage bg-white text-besilos-navy placeholder:text-besilos-navy/50"
+              className="w-full px-6 py-4 pr-24 rounded-full border-2 border-gray-200 focus:border-besilos-blue bg-white text-besilos-navy placeholder:text-gray-400 shadow-lg"
             />
             <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-besilos-sage text-white font-medium rounded-full hover:bg-besilos-sage/90 transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-besilos-navy text-white font-bold uppercase tracking-wider rounded-full hover:bg-besilos-navy/90 transition-colors shadow-lg"
               type="submit"
             >
               Search
@@ -123,7 +126,7 @@ export default function Search() {
           </Form>
 
           {hasResults && (
-            <p className="text-center mt-4 text-besilos-navy/60">
+            <p className="text-center mt-4 text-gray-600 font-medium">
               Found {products.nodes.length} products
             </p>
           )}
@@ -131,7 +134,14 @@ export default function Search() {
       </section>
 
       {/* Trust Badges */}
-      <TrustBadgesSection variant="compact" />
+      <TrustBadges
+        badges={[
+          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
+          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
+          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
+          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+        ]}
+      />
 
       {/* Results or No Results */}
       {!searchTerm || noResults ? (

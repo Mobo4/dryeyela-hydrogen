@@ -2,7 +2,11 @@
 #! oxygen_storefront_id: 1000013955
 
 name: Storefront 1000013955
-on: [push]
+on:
+  push:
+    branches:
+      - feature/hybrid-data-sync  # Preview mode only - not live
+      # - main  # Commented out - prevents production deployments until ready
 
 permissions:
   contents: read
@@ -41,9 +45,32 @@ jobs:
       - name: Build and Publish to Oxygen
         id: deploy
         run: |
-          npx shopify hydrogen deploy --auth-bypass-token --token "${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000013955 }}"
-          echo "AUTH_BYPASS_TOKEN=$(jq -r '.authBypassToken' h2_deploy_log.json)" >> $GITHUB_ENV
-          echo "DEPLOYMENT_URL=$(jq -r '.url' h2_deploy_log.json)" >> $GITHUB_ENV
+          # Check if deployment token exists
+          if [ -z "${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000013955 }}" ]; then
+            echo "❌ Error: OXYGEN_DEPLOYMENT_TOKEN_1000013955 not found in GitHub Secrets"
+            echo "   Go to: https://github.com/Mobo4/dryeyela-hydrogen/settings/secrets/actions"
+            echo "   Add secret: OXYGEN_DEPLOYMENT_TOKEN_1000013955"
+            exit 1
+          fi
+          
+          # Deploy to Oxygen
+          echo "🚀 Deploying to Shopify Oxygen..."
+          npx shopify hydrogen deploy --auth-bypass-token --token "${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000013955 }}" || {
+            echo "❌ Deployment failed!"
+            echo "   Check token is valid and not expired"
+            echo "   Get new token from: Shopify Admin → Hydrogen → Deployments"
+            exit 1
+          }
+          
+          # Extract deployment info
+          if [ -f h2_deploy_log.json ]; then
+            echo "AUTH_BYPASS_TOKEN=$(jq -r '.authBypassToken' h2_deploy_log.json)" >> $GITHUB_ENV
+            echo "DEPLOYMENT_URL=$(jq -r '.url' h2_deploy_log.json)" >> $GITHUB_ENV
+            echo "✅ Deployment successful!"
+            echo "   URL: $(jq -r '.url' h2_deploy_log.json)"
+          else
+            echo "⚠️  Warning: h2_deploy_log.json not found"
+          fi
 
       - name: Run end-to-end tests
         id: end-to-end-tests

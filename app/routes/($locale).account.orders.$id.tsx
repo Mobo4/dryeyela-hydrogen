@@ -131,11 +131,13 @@ export default function OrderRoute() {
                     <td className="w-full py-4 pl-0 pr-3 align-top sm:align-middle max-w-0 sm:w-auto sm:max-w-none">
                       <div className="flex gap-6">
                         {lineItem?.image && (
-                          <div className="w-24 card-image aspect-square">
+                          /* Clean grey background - Professional studio photography standard */
+                          <div className="w-24 card-image aspect-square rounded-lg overflow-hidden border border-gray-200/50 shadow-sm p-2 relative" style={{ backgroundColor: '#F5F5F5' }}>
                             <Image
                               data={lineItem.image}
                               width={96}
                               height={96}
+                              className="object-contain relative z-10 image-render-crisp-edges"
                             />
                           </div>
                         )}

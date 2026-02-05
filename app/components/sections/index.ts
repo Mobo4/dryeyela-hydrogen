@@ -7,3 +7,5 @@ export {TrustBadgesSection} from './TrustBadgesSection';
 export {CTASection} from './CTASection';
 export {CategoryCardsSection} from './CategoryCardsSection';
 export {EmptyState} from './EmptyState';
+export {PageHero} from './PageHero';
+export {TrustBadges} from './TrustBadges';

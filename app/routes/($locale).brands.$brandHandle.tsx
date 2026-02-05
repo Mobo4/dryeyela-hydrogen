@@ -6,13 +6,21 @@ import {
 import {useLoaderData} from '@remix-run/react';
 import {getSeoMeta} from '@shopify/hydrogen';
 import {BRANDS, SEO_CONFIG} from '~/data/navigation';
-import {Link} from '~/components/Link';
-import {Heading, Text, Section} from '~/components/Text';
+import {Link} from '@remix-run/react';
+import {Heading, Text} from '~/components/Text';
 import {ProductSwimlane} from '~/components/ProductSwimlane';
-import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
+import {PRODUCTS_BY_FILTER_QUERY} from '~/data/queries';
+import {PageHero} from '~/components/sections/PageHero';
+import {TrustBadges} from '~/components/sections/TrustBadges';
 
+/**
+ * Brand Page
+ * 
+ * Displays products for a specific brand by filtering via vendor name.
+ */
 export async function loader({params, context}: LoaderFunctionArgs) {
   const {brandHandle} = params;
+  const {storefront} = context;
 
   const brand = BRANDS.find((b) => b.handle === brandHandle);
 
@@ -20,22 +28,36 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     throw new Response('Brand not found', {status: 404});
   }
 
-  // Fetch products by vendor (brand name)
-  const {products} = await context.storefront.query(BRAND_PRODUCTS_QUERY, {
-    variables: {
-      first: 24,
-      query: `vendor:"${brand.name}"`,
-    },
-  });
+  try {
+    // Fetch products by vendor (brand name)
+    const {products} = await storefront.query(PRODUCTS_BY_FILTER_QUERY, {
+      variables: {
+        first: 24,
+        query: `vendor:"${brand.name}"`,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+    });
 
-  return json({
-    brand,
-    products,
-    seo: {
-      title: `${brand.name} Products`,
-      description: brand.description,
-    },
-  });
+    return json({
+      brand,
+      products,
+      seo: {
+        title: `${brand.name} Products`,
+        description: brand.description,
+      },
+    });
+  } catch (error) {
+    console.error(`Error loading products for brand ${brand.name}:`, error);
+    return json({
+      brand,
+      products: {nodes: []},
+      seo: {
+        title: `${brand.name} Products`,
+        description: brand.description,
+      },
+    });
+  }
 }
 
 export const meta = ({data}: MetaArgs<typeof loader>) => {
@@ -53,93 +75,122 @@ export default function BrandPage() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-besilos-navy text-besilos-cream py-16 px-6 md:px-12">
-        <div className="max-w-4xl mx-auto text-center">
-          <Link to="/brands" className="text-besilos-sage hover:underline mb-4 inline-block">
-            ← All Brands
-          </Link>
-          <Heading as="h1" size="display" className="text-besilos-cream mb-6">
-            {brand.name}
-          </Heading>
-          <Text as="p" size="lead" className="text-besilos-cream/80 max-w-2xl mx-auto">
-            {brand.description}
-          </Text>
-        </div>
-      </section>
+      {/* Hero Section - Eyepromise Style */}
+      <PageHero
+        title={brand.name}
+        description={brand.description}
+        badge={products?.nodes?.length > 0 ? `${products.nodes.length}+ Products` : undefined}
+        breadcrumbs={[
+          { label: 'Home', to: '/' },
+          { label: 'Brands', to: '/brands' },
+          { label: brand.name },
+        ]}
+        background="gradient"
+      />
+
+      {/* Trust Badges */}
+      <TrustBadges
+        badges={[
+          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
+          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
+          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
+          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+        ]}
+      />
 
       {/* Products Section */}
       {products?.nodes?.length > 0 ? (
-        <ProductSwimlane
-          products={products}
-          title={`${brand.name} Products`}
-          count={24}
-        />
-      ) : (
-        <Section padding="all" className="bg-besilos-cream">
-          <div className="max-w-3xl mx-auto text-center">
-            <Heading as="h2" size="heading" className="mb-4">
-              Coming Soon
-            </Heading>
-            <Text as="p" className="text-primary/70 mb-8">
-              {brand.name} products will be available soon. Check back later or browse our other brands.
-            </Text>
-            <Link
-              to="/brands"
-              className="inline-block bg-besilos-sage text-white px-8 py-3 rounded-full hover:bg-besilos-sage/90 transition-colors"
-            >
-              Browse All Brands
-            </Link>
+        <section className="py-20 md:py-32 bg-white">
+          <div className="max-w-[1600px] mx-auto px-4 md:px-8">
+            <div className="text-center mb-12">
+              <Heading as="h2" size="display" className="text-besilos-navy mb-4 text-3xl md:text-4xl">
+                {brand.name} Products
+              </Heading>
+              <Text className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Discover our complete selection of {brand.name} eye care solutions.
+              </Text>
+            </div>
+            <ProductSwimlane
+              products={products}
+              title=""
+              count={24}
+            />
           </div>
-        </Section>
+        </section>
+      ) : (
+        <section className="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white">
+          <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
+            <div className="bg-white rounded-2xl p-12 shadow-lg border border-gray-100">
+              <div className="text-6xl mb-6">📦</div>
+              <Heading as="h2" size="display" className="text-besilos-navy mb-4 text-3xl">
+                Coming Soon
+              </Heading>
+              <Text className="text-gray-600 text-lg mb-8">
+                {brand.name} products will be available soon. Check back later or browse our other brands.
+              </Text>
+              <Link
+                to="/brands"
+                className="inline-block bg-besilos-navy text-white px-8 py-4 font-bold uppercase tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
+              >
+                Browse All Brands
+              </Link>
+            </div>
+          </div>
+        </section>
       )}
 
-      {/* Brand Info Section */}
-      <Section padding="all" className="bg-besilos-cream">
-        <div className="max-w-3xl mx-auto">
-          <Heading as="h2" size="heading" className="text-center mb-8">
-            About {brand.name}
-          </Heading>
-          <div className="prose prose-lg mx-auto">
-            <Text as="p" className="mb-4">
-              {brand.description}
-            </Text>
-            <Text as="p" className="mb-4">
-              {brand.name} is trusted by eye care professionals for their proven effectiveness
-              in treating dry eye symptoms. All {brand.name} products are recommended by dry eye specialists.
-            </Text>
+      {/* Brand Info Section - Eyepromise Style */}
+      <section className="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-12">
+            <Heading as="h2" size="display" className="text-besilos-navy mb-4 text-3xl md:text-4xl">
+              About {brand.name}
+            </Heading>
+          </div>
+          <div className="bg-white rounded-2xl p-10 md:p-12 shadow-lg border border-gray-100">
+            <div className="prose prose-lg max-w-none">
+              <Text as="p" className="text-gray-700 text-lg mb-6 leading-relaxed">
+                {brand.description}
+              </Text>
+              <Text as="p" className="text-gray-700 text-lg leading-relaxed">
+                {brand.name} is trusted by eye care professionals for their proven effectiveness
+                in treating dry eye symptoms. All {brand.name} products are recommended by dry eye specialists
+                and backed by clinical research.
+              </Text>
+            </div>
           </div>
         </div>
-      </Section>
+      </section>
 
-      {/* CTA */}
-      <Section padding="all">
-        <div className="text-center">
-          <Heading as="h3" size="lead" className="mb-4">
-            Need Help Choosing?
-          </Heading>
-          <Text as="p" className="mb-6 text-primary/70">
-            Not sure which {brand.name} product is right for you? Contact us for personalized recommendations.
-          </Text>
-          <Link
-            to="/pages/contact"
-            className="inline-block bg-besilos-sage text-white px-8 py-3 rounded-full hover:bg-besilos-sage/90 transition-colors"
-          >
-            Get Recommendations
-          </Link>
+      {/* CTA Section - Eyepromise Style */}
+      <section className="py-20 md:py-32 bg-gradient-to-br from-besilos-navy via-besilos-navy/95 to-besilos-blue/20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(0,154,222,0.2),transparent_60%)]"></div>
+        <div className="max-w-4xl mx-auto px-4 md:px-8 text-center relative z-10">
+          <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-10 md:p-16 shadow-2xl border border-white/20">
+            <Heading as="h3" size="display" className="text-besilos-navy mb-4 text-2xl md:text-3xl">
+              Need Help Choosing?
+            </Heading>
+            <Text className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
+              Not sure which {brand.name} product is right for you? Our dry eye specialists can provide personalized recommendations.
+            </Text>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/pages/contact"
+                className="inline-block bg-besilos-navy text-white px-8 py-4 font-bold uppercase tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
+              >
+                Get Recommendations
+              </Link>
+              <Link
+                to="/collections/all"
+                className="inline-block bg-transparent text-besilos-navy border-2 border-besilos-navy px-8 py-4 font-bold uppercase tracking-wider rounded-lg hover:bg-gray-50 transition-all"
+              >
+                Browse All Products
+              </Link>
+            </div>
+          </div>
         </div>
-      </Section>
+      </section>
     </>
   );
 }
 
-const BRAND_PRODUCTS_QUERY = `#graphql
-  query brandProducts($first: Int!, $query: String) {
-    products(first: $first, query: $query) {
-      nodes {
-        ...ProductCard
-      }
-    }
-  }
-  ${PRODUCT_CARD_FRAGMENT}
-` as const;

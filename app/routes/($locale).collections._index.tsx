@@ -24,6 +24,8 @@ import {
   TrustBadgesSection,
   CTASection,
   CategoryCardsSection,
+  PageHero,
+  TrustBadges,
 } from '~/components/sections';
 import {SHOP_CATEGORIES, SYMPTOMS} from '~/data/navigation';
 
@@ -79,19 +81,26 @@ export default function Collections() {
 
   return (
     <>
-      {/* Hero Section */}
-      <HeroSection
+      {/* Hero Section - Eyepromise Style */}
+      <PageHero
         title="Shop All Collections"
         description="Browse our complete selection of doctor-recommended dry eye products. From eye drops to supplements, we have everything you need for lasting relief."
-        variant="secondary"
         breadcrumbs={[
           {label: 'Home', to: '/'},
           {label: 'Collections'},
         ]}
+        background="gradient"
       />
 
-      {/* Trust Badges - Compact */}
-      <TrustBadgesSection variant="compact" />
+      {/* Trust Badges */}
+      <TrustBadges
+        badges={[
+          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
+          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
+          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
+          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+        ]}
+      />
 
       {/* Shop by Category */}
       <CategoryCardsSection
@@ -180,14 +189,15 @@ function CollectionCard({
       to={`/collections/${collection.handle}`}
       className="group block bg-white rounded-2xl border border-besilos-sage/10 hover:border-besilos-sage/30 hover:shadow-lg transition-all duration-300 overflow-hidden"
     >
-      <div className="aspect-[3/2] bg-besilos-cream/50 overflow-hidden">
+      {/* Clean grey background - Professional studio photography standard */}
+      <div className="aspect-[3/2] overflow-hidden relative" style={{ backgroundColor: '#F5F5F5' }}>
         {collection?.image ? (
           <Image
             data={collection.image}
             aspectRatio="6/4"
             sizes="(max-width: 32em) 100vw, 45vw"
             loading={loading}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 p-4 md:p-6 relative z-10 image-render-crisp-edges"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

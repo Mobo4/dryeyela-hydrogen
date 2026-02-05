@@ -1,11 +1,11 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import {
   json,
   type MetaArgs,
   type LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData, useNavigate} from '@remix-run/react';
-import {useInView} from 'react-intersection-observer';
+import { useLoaderData, useNavigate } from '@remix-run/react';
+import { useInView } from 'react-intersection-observer';
 import type {
   Filter,
   ProductCollectionSortKeys,
@@ -19,42 +19,45 @@ import {
   getSeoMeta,
 } from '@shopify/hydrogen';
 
-import {Section, Text} from '~/components/Text';
-import {Grid} from '~/components/Grid';
-import {Button} from '~/components/Button';
-import {ProductCard} from '~/components/ProductCard';
-import {SortFilter, type SortParam} from '~/components/SortFilter';
-import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
-import {routeHeaders} from '~/data/cache';
-import {seoPayload} from '~/lib/seo.server';
-import {FILTER_URL_PREFIX} from '~/components/SortFilter';
-import {getImageLoadingPriority} from '~/lib/const';
-import {parseAsCurrency} from '~/lib/utils';
+import { Section, Text } from '~/components/Text';
+import { Grid } from '~/components/Grid';
+import { Button } from '~/components/Button';
+import { ProductCard } from '~/components/ProductCard';
+import { SortFilter, type SortParam } from '~/components/SortFilter';
+import { PRODUCT_CARD_FRAGMENT } from '~/data/fragments';
+import { routeHeaders } from '~/data/cache';
+import { seoPayload } from '~/lib/seo.server';
+import { FILTER_URL_PREFIX } from '~/components/SortFilter';
+import { getImageLoadingPriority } from '~/lib/const';
+import { parseAsCurrency } from '~/lib/utils';
 import {
   HeroSection,
   TrustBadgesSection,
   CTASection,
   EmptyState,
   CategoryCardsSection,
+  PageHero,
+  TrustBadges,
 } from '~/components/sections';
-import {getFallbackCollection, getRelatedCollections} from '~/data/collections';
+import { VisualFilterBar } from '~/components/VisualFilterBar';
+import { getFallbackCollection, getRelatedCollections } from '~/data/collections';
 
 export const headers = routeHeaders;
 
-export async function loader({params, request, context}: LoaderFunctionArgs) {
+export async function loader({ params, request, context }: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 12,
   });
-  const {collectionHandle} = params;
+  const { collectionHandle } = params;
   const locale = context.storefront.i18n;
 
   if (!collectionHandle) {
-    throw new Response('Missing collectionHandle param', {status: 400});
+    throw new Response('Missing collectionHandle param', { status: 400 });
   }
 
   const searchParams = new URL(request.url).searchParams;
 
-  const {sortKey, reverse} = getSortValuesFromParam(
+  const { sortKey, reverse } = getSortValuesFromParam(
     searchParams.get('sort') as SortParam,
   );
   const filters = [...searchParams.entries()].reduce(
@@ -70,7 +73,7 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
     [] as ProductFilter[],
   );
 
-  const {collection, collections} = await context.storefront.query(
+  const { collection, collections } = await context.storefront.query(
     COLLECTION_QUERY,
     {
       variables: {
@@ -89,34 +92,46 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   const fallbackMeta = getFallbackCollection(collectionHandle);
   const relatedCollections = getRelatedCollections(collectionHandle, 3);
 
-  // If collection doesn't exist in Shopify, return fallback data
+  // If collection doesn't exist in Shopify, check LOCAL fallbacks
   if (!collection) {
-    // Create a minimal SEO config for missing collections
+    const { LOCAL_COLLECTIONS } = await import('~/data/local-collections');
+    const localProducts = LOCAL_COLLECTIONS[collectionHandle];
+
+    if (localProducts && localProducts.length > 0) {
+      // Construct a virtual collection object
+      const virtualCollection = {
+        id: `gid://shopify/Collection/local-${collectionHandle}`,
+        handle: collectionHandle,
+        title: fallbackMeta.title,
+        description: fallbackMeta.description,
+        products: {
+          filters: [],
+          nodes: localProducts,
+          pageInfo: { hasNextPage: false, hasPreviousPage: false }
+        }
+      };
+
+      const seo = seoPayload.collection({ collection: virtualCollection, url: request.url });
+
+      return json({
+        collection: virtualCollection,
+        collectionHandle,
+        fallbackMeta,
+        relatedCollections,
+        appliedFilters: [],
+        collections: flattenConnection(collections),
+        seo,
+      });
+    }
+
+    // REAL FALLBACK for truly unknown collections
     const seo = {
       title: fallbackMeta.title,
       description: fallbackMeta.description,
       titleTemplate: '%s | Collection',
       url: request.url,
       media: undefined,
-      jsonLd: [
-        {
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Collections',
-              item: `${new URL(request.url).origin}/collections`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: fallbackMeta.title,
-            },
-          ],
-        },
-      ],
+      jsonLd: [],
     };
 
     return json({
@@ -130,7 +145,7 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
     });
   }
 
-  const seo = seoPayload.collection({collection, url: request.url});
+  const seo = seoPayload.collection({ collection, url: request.url });
 
   const allFilterValues = collection.products.filters.flatMap(
     (filter) => filter.values,
@@ -183,15 +198,15 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   });
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({ matches }: MetaArgs<typeof loader>) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
 export default function Collection() {
-  const {collection, collectionHandle, fallbackMeta, relatedCollections, collections, appliedFilters} =
+  const { collection, collectionHandle, fallbackMeta, relatedCollections, collections, appliedFilters } =
     useLoaderData<typeof loader>();
 
-  const {ref, inView} = useInView();
+  const { ref, inView } = useInView();
 
   // Collection doesn't exist in Shopify - show coming soon state
   if (!collection) {
@@ -203,9 +218,9 @@ export default function Collection() {
           description={fallbackMeta.heroDescription}
           variant="secondary"
           breadcrumbs={[
-            {label: 'Home', to: '/'},
-            {label: 'Collections', to: '/collections'},
-            {label: fallbackMeta.title},
+            { label: 'Home', to: '/' },
+            { label: 'Collections', to: '/collections' },
+            { label: fallbackMeta.title },
           ]}
         />
 
@@ -214,8 +229,8 @@ export default function Collection() {
           title="Coming Soon"
           description={`We're preparing our ${fallbackMeta.title.toLowerCase()} collection. Check back soon or explore our other products below.`}
           icon="coming-soon"
-          primaryCTA={{label: 'Shop All Products', to: '/collections/all'}}
-          secondaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
+          primaryCTA={{ label: 'Shop All Products', to: '/collections/all' }}
+          secondaryCTA={{ label: 'Contact Us', to: '/pages/contact' }}
         />
 
         {/* Related Collections */}
@@ -241,8 +256,8 @@ export default function Collection() {
         <CTASection
           title="Need Help Finding Products?"
           description="Our dry eye specialists can help you find the right products for your needs."
-          primaryCTA={{label: 'Contact Support', to: '/pages/contact'}}
-          secondaryCTA={{label: 'Learn About Dry Eye', to: '/pages/about'}}
+          primaryCTA={{ label: 'Contact Support', to: '/pages/contact' }}
+          secondaryCTA={{ label: 'Learn About Dry Eye', to: '/pages/about' }}
           background="cream"
         />
       </>
@@ -253,21 +268,28 @@ export default function Collection() {
 
   return (
     <>
-      {/* Hero Section */}
-      <HeroSection
+      {/* Hero Section - Eyepromise Style */}
+      <PageHero
         title={collection.title}
         description={collection.description || fallbackMeta.heroDescription}
-        variant="secondary"
-        breadcrumbs={[
-          {label: 'Home', to: '/'},
-          {label: 'Collections', to: '/collections'},
-          {label: collection.title},
-        ]}
         badge={productCount > 0 ? `${productCount}+ Products` : undefined}
+        breadcrumbs={[
+          { label: 'Home', to: '/' },
+          { label: 'Collections', to: '/collections' },
+          { label: collection.title },
+        ]}
+        background="gradient"
       />
 
-      {/* Trust Badges - Compact */}
-      <TrustBadgesSection variant="compact" />
+      {/* Trust Badges */}
+      <TrustBadges
+        badges={[
+          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
+          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
+          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
+          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+        ]}
+      />
 
       {/* Products Section */}
       <Section className="py-12">
@@ -317,7 +339,7 @@ export default function Collection() {
                     title="No Products Found"
                     description="This collection doesn't have any products yet. Try removing some filters or check back later."
                     icon="products"
-                    primaryCTA={{label: 'Shop All Products', to: '/collections/all'}}
+                    primaryCTA={{ label: 'Shop All Products', to: '/collections/all' }}
                   />
                 )}
               </>
@@ -346,8 +368,8 @@ export default function Collection() {
       <CTASection
         title="Questions About Our Products?"
         description="Our dry eye specialists are here to help you find the right treatment."
-        primaryCTA={{label: 'Contact Us', to: '/pages/contact'}}
-        secondaryCTA={{label: 'View All Products', to: '/collections/all'}}
+        primaryCTA={{ label: 'Contact Us', to: '/pages/contact' }}
+        secondaryCTA={{ label: 'View All Products', to: '/collections/all' }}
         variant="split"
         background="navy"
       />
@@ -403,76 +425,76 @@ function ProductsLoadedOnScroll({
 }
 
 const COLLECTION_QUERY = `#graphql
-  query CollectionDetails(
-    $handle: String!
-    $country: CountryCode
-    $language: LanguageCode
-    $filters: [ProductFilter!]
-    $sortKey: ProductCollectionSortKeys!
-    $reverse: Boolean
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
-  ) @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
-      id
+          query CollectionDetails(
+          $handle: String!
+          $country: CountryCode
+          $language: LanguageCode
+          $filters: [ProductFilter!]
+          $sortKey: ProductCollectionSortKeys!
+          $reverse: Boolean
+          $first: Int
+          $last: Int
+          $startCursor: String
+          $endCursor: String
+          ) @inContext(country: $country, language: $language) {
+            collection(handle: $handle) {
+            id
       handle
-      title
-      description
-      seo {
-        description
+          title
+          description
+          seo {
+            description
         title
       }
-      image {
-        id
+          image {
+            id
         url
-        width
-        height
-        altText
+          width
+          height
+          altText
       }
-      products(
-        first: $first,
-        last: $last,
-        before: $startCursor,
-        after: $endCursor,
-        filters: $filters,
-        sortKey: $sortKey,
-        reverse: $reverse
-      ) {
-        filters {
-          id
+          products(
+          first: $first,
+          last: $last,
+          before: $startCursor,
+          after: $endCursor,
+          filters: $filters,
+          sortKey: $sortKey,
+          reverse: $reverse
+          ) {
+            filters {
+            id
           label
           type
           values {
             id
             label
-            count
-            input
+          count
+          input
           }
         }
-        nodes {
-          ...ProductCard
-        }
-        pageInfo {
-          hasPreviousPage
+          nodes {
+            ...ProductCard
+          }
+          pageInfo {
+            hasPreviousPage
           hasNextPage
           endCursor
           startCursor
         }
       }
     }
-    collections(first: 100) {
-      edges {
-        node {
-          title
+          collections(first: 100) {
+            edges {
+            node {
+            title
           handle
         }
       }
     }
   }
-  ${PRODUCT_CARD_FRAGMENT}
-` as const;
+          ${PRODUCT_CARD_FRAGMENT}
+          ` as const;
 
 function getSortValuesFromParam(sortParam: SortParam | null): {
   sortKey: ProductCollectionSortKeys;

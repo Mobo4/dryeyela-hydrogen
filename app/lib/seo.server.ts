@@ -1,4 +1,4 @@
-import {type SeoConfig} from '@shopify/hydrogen';
+import { type SeoConfig } from '@shopify/hydrogen';
 import type {
   Article,
   Blog,
@@ -20,7 +20,7 @@ import type {
   WebPage,
 } from 'schema-dts';
 
-import type {ShopFragment} from 'storefrontapi.generated';
+import type { ShopFragment } from 'storefrontapi.generated';
 
 function root({
   shop,
@@ -58,7 +58,7 @@ function root({
   };
 }
 
-function home({url}: {url: Request['url']}): SeoConfig {
+function home({ url }: { url: Request['url'] }): SeoConfig {
   return {
     title: 'Los Angeles Premier Dry Eye Products Store',
     titleTemplate: '%s | DryEyeLA',
@@ -150,7 +150,18 @@ function productJsonLd({
         name: product.vendor,
       },
       description,
-      image: [selectedVariant?.image?.url ?? ''],
+      image: {
+        '@type': 'ImageObject',
+        url: selectedVariant?.image?.url ?? '',
+        license: 'https://dryeyela.com/policies/terms-of-service',
+        acquireLicensePage: 'https://dryeyela.com/pages/contact',
+        creator: {
+          '@type': 'Organization',
+          name: 'DryEyeLA',
+        },
+        creditText: 'DryEyeLA',
+        copyrightNotice: '© 2026 DryEyeLA',
+      },
       name: product.title,
       offers,
       sku: selectedVariant?.sku ?? '',
@@ -176,7 +187,7 @@ function product({
     description,
     url,
     media: selectedVariant?.image,
-    jsonLd: productJsonLd({product, selectedVariant, url}),
+    jsonLd: productJsonLd({ product, selectedVariant, url }),
   };
 }
 
@@ -184,7 +195,7 @@ type CollectionRequiredFields = Omit<
   Collection,
   'products' | 'descriptionHtml' | 'metafields' | 'image' | 'updatedAt'
 > & {
-  products: {nodes: Pick<Product, 'handle'>[]};
+  products: { nodes: Pick<Product, 'handle'>[] };
   image?: null | Pick<Image, 'url' | 'height' | 'width' | 'altText'>;
   descriptionHtml?: null | Collection['descriptionHtml'];
   updatedAt?: null | Collection['updatedAt'];
@@ -264,7 +275,7 @@ function collection({
       width: collection?.image?.width,
       altText: collection?.image?.altText,
     },
-    jsonLd: collectionJsonLd({collection, url}),
+    jsonLd: collectionJsonLd({ collection, url }),
   };
 }
 
@@ -314,7 +325,7 @@ function listCollections({
     titleTemplate: '%s | Collections',
     description: 'All hydrogen collections',
     url,
-    jsonLd: collectionsJsonLd({collections, url}),
+    jsonLd: collectionsJsonLd({ collections, url }),
   };
 }
 
@@ -355,7 +366,18 @@ function article({
         article?.seo?.description || article?.excerpt || '',
       ),
       headline: article?.seo?.title || '',
-      image: article?.image?.url,
+      image: {
+        '@type': 'ImageObject',
+        url: article?.image?.url ?? '',
+        license: 'https://dryeyela.com/policies/terms-of-service',
+        acquireLicensePage: 'https://dryeyela.com/pages/contact',
+        creator: {
+          '@type': 'Organization',
+          name: 'DryEyeLA',
+        },
+        creditText: 'DryEyeLA',
+        copyrightNotice: '© 2026 DryEyeLA',
+      },
       url,
     },
   };

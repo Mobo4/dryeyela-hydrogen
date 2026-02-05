@@ -1,0 +1,20 @@
+{
+  "totalImages": 402,
+  "extensions": {
+    "png": 396,
+    "jpg": 6,
+    "webp": 0
+  },
+  "sampleMappings": [
+    "2-pack-of-menicon-lacripure-serile-saline-solution-98-vials-x-2-scleral-lenses,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/2-pack-of-menicon-lacripure-serile-saline-solution-98-vials-x-2-scleral-lenses.png",
+    "acuicyn-antimicrobial-eyelid-eyelash-hygiene,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/acuicyn-antimicrobial-eyelid-eyelash-hygiene.png",
+    "acuvue-revitalens-multi-purpose-disinfecting-solution-10oz-lens-case-2,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/acuvue--revitalens-multi-purpose-disinfecting-solution-10oz-lens-case-2.png",
+    "acuvue-revitalens-multi-purpose-disinfecting-solution-10-oz-pack-of-2,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/acuvue-revitalens-multi-purpose-disinfecting-solution-10-oz-pack-of-2.png",
+    "acuvue-revitalens-multi-purpose-disinfecting-solution-10-oz-pack-of-3,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/acuvue-revitalens-multi-purpose-disinfecting-solution-10-oz-pack-of-3.png",
+    "alaway-allergy-eye-drops-preservative-free-antihistamine-eye-drops-20-single-dose-vials-pack-of-2,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/alaway-allergy-eye-drops-preservative-free-antihistamine-eye-drops-20-single-dose-vials-pack-of-2.png",
+    "alaway-antihistamine-eye-drops-60-day-supply,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/alaway-antihistamine-eye-drops-60-day-supply.png",
+    "alaway-eye-drops-preservative-free-antihistamine-eye-drops-for-up-to-12-hours-of-eye-itch-relief-20-single-dose-vials,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/alaway-eye-drops-preservative-free-antihistamine-eye-drops-for-up-to-12-hours-of-eye-itch-relief-20-single-dose-vials.png",
+    "alcon-systane-hydration-preservative-free-lubricant-eye-drops-30ct-vials-30-count-1,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/alcon-systane-hydration-preservative-free-lubricant-eye-drops-30ct-vials-30-count-1.png",
+    "avenova-complete-kit-hypochlorous-spray-with-nova-wipes-and-2-bottles-of-lubricants,https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products/avenova--complete-kit-hypochlorous-spray-with-nova-wipes-and-2-bottles-of-lubricants.png"
+  ]
+}

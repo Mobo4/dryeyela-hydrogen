@@ -72,7 +72,13 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
         }
       }
     }
+    media(first: 2) {
+      nodes {
+        ...Media
+      }
+    }
   }
+  ${MEDIA_FRAGMENT}
 `;
 
 export const FEATURED_COLLECTION_FRAGMENT = `#graphql

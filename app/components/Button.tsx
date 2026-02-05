@@ -1,8 +1,8 @@
-import { forwardRef } from 'react';
-import { Link } from '@remix-run/react';
+import {forwardRef} from 'react';
+import {Link} from '@remix-run/react';
 import clsx from 'clsx';
 
-import { missingClass } from '~/lib/utils';
+import {missingClass} from '~/lib/utils';
 
 export const Button = forwardRef(
   (
@@ -29,7 +29,8 @@ export const Button = forwardRef(
     const variants = {
       primary: `${baseButtonClasses} bg-besilos-sage text-white hover:bg-besilos-sage/90 shadow-sm`,
       secondary: `${baseButtonClasses} border border-besilos-navy/20 bg-transparent text-besilos-navy hover:bg-besilos-navy/5`,
-      inline: 'border-b border-besilos-sage text-besilos-sage hover:text-besilos-sage/80 pb-0.5 leading-none rounded-none px-0 py-0',
+      inline:
+        'border-b border-besilos-sage text-besilos-sage hover:text-besilos-sage/80 pb-0.5 leading-none rounded-none px-0 py-0',
     };
 
     const widths = {
