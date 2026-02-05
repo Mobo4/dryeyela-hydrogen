@@ -1,5 +1,7 @@
 import { Link } from '@remix-run/react';
-import { type PrnProduct } from '~/data/prn-products';
+import type { PRN_PRODUCTS } from '~/data/prn-products';
+
+type PrnProduct = typeof PRN_PRODUCTS[keyof typeof PRN_PRODUCTS];
 
 interface ProductRecommendationsProps {
     products: PrnProduct[];
@@ -22,11 +24,12 @@ export function ProductRecommendations({ products }: ProductRecommendationsProps
                             to={`/products/${product.id}`}
                             className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hover:shadow-md hover:border-blue-200 transition-all group flex flex-col"
                         >
-                            <div className="aspect-square bg-[#fcfbfc] rounded-lg mb-4 overflow-hidden p-4 flex items-center justify-center">
+                            {/* Clean grey background - Professional studio photography standard */}
+                            <div className="aspect-square rounded-lg mb-4 overflow-hidden p-4 flex items-center justify-center relative bg-[#F5F5F5] shadow-sm border border-gray-200/50 group-hover:shadow-md transition-all duration-300">
                                 <img
                                     src={product.images[0].src}
                                     alt={product.images[0].alt}
-                                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 relative z-10 image-render-crisp-edges"
                                 />
                             </div>
                             <div className="mt-auto">

@@ -1,11 +1,14 @@
-import { Link, useLocation } from '@remix-run/react';
+import { Link, useLocation, useParams } from '@remix-run/react';
 import { Popover, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { IconSearch, IconAccount, IconBag, IconMenu, IconCaret } from '~/components/Icon';
+import { IconAccount, IconBag, IconMenu, IconCaret } from '~/components/Icon';
+import { SearchAutocomplete } from '~/components/SearchAutocomplete';
 import { SHOP_CATEGORIES, BRANDS, SYMPTOMS } from '~/data/navigation';
 
 export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; openMenu: () => void }) {
     const location = useLocation();
+    const params = useParams();
+    const locale = params.locale || 'en';
 
     return (
         <header className="w-full flex flex-col z-50 sticky top-0 shadow-sm border-b border-gray-100 bg-white">
@@ -21,7 +24,23 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
             <div className="max-w-[1600px] mx-auto px-4 md:px-8 flex items-center justify-between h-20 md:h-24 w-full">
                 {/* Logo */}
                 <Link to="/" className="flex-shrink-0">
-                    <img src="/assets/logos/logo-dryeyela.png" alt="DryEyeLA" className="h-10 md:h-14" />
+                    <img 
+                        src="/assets/logos/logo-dryeyela-new.svg" 
+                        alt="DryEyeLA" 
+                        className="h-10 md:h-14"
+                        onError={(e) => {
+                            // Fallback to text logo if image fails to load
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent && !parent.querySelector('.logo-fallback')) {
+                                const fallback = document.createElement('div');
+                                fallback.className = 'logo-fallback text-besilos-navy font-bold text-xl md:text-2xl uppercase tracking-wider';
+                                fallback.textContent = 'DryEyeLA';
+                                parent.appendChild(fallback);
+                            }
+                        }}
+                    />
                 </Link>
 
                 {/* Primary Nav with Mega Menus */}
@@ -67,12 +86,18 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                     <Link to="/pages/learn" className="px-4 py-2 hover:text-besilos-blue transition-colors">Learn</Link>
                 </nav>
 
+                {/* Search Bar - Desktop */}
+                <div className="hidden md:block flex-1 max-w-md mx-8">
+                    <SearchAutocomplete 
+                        locale={locale}
+                        placeholder="Search products..."
+                        className="w-full"
+                    />
+                </div>
+
                 {/* Icons & Actions */}
                 <div className="flex items-center gap-1 md:gap-3">
                     <div className="hidden md:flex items-center">
-                        <Link to="/search" className="p-3 text-besilos-navy hover:text-besilos-blue transition-colors">
-                            <IconSearch />
-                        </Link>
                         <Link to="/account" className="p-3 text-besilos-navy hover:text-besilos-blue transition-colors">
                             <IconAccount />
                         </Link>

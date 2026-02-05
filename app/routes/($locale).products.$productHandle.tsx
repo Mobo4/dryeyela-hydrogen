@@ -3,8 +3,10 @@ import { useLoaderData } from '@remix-run/react';
 import { useState, useEffect } from 'react';
 import { PRN_PRODUCTS, getPrnProduct } from '~/data/prn-products';
 import { VariantSelector } from '~/components/VariantSelector';
-import { ReviewsSection } from '~/components/ReviewsSection';
+import { JudgeMeReviews } from '~/components/JudgeMeReviews';
 import { ProductRecommendations } from '~/components/ProductRecommendations';
+import { trackKlaviyoProductView } from '~/hooks/useKlaviyoRefill';
+import { TrustBadges } from '~/components/sections';
 
 // Generic Product Page for PRN Products
 // Handles dynamic routing based on 'productHandle' param
@@ -117,7 +119,12 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     .map((relatedId: string) => getPrnProduct(relatedId) || Object.values(PRN_PRODUCTS).find(p => p.id === relatedId))
     .filter(Boolean);
 
-  return defer({ product, relatedProducts, isHybrid, error: null });
+  // Pass app config for client components
+  const appConfig = {
+    judgeMeShopDomain: context.env.PUBLIC_JUDGEME_SHOP_DOMAIN,
+  };
+
+  return defer({ product, relatedProducts, isHybrid, error: null, appConfig });
 }
 
 // GraphQL Query for Shopify Product
@@ -164,7 +171,7 @@ const PRODUCT_QUERY = `#graphql
 
 
 export default function GenericProductPage() {
-  const { product, relatedProducts, error } = useLoaderData<typeof loader>();
+  const { product, relatedProducts, error, appConfig } = useLoaderData<typeof loader>();
 
   // If loader caught an error, display it
   if (error) {
@@ -189,6 +196,17 @@ export default function GenericProductPage() {
     }
   }, [product]);
 
+  // Track product view for Klaviyo
+  useEffect(() => {
+    if (product) {
+      trackKlaviyoProductView({
+        id: product.id,
+        title: product.title,
+        handle: product.handle || '',
+      });
+    }
+  }, [product]);
+
   if (!product) return null;
   // Fallback if no variants exist but product does (should render simplified view, but for now null)
   if (!selectedVariant && product.variants?.length) return null;
@@ -199,15 +217,19 @@ export default function GenericProductPage() {
       <section className="bg-[#fcfbfc] pt-12 pb-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-          {/* Product Image Column */}
+          {/* Product Image Column - Clean grey background, professional studio photography */}
           <div className="lg:col-span-7 flex flex-col items-center">
-            <div className="relative w-full max-w-lg aspect-square bg-white rounded-xl shadow-sm border border-slate-100 p-8 mb-8">
+            <div className="relative w-full max-w-lg aspect-square rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden bg-[#F5F5F5] mb-8 group">
+              {/* Product Image - High resolution, sharp textures, dramatic but clear professional studio lighting */}
               <img
                 key={selectedVariant?.id || 'main'}
                 src={selectedVariant?.image || product.images[0].src}
                 alt={selectedVariant?.title || product.title}
-                className="w-full h-full object-contain animate-fade-in"
-                style={{ animation: 'fadeIn 0.5s ease-in-out' }}
+                className="w-full h-full object-contain p-8 md:p-12 relative z-10 transition-transform duration-500 group-hover:scale-105 animate-fade-in image-render-crisp-edges"
+                style={{ 
+                  animation: 'fadeIn 0.5s ease-in-out',
+                  imageRendering: '-webkit-optimize-contrast'
+                }}
               />
             </div>
           </div>
@@ -404,8 +426,22 @@ export default function GenericProductPage() {
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <ReviewsSection reviews={product.reviews || []} />
+      {/* Trust Badges */}
+      <TrustBadges
+        badges={[
+          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
+          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
+          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
+          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+        ]}
+      />
+
+      {/* Reviews Section - Judge.me Integration */}
+      <JudgeMeReviews 
+        productId={product.id}
+        shopDomain={appConfig?.judgeMeShopDomain}
+        fallbackReviews={product.reviews || []}
+      />
 
       {/* Recommendations Section */}
       <ProductRecommendations products={relatedProducts as any[]} />

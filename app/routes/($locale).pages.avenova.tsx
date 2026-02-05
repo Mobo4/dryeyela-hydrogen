@@ -2,29 +2,41 @@ import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData } from '@remix-run/react';
 import { Heading, Text } from '~/components/Text';
 import { ProductSwimlane } from '~/components/ProductSwimlane';
+import { PRODUCTS_SEARCH_QUERY } from '~/data/queries';
 
+/**
+ * Avenova Brand Page
+ * 
+ * Displays Avenova products and brand information.
+ * Uses Shopify Storefront API to fetch products by brand name.
+ */
 export async function loader({ params, context }: LoaderFunctionArgs) {
-    const { storefront } = context;
+  const { storefront } = context;
 
-    try {
-        // Broad search for 'Avenova' to ensure we get results (captures title/handle/vendor)
-        const { products } = await storefront.query(PRODUCTS_SEARCH_QUERY, {
-            variables: { query: 'Avenova', count: 4 },
-        });
+  try {
+    // Search for Avenova products by vendor name
+    const { products } = await storefront.query(PRODUCTS_SEARCH_QUERY, {
+      variables: {
+        query: 'vendor:"Avenova" OR title:Avenova',
+        count: 4,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+    });
 
-        return json({
-            brand: 'Avenova',
-            products,
-            error: null
-        });
-    } catch (error: any) {
-        console.error('Error loading Avenova products:', error);
-        return json({
-            brand: 'Avenova',
-            products: { nodes: [] },
-            error: error.message
-        });
-    }
+    return json({
+      brand: 'Avenova',
+      products,
+      error: null,
+    });
+  } catch (error) {
+    console.error('Error loading Avenova products:', error);
+    return json({
+      brand: 'Avenova',
+      products: { nodes: [] },
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
 }
 
 export default function AvenovaPage() {
@@ -214,48 +226,3 @@ function IconSatisfaction() {
     );
 }
 
-const PRODUCTS_SEARCH_QUERY = `#graphql
-  query ProductsSearch($query: String!, $count: Int!) {
-    products(first: $count, query: $query) {
-      nodes {
-        id
-        title
-        handle
-        vendor
-        publishedAt
-        featuredImage {
-          url
-          altText
-          width
-          height
-        }
-        priceRange {
-          minVariantPrice {
-            amount
-            currencyCode
-          }
-        }
-        variants(first: 1) {
-          nodes {
-            id
-            availableForSale
-            image {
-              url
-              altText
-              width
-              height
-            }
-            price {
-              amount
-              currencyCode
-            }
-            compareAtPrice {
-              amount
-              currencyCode
-            }
-          }
-        }
-      }
-    }
-  }
-`;

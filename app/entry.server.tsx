@@ -22,7 +22,17 @@ export default async function handleRequest(
       'https://shopify.com',
       'https://www.google-analytics.com',
       'https://www.googletagmanager.com',
+      'https://cdn.judge.me', // Judge.me reviews widget
+      'https://config.gorgias.chat', // Gorgias chat widget
+      'https://a.klaviyo.com', // Klaviyo analytics
       ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:*'] : []),
+    ],
+    connectSrc: [
+      'self',
+      'https://*.myshopify.com',
+      'https://api.judge.me', // Judge.me API
+      'https://api.gorgias.chat', // Gorgias API
+      'https://a.klaviyo.com', // Klaviyo API
     ],
     imgSrc: [
       'self',

@@ -73,10 +73,10 @@ export default {
         mobileGallery: 'calc(100vw - 3rem)',
       },
       fontFamily: {
-        sans: ['Montserrat', 'sans-serif', 'ui-sans-serif', 'system-ui'],
-        serif: ['Fira Sans', 'sans-serif'], // PRN uses Fira Sans for headings
-        body: ['Montserrat', 'sans-serif'],
-        heading: ['Fira Sans', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'], // Using Inter for consistency
+        body: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         display: ['var(--font-size-display)', '1.1'],

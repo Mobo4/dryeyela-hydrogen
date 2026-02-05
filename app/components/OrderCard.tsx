@@ -23,11 +23,11 @@ export function OrderCard({order}: {order: OrderCardFragment}) {
         prefetch="intent"
       >
         {lineItems[0].image && (
-          <div className="card-image aspect-square bg-primary/5">
+          <div className="card-image aspect-square rounded-lg overflow-hidden bg-[#F5F5F5] border border-gray-200/50 shadow-sm p-3 relative">
             <Image
               width={168}
               height={168}
-              className="w-full fadeIn cover"
+              className="w-full h-full fadeIn object-contain relative z-10 image-render-crisp-edges"
               alt={lineItems[0].image?.altText ?? 'Order image'}
               src={lineItems[0].image.url}
             />

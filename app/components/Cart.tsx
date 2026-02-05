@@ -258,15 +258,17 @@ function CartLineItem({line}: {line: CartLine}) {
         display: optimisticData?.action === 'remove' ? 'none' : 'flex',
       }}
     >
-      <div className="flex-shrink">
+      <div className="flex-shrink relative">
         {merchandise.image && (
-          <Image
-            width={110}
-            height={110}
-            data={merchandise.image}
-            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
-            alt={merchandise.title}
-          />
+          <div className="w-24 h-24 md:w-28 md:h-28 rounded-lg overflow-hidden bg-[#F5F5F5] border border-gray-200/50 shadow-sm p-2 relative">
+            <Image
+              width={110}
+              height={110}
+              data={merchandise.image}
+              className="object-contain object-center w-full h-full relative z-10 image-render-crisp-edges"
+              alt={merchandise.title}
+            />
+          </div>
         )}
       </div>
 

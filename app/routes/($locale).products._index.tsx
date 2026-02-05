@@ -24,6 +24,8 @@ import {
   TrustBadgesSection,
   CTASection,
   CategoryCardsSection,
+  PageHero,
+  TrustBadges,
 } from '~/components/sections';
 import {SHOP_CATEGORIES} from '~/data/navigation';
 
@@ -89,20 +91,27 @@ export default function AllProducts() {
 
   return (
     <>
-      {/* Hero Section */}
-      <HeroSection
+      {/* Hero Section - Eyepromise Style */}
+      <PageHero
         title="All Products"
         description="Browse our complete selection of doctor-recommended dry eye products. From eye drops to supplements, find everything you need for lasting relief."
-        variant="secondary"
+        badge={`${products.nodes.length}+ Products`}
         breadcrumbs={[
           {label: 'Home', to: '/'},
           {label: 'Products'},
         ]}
-        badge={`${products.nodes.length}+ Products`}
+        background="gradient"
       />
 
-      {/* Trust Badges - Compact */}
-      <TrustBadgesSection variant="compact" />
+      {/* Trust Badges */}
+      <TrustBadges
+        badges={[
+          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
+          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
+          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
+          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+        ]}
+      />
 
       {/* Quick Category Navigation */}
       <CategoryCardsSection

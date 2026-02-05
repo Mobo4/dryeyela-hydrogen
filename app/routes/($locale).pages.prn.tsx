@@ -3,32 +3,42 @@ import { useLoaderData } from '@remix-run/react';
 import { Heading, Text, Section } from '~/components/Text';
 import { ProductSwimlane } from '~/components/ProductSwimlane';
 import { Button } from '~/components/Button';
-import { getPrnProduct } from '~/data/prn-products'; // Reuse if needed, or fetch collection
+import { getPrnProduct } from '~/data/prn-products';
+import { PRODUCTS_SEARCH_QUERY } from '~/data/queries';
 
-// Using generic product search for PRN, similar to Avenova logic
+/**
+ * PRN Brand Page
+ * 
+ * Displays PRN Vision products and brand information.
+ * Uses Shopify Storefront API to fetch products by vendor/brand name.
+ */
 export async function loader({ params, context }: LoaderFunctionArgs) {
-    const { storefront } = context;
+  const { storefront } = context;
 
-    try {
-        // Broad search for 'De3' or 'Omega' to ensure we get results
-        // In reality we should probably fetch a specific collection 'prn-vision'
-        const { products } = await storefront.query(PRODUCTS_SEARCH_QUERY, {
-            variables: { query: 'Omega', count: 4 },
-        });
+  try {
+    // Search for PRN products by vendor name
+    const { products } = await storefront.query(PRODUCTS_SEARCH_QUERY, {
+      variables: {
+        query: 'vendor:"PRN Vision" OR vendor:"PRN Vision Group"',
+        count: 4,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+    });
 
-        return json({
-            brand: 'PRN Vision',
-            products,
-            error: null
-        });
-    } catch (error: any) {
-        console.error('Error loading PRN products:', error);
-        return json({
-            brand: 'PRN Vision',
-            products: { nodes: [] },
-            error: error.message
-        });
-    }
+    return json({
+      brand: 'PRN Vision',
+      products,
+      error: null,
+    });
+  } catch (error) {
+    console.error('Error loading PRN products:', error);
+    return json({
+      brand: 'PRN Vision',
+      products: { nodes: [] },
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
 }
 
 export default function PRNPage() {
@@ -184,48 +194,3 @@ function IconGuarantee() {
     );
 }
 
-const PRODUCTS_SEARCH_QUERY = `#graphql
-  query ProductsSearch($query: String!, $count: Int!) {
-    products(first: $count, query: $query) {
-      nodes {
-        id
-        title
-        handle
-        vendor
-        publishedAt
-        featuredImage {
-          url
-          altText
-          width
-          height
-        }
-        priceRange {
-          minVariantPrice {
-            amount
-            currencyCode
-          }
-        }
-        variants(first: 1) {
-          nodes {
-            id
-            availableForSale
-            image {
-              url
-              altText
-              width
-              height
-            }
-            price {
-              amount
-              currencyCode
-            }
-            compareAtPrice {
-              amount
-              currencyCode
-            }
-          }
-        }
-      }
-    }
-  }
-`;

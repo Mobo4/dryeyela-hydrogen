@@ -7155,7 +7155,8 @@ Blue Bell, PA 19422 (PRN), <br>
 
 
 <script>
-	const storefrontAccessToken = '314d12ac67dc94414f1a58cf9a7b1d93';
+	// SECURITY: Hardcoded credentials removed - use environment variables instead
+	// const storefrontAccessToken = 'REMOVED_FOR_SECURITY';
 	const shopifyStoreDomain = 'prnvision.com';
 	const storefrontApiUrl = `https://${shopifyStoreDomain}/api/2024-01/graphql.json`;
 
@@ -7193,7 +7194,8 @@ Blue Bell, PA 19422 (PRN), <br>
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'X-Shopify-Storefront-Access-Token': storefrontAccessToken
+				// SECURITY: Use environment variable instead of hardcoded token
+				'X-Shopify-Storefront-Access-Token': process.env.PUBLIC_STOREFRONT_API_TOKEN || ''
 			},
 			body: JSON.stringify({ query: mutation, variables })
 		});
@@ -7228,7 +7230,8 @@ Blue Bell, PA 19422 (PRN), <br>
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'X-Shopify-Storefront-Access-Token': storefrontAccessToken
+				// SECURITY: Use environment variable instead of hardcoded token
+				'X-Shopify-Storefront-Access-Token': process.env.PUBLIC_STOREFRONT_API_TOKEN || ''
 			},
 			body: JSON.stringify({ query: mutation, variables })
 		});

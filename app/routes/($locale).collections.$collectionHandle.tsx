@@ -36,6 +36,8 @@ import {
   CTASection,
   EmptyState,
   CategoryCardsSection,
+  PageHero,
+  TrustBadges,
 } from '~/components/sections';
 import { VisualFilterBar } from '~/components/VisualFilterBar';
 import { getFallbackCollection, getRelatedCollections } from '~/data/collections';
@@ -266,21 +268,28 @@ export default function Collection() {
 
   return (
     <>
-      {/* Hero Section */}
-      <HeroSection
+      {/* Hero Section - Eyepromise Style */}
+      <PageHero
         title={collection.title}
         description={collection.description || fallbackMeta.heroDescription}
-        variant="secondary"
+        badge={productCount > 0 ? `${productCount}+ Products` : undefined}
         breadcrumbs={[
           { label: 'Home', to: '/' },
           { label: 'Collections', to: '/collections' },
           { label: collection.title },
         ]}
-        badge={productCount > 0 ? `${productCount}+ Products` : undefined}
+        background="gradient"
       />
 
-      {/* Trust Badges - Compact */}
-      <TrustBadgesSection variant="compact" />
+      {/* Trust Badges */}
+      <TrustBadges
+        badges={[
+          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
+          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
+          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
+          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+        ]}
+      />
 
       {/* Products Section */}
       <Section className="py-12">

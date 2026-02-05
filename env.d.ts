@@ -29,6 +29,10 @@ declare global {
     PUBLIC_CUSTOMER_ACCOUNT_API_URL: string;
     PUBLIC_CHECKOUT_DOMAIN: string;
     SHOP_ID: string;
+    // App Integration Environment Variables
+    PUBLIC_JUDGEME_SHOP_DOMAIN?: string;
+    PUBLIC_GORGIAS_APP_ID?: string;
+    PUBLIC_KLAVIYO_API_KEY?: string;
   }
 }
 

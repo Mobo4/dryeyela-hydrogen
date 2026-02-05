@@ -33,11 +33,13 @@ export function ProductGallery({
         const style = [
           isFullWidth ? 'md:col-span-2' : 'md:col-span-1',
           isFirst || isFourth ? '' : 'md:aspect-[4/5]',
-          'aspect-square snap-center card-image bg-white dark:bg-contrast/10 w-mobileGallery md:w-full',
+          // Clean grey background - Professional studio photography standard
+          'aspect-square snap-center card-image bg-[#F5F5F5] dark:bg-contrast/10 w-mobileGallery md:w-full shadow-lg border border-gray-200/50',
         ].join(' ');
 
         return (
           <div className={style} key={med.id || image?.id}>
+            {/* High resolution, sharp textures - Professional studio lighting */}
             {image && (
               <Image
                 loading={i === 0 ? 'eager' : 'lazy'}
@@ -48,7 +50,7 @@ export function ProductGallery({
                     ? '(min-width: 48em) 60vw, 90vw'
                     : '(min-width: 48em) 30vw, 90vw'
                 }
-                className="object-cover w-full h-full aspect-square fadeIn"
+                className="object-contain w-full h-full aspect-square fadeIn p-4 md:p-6 relative z-10 image-render-crisp-edges"
               />
             )}
           </div>

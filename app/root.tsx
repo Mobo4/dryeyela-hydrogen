@@ -28,6 +28,7 @@ import invariant from 'tiny-invariant';
 import { PageLayout } from '~/components/PageLayout';
 import { GenericError } from '~/components/GenericError';
 import { NotFound } from '~/components/NotFound';
+import { GorgiasChat } from '~/components/GorgiasChat';
 import favicon from '~/assets/favicon.svg';
 import { seoPayload } from '~/lib/seo.server';
 import styles from '~/styles/app.css?url';
@@ -81,11 +82,11 @@ export const links: LinksFunction = () => {
     {
       rel: 'preconnect',
       href: 'https://fonts.gstatic.com',
-      crossOrigin: 'true',
+      crossOrigin: true,
     },
     {
       rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600&display=swap',
     },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
   ];
@@ -131,6 +132,12 @@ async function loadCriticalData({ request, context }: LoaderFunctionArgs) {
       withPrivacyBanner: true,
     },
     selectedLocale: storefront.i18n,
+    // App integration environment variables (PUBLIC_ vars are available in browser)
+    appConfig: {
+      judgeMeShopDomain: env.PUBLIC_JUDGEME_SHOP_DOMAIN,
+      gorgiasAppId: env.PUBLIC_GORGIAS_APP_ID,
+      klaviyoApiKey: env.PUBLIC_KLAVIYO_API_KEY,
+    },
   };
 }
 
@@ -182,7 +189,6 @@ function Layout({ children }: { children?: React.ReactNode }) {
             `,
           }}
         />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <Meta />
         <Links />
       </head>
@@ -205,6 +211,13 @@ function Layout({ children }: { children?: React.ReactNode }) {
         )}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
+        {/* Lazy-loaded app widgets */}
+        {data?.appConfig && (
+          <GorgiasChat 
+            appId={data.appConfig.gorgiasAppId}
+            enabled={!!data.appConfig.gorgiasAppId}
+          />
+        )}
       </body>
     </html>
   );

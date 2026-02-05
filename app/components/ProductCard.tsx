@@ -39,7 +39,7 @@ export function ProductCard({
 
   // Premium: Get secondary image for hover effect
   const media = flattenConnection(product.media || { nodes: [] });
-  const secondaryImage = media[1]?.image;
+  const secondaryImage = media[1] && 'image' in media[1] ? media[1].image : null;
 
   if (label) {
     cardLabel = label;
@@ -57,12 +57,16 @@ export function ProductCard({
         prefetch="intent"
       >
         <div className={clsx('grid gap-4', className)}>
-          <div className="card-image aspect-[4/5] bg-besilos-cream/20 rounded-xl overflow-hidden relative shadow-sm transition-all duration-500 group-hover:shadow-md border border-besilos-sage/10">
-            {/* Primary Image */}
-            {image && (
+          {/* Clean grey background - Professional studio photography standard */}
+          <div className="card-image aspect-[4/5] rounded-xl overflow-hidden relative shadow-lg transition-all duration-500 group-hover:shadow-xl border border-gray-200/50 bg-[#F5F5F5]">
+            
+            {/* Primary Image - High resolution, sharp textures, professional studio lighting */}
+            {image ? (
               <Image
                 className={clsx(
-                  "object-cover w-full h-full transition-all duration-700",
+                  "object-contain w-full h-full transition-all duration-700 relative z-10 p-4 md:p-6",
+                  // Ensure crisp, sharp rendering for high-resolution images
+                  "image-render-crisp-edges",
                   secondaryImage ? "group-hover:opacity-0" : "group-hover:scale-105"
                 )}
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
@@ -71,16 +75,26 @@ export function ProductCard({
                 alt={image.altText || `Picture of ${product.title}`}
                 loading={loading}
               />
+            ) : (
+              // Fallback placeholder for missing images
+              <div className="w-full h-full flex flex-col items-center justify-center p-8 relative z-10">
+                <svg className="w-24 h-24 text-gray-300 mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                  <path d="M21 15L16 10L5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <p className="text-gray-400 text-xs text-center font-medium">{product.title}</p>
+              </div>
             )}
 
-            {/* Secondary Image (Hover) */}
+            {/* Secondary Image (Hover) - High resolution, sharp textures */}
             {secondaryImage && (
               <Image
-                className="absolute inset-0 object-cover w-full h-full opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-105"
+                className="absolute inset-0 object-contain w-full h-full opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-105 p-4 md:p-6 z-10 image-render-crisp-edges"
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
                 aspectRatio="4/5"
                 data={secondaryImage}
-                alt={secondaryImage.altText || `Picture of ${product.title}`}
+                alt={secondaryImage && 'altText' in secondaryImage ? secondaryImage.altText : `Picture of ${product.title}`}
                 loading={loading}
               />
             )}
