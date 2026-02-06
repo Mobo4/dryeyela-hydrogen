@@ -14,9 +14,77 @@ import {PageHero} from '~/components/sections/PageHero';
 import {TrustBadges} from '~/components/sections/TrustBadges';
 
 /**
+ * Brand Vendor Mapping
+ *
+ * Maps brand handles to an array of possible vendor name variations
+ * as they may appear in Shopify. This allows for flexible product
+ * matching when vendors use different naming conventions.
+ */
+const BRAND_VENDOR_MAP: Record<string, string[]> = {
+  prn: ['PRN', 'PRN Vision', 'PRN Omega'],
+  optase: ['Optase', 'OPTASE', 'optase', 'OPTASE Ltd', 'Optase Ltd'],
+  'oasis-tears': ['Oasis Tears', 'Oasis', 'OASIS', 'Oasis Medical', 'OasisTears'],
+  macuhealth: ['MacuHealth', 'Macuhealth', 'MACUHEALTH', 'Macu Health'],
+  bruder: ['Bruder', 'BRUDER', 'Bruder Healthcare', 'Bruder Moist Heat'],
+  avenova: ['Avenova', 'AVENOVA', 'NovaBay'],
+  'bausch-lomb': [
+    'Bausch + Lomb',
+    'Bausch & Lomb',
+    'Bausch and Lomb',
+    'B+L',
+    'B&L',
+    'BAUSCH + LOMB',
+    'BAUSCH & LOMB',
+  ],
+  systane: ['Systane', 'SYSTANE', 'Alcon', 'ALCON', 'Alcon Systane'],
+  refresh: ['Refresh', 'REFRESH', 'Allergan', 'ALLERGAN', 'Allergan Refresh'],
+  ocusoft: ['Ocusoft', 'OCuSOFT', 'OCUSOFT', 'OcuSoft', 'Ocu-Soft'],
+  retaine: ['Retaine', 'RETAINE', 'OCuSOFT Retaine'],
+  menicon: ['Menicon', 'MENICON', 'Menicon Co'],
+  tangible: ['Tangible', 'TANGIBLE', 'Tangible Science', 'Tangible Hydra-PEG'],
+  heyedrate: ['Heyedrate', 'HEYEDRATE', 'Eye Love', 'EyeLove', 'Eyelove'],
+  eyepromise: ['EyePromise', 'Eyepromise', 'EYEPROMISE', 'Eye Promise', 'ZeaVision'],
+  cliradex: ['Cliradex', 'CLIRADEX', 'Bio-Tissue', 'BioTissue'],
+  'eye-eco': ['Eye Eco', 'EyeEco', 'Eyeeco', 'EYEECO', 'Eye-Eco'],
+};
+
+/**
+ * Builds a Shopify search query string for vendor matching.
+ * Uses OR conditions to match any of the possible vendor variations.
+ *
+ * @param brandHandle - The brand handle from the URL
+ * @param defaultName - The default brand name as fallback
+ * @returns A formatted query string like: vendor:"Name1" OR vendor:"Name2"
+ */
+function buildVendorQuery(brandHandle: string, defaultName: string): string {
+  const vendorVariations = BRAND_VENDOR_MAP[brandHandle];
+
+  if (vendorVariations && vendorVariations.length > 0) {
+    // Build OR query with all vendor variations
+    return vendorVariations
+      .map((vendor) => `vendor:"${vendor}"`)
+      .join(' OR ');
+  }
+
+  // Fallback: use the brand name with common case variations
+  const lowerName = defaultName.toLowerCase();
+  const upperName = defaultName.toUpperCase();
+
+  // Only add variations if they're different from the original
+  const variations = [defaultName];
+  if (lowerName !== defaultName) variations.push(lowerName);
+  if (upperName !== defaultName) variations.push(upperName);
+
+  return variations
+    .map((vendor) => `vendor:"${vendor}"`)
+    .join(' OR ');
+}
+
+/**
  * Brand Page
- * 
+ *
  * Displays products for a specific brand by filtering via vendor name.
+ * Uses flexible vendor matching to handle different naming conventions.
  */
 export async function loader({params, context}: LoaderFunctionArgs) {
   const {brandHandle} = params;
@@ -28,12 +96,15 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     throw new Response('Brand not found', {status: 404});
   }
 
+  // Build flexible vendor query with variations
+  const vendorQuery = buildVendorQuery(brandHandle || '', brand.name);
+
   try {
-    // Fetch products by vendor (brand name)
+    // Fetch products by vendor using flexible OR query
     const {products} = await storefront.query(PRODUCTS_BY_FILTER_QUERY, {
       variables: {
         first: 24,
-        query: `vendor:"${brand.name}"`,
+        query: vendorQuery,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
       },

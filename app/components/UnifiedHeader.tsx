@@ -62,11 +62,18 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                     {/* By Brand */}
                     <NavDropdown title="Shop by Brand">
                         <div className="p-8 w-[300px] flex flex-col gap-4">
-                            {BRANDS.map((brand) => (
-                                <Link key={brand.handle} to={`/pages/${brand.handle}`} className="font-bold text-besilos-navy hover:text-besilos-blue transition-colors">
-                                    {brand.name}
-                                </Link>
-                            ))}
+                            {BRANDS.map((brand) => {
+                                // PRN, Avenova, EyePromise have custom /pages/ routes
+                                const customBrandPages = ['prn', 'avenova', 'eyepromise'];
+                                const brandPath = customBrandPages.includes(brand.handle)
+                                    ? `/pages/${brand.handle}`
+                                    : `/brands/${brand.handle}`;
+                                return (
+                                    <Link key={brand.handle} to={brandPath} className="font-bold text-besilos-navy hover:text-besilos-blue transition-colors">
+                                        {brand.name}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </NavDropdown>
 

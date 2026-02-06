@@ -30,6 +30,15 @@ import { useCartFetchers } from '~/hooks/useCartFetchers';
 import type { RootLoader } from '~/root';
 import { SHOP_CATEGORIES, BRANDS, SYMPTOMS, INGREDIENTS } from '~/data/navigation';
 
+// Helper function to get brand page path
+// PRN, Avenova, EyePromise have custom /pages/ routes
+const CUSTOM_BRAND_PAGES = ['prn', 'avenova', 'eyepromise'];
+function getBrandPath(brandHandle: string): string {
+  return CUSTOM_BRAND_PAGES.includes(brandHandle)
+    ? `/pages/${brandHandle}`
+    : `/brands/${brandHandle}`;
+}
+
 type LayoutProps = {
   children: React.ReactNode;
   layout?: LayoutQuery & {
@@ -191,7 +200,7 @@ function MenuMobileNav({
                 {BRANDS.map((brand) => (
                   <Link
                     key={brand.handle}
-                    to={`/pages/${brand.handle}`}
+                    to={getBrandPath(brand.handle)}
                     onClick={onClose}
                     className="py-2 text-besilos-navy/70 hover:text-besilos-sage"
                   >
@@ -371,7 +380,7 @@ function DesktopHeader({
                 {BRANDS.map((brand) => (
                   <li key={brand.handle}>
                     <Link
-                      to={`/pages/${brand.handle}`}
+                      to={getBrandPath(brand.handle)}
                       className="block p-2 rounded-lg text-besilos-navy/80 hover:bg-besilos-sage/10 hover:text-besilos-sage transition-colors text-sm"
                       prefetch="intent"
                     >
@@ -620,7 +629,7 @@ function Footer({ menu }: { menu?: EnhancedMenu }) {
               {BRANDS.map((brand) => (
                 <li key={brand.handle}>
                   <Link
-                    to={`/pages/${brand.handle}`}
+                    to={getBrandPath(brand.handle)}
                     className="text-besilos-cream/70 hover:text-besilos-sage transition-colors text-sm"
                     prefetch="intent"
                   >
