@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { flattenConnection, Image, Money, useMoney } from '@shopify/hydrogen';
-import type { MoneyV2, Product } from '@shopify/hydrogen/storefront-api-types';
+import type { MoneyV2, Product, Image as ShopifyImage } from '@shopify/hydrogen/storefront-api-types';
 
 import type { ProductCardFragment } from 'storefrontapi.generated';
 import { Text } from '~/components/Text';
@@ -9,6 +9,54 @@ import { Button } from '~/components/Button';
 import { AddToCartButton } from '~/components/AddToCartButton';
 import { isDiscounted, isNewArrival } from '~/lib/utils';
 import { getProductPlaceholder } from '~/lib/placeholders';
+
+// Helper to check if an image URL is from Shopify CDN
+function isShopifyImage(url: string | undefined): boolean {
+  if (!url) return false;
+  return url.includes('cdn.shopify.com') || url.includes('shopify.com');
+}
+
+// Helper component for rendering images (handles both Shopify and external URLs)
+function ProductImage({
+  image,
+  alt,
+  loading,
+  className,
+  sizes,
+}: {
+  image: Pick<ShopifyImage, 'url' | 'altText' | 'width' | 'height'> | null | undefined;
+  alt: string;
+  loading?: HTMLImageElement['loading'];
+  className?: string;
+  sizes?: string;
+}) {
+  if (!image?.url) return null;
+
+  // Use Hydrogen Image component for Shopify CDN images (optimized)
+  if (isShopifyImage(image.url)) {
+    return (
+      <Image
+        className={className}
+        sizes={sizes || "(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"}
+        aspectRatio="4/5"
+        data={image}
+        alt={image.altText || alt}
+        loading={loading}
+      />
+    );
+  }
+
+  // Use regular img tag for external URLs (placehold.co, etc.)
+  return (
+    <img
+      src={image.url}
+      alt={image.altText || alt}
+      loading={loading || 'lazy'}
+      className={className}
+      style={{ objectFit: 'contain' }}
+    />
+  );
+}
 
 export function ProductCard({
   product,
@@ -62,18 +110,16 @@ export function ProductCard({
             
             {/* Primary Image - High resolution, sharp textures, professional studio lighting */}
             {image ? (
-              <Image
+              <ProductImage
+                image={image}
+                alt={`Picture of ${product.title}`}
+                loading={loading}
                 className={clsx(
                   "object-contain w-full h-full transition-all duration-700 relative z-10 p-4 md:p-6",
-                  // Ensure crisp, sharp rendering for high-resolution images
                   "image-render-crisp-edges",
                   secondaryImage ? "group-hover:opacity-0" : "group-hover:scale-105"
                 )}
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
-                aspectRatio="4/5"
-                data={image}
-                alt={image.altText || `Picture of ${product.title}`}
-                loading={loading}
               />
             ) : (
               // Fallback placeholder for missing images
@@ -89,13 +135,12 @@ export function ProductCard({
 
             {/* Secondary Image (Hover) - High resolution, sharp textures */}
             {secondaryImage && (
-              <Image
+              <ProductImage
+                image={secondaryImage as Pick<ShopifyImage, 'url' | 'altText' | 'width' | 'height'>}
+                alt={`Picture of ${product.title}`}
+                loading={loading}
                 className="absolute inset-0 object-contain w-full h-full opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-105 p-4 md:p-6 z-10 image-render-crisp-edges"
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
-                aspectRatio="4/5"
-                data={secondaryImage}
-                alt={secondaryImage && 'altText' in secondaryImage && typeof secondaryImage.altText === 'string' ? secondaryImage.altText : `Picture of ${product.title}`}
-                loading={loading}
               />
             )}
 

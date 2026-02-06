@@ -112,6 +112,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
   
   if (!hasShopifyProducts && localProducts && localProducts.length > 0) {
     // Construct a virtual collection object with local products
+    // Include all fields required by Hydrogen's Pagination component
     const virtualCollection = {
       id: `gid://shopify/Collection/local-${collectionHandle}`,
       handle: collectionHandle,
@@ -124,7 +125,12 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
       products: {
         filters: [] as Filter[],
         nodes: localProducts,
-        pageInfo: { hasNextPage: false, hasPreviousPage: false }
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        }
       }
     };
 
