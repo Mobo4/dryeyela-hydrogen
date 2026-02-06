@@ -106,7 +106,7 @@ const CATEGORY_COLORS = {
 } as const;
 
 /**
- * Generate a styled placeholder image URL
+ * Generate a styled placeholder image URL (fallback only)
  */
 function generatePlaceholderImage(productName: string, category: keyof typeof CATEGORY_COLORS): string {
     const colors = CATEGORY_COLORS[category];
@@ -116,6 +116,7 @@ function generatePlaceholderImage(productName: string, category: keyof typeof CA
 
 /**
  * Create a production-ready product object for local collections
+ * @param imageUrl - Real product image URL from CDN (optional, uses placeholder if not provided)
  */
 function createProduct(
     handle: string,
@@ -124,9 +125,10 @@ function createProduct(
     price: string,
     description: string,
     category: keyof typeof CATEGORY_COLORS,
-    compareAtPrice?: string
+    compareAtPrice?: string,
+    imageUrl?: string
 ): CollectionProduct {
-    const imageUrl = generatePlaceholderImage(title, category);
+    const finalImageUrl = imageUrl || generatePlaceholderImage(title, category);
     const publishedAt = new Date().toISOString();
     const currencyCode: CurrencyCode = 'USD';
 
@@ -146,13 +148,13 @@ function createProduct(
                 compareAtPrice: compareAtPrice
                     ? { amount: compareAtPrice, currencyCode }
                     : null,
-                image: { url: imageUrl, altText: title, width: 800, height: 800 },
+                image: { url: finalImageUrl, altText: title, width: 800, height: 800 },
                 selectedOptions: [{ name: 'Title', value: 'Default Title' }],
                 product: { handle, title }
             }]
         },
         images: {
-            nodes: [{ url: imageUrl, altText: title, width: 800, height: 800 }]
+            nodes: [{ url: finalImageUrl, altText: title, width: 800, height: 800 }]
         },
         media: {
             nodes: [
@@ -161,8 +163,8 @@ function createProduct(
                     id: `gid://shopify/MediaImage/${handle}`,
                     alt: title,
                     mediaContentType: 'IMAGE',
-                    image: { id: `gid://shopify/Image/${handle}`, url: imageUrl, width: 800, height: 800 },
-                    previewImage: { url: imageUrl }
+                    image: { id: `gid://shopify/Image/${handle}`, url: finalImageUrl, width: 800, height: 800 },
+                    previewImage: { url: finalImageUrl }
                 }
             ]
         }
@@ -184,7 +186,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Oasis',
         '29.95',
         'Preservative-free glycerin drops with hyaluronic acid for long-lasting moisture and comfort.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-drops-oasistearspf-grey2-1-888034.jpg'
     ),
     createProduct(
         'oasis-tears-pf-30ct',
@@ -192,7 +196,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Oasis',
         '24.95',
         'Single-use preservative-free vials perfect for sensitive eyes and contact lens wearers.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-drops-oasistearspf-grey2-1-888034.jpg'
     ),
     createProduct(
         'optase-intense-drops',
@@ -200,7 +206,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Optase',
         '24.95',
         '0.2% Hyaluronic acid formula providing intense hydration for moderate to severe dry eye.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-drops-optase-intensepf1.jpg'
     ),
     createProduct(
         'retaine-mgd',
@@ -208,7 +216,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Retaine',
         '26.50',
         'Lipid-enhanced formula that replenishes all 3 layers of the tear film for MGD relief.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-retaine-cmc-vials1.jpg'
     ),
     createProduct(
         'systane-complete-pf',
@@ -216,7 +226,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Systane',
         '22.99',
         'Nano-droplet technology provides fast-acting relief for all types of dry eye.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-drops-systanepf2.jpg'
     ),
     createProduct(
         'systane-ultra-pf',
@@ -224,7 +236,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Systane',
         '18.99',
         'Preservative-free extended protection formula ideal for sensitive eyes.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-drops-completepf-vials1-482177.jpg'
     ),
     createProduct(
         'refresh-optive-pf',
@@ -232,7 +246,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Refresh',
         '19.99',
         'Preservative-free single-use vials with dual-action formula for lasting comfort.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-drops-refresh-relievapf-vials1-692132.jpg'
     ),
     createProduct(
         'refresh-tears',
@@ -240,7 +256,9 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Refresh',
         '12.99',
         'Original lubricant eye drop formula providing immediate relief for mild dry eye.',
-        'eyeDrops'
+        'eyeDrops',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-refresh-tearspf1-231411.jpg'
     )
 ];
 
@@ -255,7 +273,9 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Optase',
         '21.95',
         'Tea tree oil-infused preservative-free wipes for daily eyelid hygiene and Demodex control.',
-        'cleansers'
+        'cleansers',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-wipes-optase-tto2.jpg'
     ),
     createProduct(
         'ocusoft-lid-scrub-plus-foam',
@@ -263,7 +283,9 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'OCuSOFT',
         '24.50',
         'Extra strength foaming cleanser with added moisturizers for moderate to severe conditions.',
-        'cleansers'
+        'cleansers',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-foam-ocusoftplusplat1.jpg'
     ),
     createProduct(
         'ocusoft-lid-scrub-plus-pads',
@@ -271,7 +293,9 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'OCuSOFT',
         '19.95',
         'Pre-moistened pads (30ct) for convenient on-the-go eyelid cleansing.',
-        'cleansers'
+        'cleansers',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-pads-ocusoftpads2.jpg'
     ),
     createProduct(
         'ocusoft-lid-scrub-original',
@@ -279,7 +303,9 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'OCuSOFT',
         '16.95',
         'Mild foaming cleanser for daily maintenance of eyelid hygiene.',
-        'cleansers'
+        'cleansers',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-foam-ocusoftoriginal2.jpg'
     ),
     createProduct(
         'cliradex-towelettes',
@@ -287,7 +313,9 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Cliradex',
         '44.00',
         '4-Terpineol natural cleanser derived from tea tree oil for effective Demodex treatment.',
-        'cleansers'
+        'cleansers',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-wipes-cliradex1_1.jpg'
     ),
     createProduct(
         'cliradex-light-foam',
@@ -295,7 +323,9 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Cliradex',
         '32.00',
         'Gentle daily foaming cleanser with natural 4-Terpineol for sensitive eyelids.',
-        'cleansers'
+        'cleansers',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/DER-Foam-CliradexLight01-1.jpg'
     )
 ];
 
@@ -310,7 +340,9 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Avenova',
         '29.99',
         'Pure 0.01% hypochlorous acid spray for daily eyelid and lash hygiene.',
-        'sprays'
+        'sprays',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-spray-avenova1.jpg'
     ),
     createProduct(
         'avenova-spray-40ml',
@@ -318,7 +350,9 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Avenova',
         '49.99',
         'Pure hypochlorous acid spray in a larger size for extended daily use.',
-        'sprays'
+        'sprays',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-spray-avenova1-3pk.jpg'
     ),
     createProduct(
         'heyedrate-lid-lash',
@@ -326,7 +360,9 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Heyedrate',
         '24.95',
         'Organic hypochlorous acid spray for natural lid and lash cleansing.',
-        'sprays'
+        'sprays',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-spray-heyedrate1.jpg'
     ),
     createProduct(
         'optase-protect-spray',
@@ -334,7 +370,9 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Optase',
         '22.95',
         'Antibacterial HOCl spray for maintaining healthy eyelid margins.',
-        'sprays'
+        'sprays',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-spray-optase-protect1.jpg'
     ),
     createProduct(
         'ocusoft-hypochlor-spray',
@@ -342,7 +380,9 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'OCuSOFT',
         '19.95',
         '0.02% HOCl formula for antimicrobial eyelid care and hygiene.',
-        'sprays'
+        'sprays',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-spray-ocusoft-hypochlor1.jpg'
     )
 ];
 
@@ -357,7 +397,9 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Bruder',
         '26.95',
         'MediBeads microwave-activated mask providing consistent moist heat for MGD treatment.',
-        'masks'
+        'masks',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-mask-bruder1.jpg'
     ),
     createProduct(
         'bruder-single-eye-mask',
@@ -365,7 +407,9 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Bruder',
         '19.95',
         'Single eye targeted treatment mask for localized chalazion and stye relief.',
-        'masks'
+        'masks',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-mask-brudersingle1.jpg'
     ),
     createProduct(
         'optase-moist-heat-mask',
@@ -373,7 +417,9 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Optase',
         '24.95',
         'Dual-sided microwave mask with removable cover for customizable heat therapy.',
-        'masks'
+        'masks',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-mask-optase1.jpg'
     ),
     createProduct(
         'eye-eco-tranquileyes',
@@ -381,7 +427,9 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Eye Eco',
         '45.00',
         'Sleep mask with moisture retention technology for overnight dry eye protection.',
-        'masks'
+        'masks',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-mask-tranquileyesxl1.jpg'
     ),
     createProduct(
         'therapearl-eye-mask',
@@ -389,7 +437,9 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'TheraPearl',
         '14.95',
         'Hot or cold dual-temperature therapy mask for versatile eye comfort.',
-        'masks'
+        'masks',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-mask-therapearl1.jpg'
     )
 ];
 
@@ -408,7 +458,9 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         'MacuHealth',
         '74.95',
         'Triple carotenoid formula with Lutein, Meso-Zeaxanthin, and Zeaxanthin for macular support.',
-        'vitamins'
+        'vitamins',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-vitamins-macuhealth-tripleplus1.jpg'
     ),
     createProduct(
         'macuhealth-lmz3',
@@ -416,7 +468,9 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         'MacuHealth',
         '59.95',
         'Lutein, Meso-Zeaxanthin, and Zeaxanthin in clinically proven ratios for eye health.',
-        'vitamins'
+        'vitamins',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der3-vitamins-macuhealth1.jpg'
     ),
     createProduct(
         'eyepromise-ez-tears',
@@ -424,7 +478,9 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         'EyePromise',
         '29.95',
         '8 key nutrients specifically formulated to support healthy tear production.',
-        'vitamins'
+        'vitamins',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/eyepromise-vitamins-dvs1.jpg'
     ),
     createProduct(
         'eyepromise-restore',
@@ -432,7 +488,9 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         'EyePromise',
         '49.95',
         'Complete macular support formula with omega-3s and zeaxanthin for comprehensive eye nutrition.',
-        'vitamins'
+        'vitamins',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-vitamins-eyepromisemacular1.jpg'
     )
 ];
 
@@ -447,7 +505,9 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Menicon',
         '22.00',
         'Preservative-free saline solution specifically designed for scleral lens filling and rinsing.',
-        'contactLens'
+        'contactLens',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-contacts-lacripure1-2pk.jpg'
     ),
     createProduct(
         'tangible-clean',
@@ -455,7 +515,9 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Tangible',
         '25.00',
         'Daily cleaner formulated for GP and scleral contact lenses to remove deposits.',
-        'contactLens'
+        'contactLens',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-contacts-tangibleclean1-12oz-2pk.jpg'
     ),
     createProduct(
         'tangible-boost',
@@ -463,7 +525,9 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Tangible',
         '32.00',
         'Hydra-PEG wetting agent that improves lens surface wettability and comfort.',
-        'contactLens'
+        'contactLens',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-contacts-tangiblefill1.jpg'
     ),
     createProduct(
         'nutrilens-plus',
@@ -471,7 +535,9 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Contamac',
         '28.00',
         'Scleral lens conditioning solution that enhances lens surface hydration.',
-        'contactLens'
+        'contactLens',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-contacts-menicon-lenscase1.jpg'
     ),
     createProduct(
         'clear-care-plus',
@@ -479,7 +545,9 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Alcon',
         '16.95',
         'Hydrogen peroxide deep cleaning system with HydraGlyde moisture matrix.',
-        'contactLens'
+        'contactLens',
+        undefined,
+        'https://dryeyerescue.com/cdn/shop/files/der-contacts-clearcare1.jpg'
     )
 ];
 
