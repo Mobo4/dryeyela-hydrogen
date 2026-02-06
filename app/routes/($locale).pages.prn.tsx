@@ -5,6 +5,7 @@ import { ProductSwimlane } from '~/components/ProductSwimlane';
 import { Button } from '~/components/Button';
 import { getPrnProduct } from '~/data/prn-products';
 import { PRODUCTS_SEARCH_QUERY } from '~/data/queries';
+import type { ProductCardFragment } from 'storefrontapi.generated';
 
 /**
  * PRN Brand Page
@@ -113,7 +114,7 @@ export default function PRNPage() {
 
                     {products && products.nodes && products.nodes.length > 0 ? (
                         <ProductSwimlane
-                            products={products}
+                            products={{ nodes: products.nodes as ProductCardFragment[] }}
                             count={4}
                             title=""
                         />

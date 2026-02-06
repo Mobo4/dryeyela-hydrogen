@@ -3,6 +3,7 @@ import { useLoaderData } from '@remix-run/react';
 import { Heading, Text } from '~/components/Text';
 import { ProductSwimlane } from '~/components/ProductSwimlane';
 import { PRODUCTS_SEARCH_QUERY } from '~/data/queries';
+import type { ProductCardFragment } from 'storefrontapi.generated';
 
 /**
  * Avenova Brand Page
@@ -116,7 +117,7 @@ export default function AvenovaPage() {
                     </div>
                     {products && products.nodes && products.nodes.length > 0 ? (
                         <ProductSwimlane
-                            products={products}
+                            products={{ nodes: products.nodes as ProductCardFragment[] }}
                             count={4}
                             title=""
                         />

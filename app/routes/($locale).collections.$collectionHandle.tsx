@@ -23,7 +23,7 @@ import { Section, Text } from '~/components/Text';
 import { Grid } from '~/components/Grid';
 import { Button } from '~/components/Button';
 import { ProductCard } from '~/components/ProductCard';
-import { SortFilter, type SortParam } from '~/components/SortFilter';
+import { SortFilter, type SortParam, type AppliedFilter } from '~/components/SortFilter';
 import { PRODUCT_CARD_FRAGMENT } from '~/data/fragments';
 import { routeHeaders } from '~/data/cache';
 import { seoPayload } from '~/lib/seo.server';
@@ -79,8 +79,8 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
 
   // Try to fetch from Shopify with error handling
   let collection = null;
-  let collections = { edges: [] };
-  
+  let collections: { edges: Array<{ node: { title: string; handle: string } }> } = { edges: [] };
+
   try {
     const result = await context.storefront.query(
       COLLECTION_QUERY,
@@ -97,7 +97,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
       },
     );
     collection = result?.collection;
-    collections = result?.collections || { edges: [] };
+    collections = result?.collections ?? { edges: [] };
   } catch (error) {
     console.warn(`[CollectionLoader] Shopify query failed for "${collectionHandle}":`, error);
     // Continue to local fallback
@@ -108,7 +108,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
   const localProducts = LOCAL_COLLECTIONS[collectionHandle];
 
   // If collection doesn't exist in Shopify OR has no products, use LOCAL fallback
-  const hasShopifyProducts = collection?.products?.nodes?.length > 0;
+  const hasShopifyProducts = (collection?.products?.nodes?.length ?? 0) > 0;
   
   if (!hasShopifyProducts && localProducts && localProducts.length > 0) {
     // Construct a virtual collection object with local products
@@ -117,8 +117,12 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
       handle: collectionHandle,
       title: fallbackMeta.title,
       description: fallbackMeta.description,
+      seo: {
+        title: fallbackMeta.title,
+        description: fallbackMeta.description,
+      },
       products: {
-        filters: [],
+        filters: [] as Filter[],
         nodes: localProducts,
         pageInfo: { hasNextPage: false, hasPreviousPage: false }
       }
@@ -309,8 +313,8 @@ export default function Collection() {
       <Section className="py-12">
         <SortFilter
           filters={collection.products.filters as Filter[]}
-          appliedFilters={appliedFilters}
-          collections={collections}
+          appliedFilters={appliedFilters as AppliedFilter[]}
+          collections={collections.map((c) => ({ handle: c.handle, title: c.title }))}
         >
           <Pagination connection={collection.products}>
             {({

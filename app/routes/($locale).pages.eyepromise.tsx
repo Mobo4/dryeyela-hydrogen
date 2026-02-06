@@ -8,10 +8,15 @@ import { seoPayload } from '~/lib/seo.server';
 export const headers = routeHeaders;
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-    const seo = seoPayload.customPage({
+    const seo = seoPayload.page({
         url: request.url,
-        title: 'EyePromise - DryEyeLA',
-        description: 'Upgrade Your Eyes. Protect and enhance your sight with science based nutritional support.',
+        page: {
+            title: 'EyePromise - DryEyeLA',
+            seo: {
+                title: 'EyePromise - DryEyeLA',
+                description: 'Upgrade Your Eyes. Protect and enhance your sight with science based nutritional support.',
+            },
+        },
     });
     return json({ seo });
 }

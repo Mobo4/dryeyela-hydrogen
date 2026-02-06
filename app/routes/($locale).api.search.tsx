@@ -26,10 +26,8 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
       },
     });
 
-    const products = search.edges
-      .filter((edge) => edge.node.__typename === 'Product')
-      .map((edge) => {
-        const product = edge.node as Extract<typeof edge.node, { __typename: 'Product' }>;
+    const products = search.edges.map((edge) => {
+        const product = edge.node;
         return {
           id: product.id,
           title: product.title,

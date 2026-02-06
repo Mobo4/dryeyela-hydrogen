@@ -47,17 +47,19 @@ export const loader = async ({
       });
     }
 
-    const articles = flattenConnection(blog.articles).map((article) => {
-      const { publishedAt } = article!;
-      return {
-        ...article,
-        publishedAt: new Intl.DateTimeFormat(`${language}-${country}`, {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }).format(new Date(publishedAt!)),
-      };
-    });
+    const articles = flattenConnection(blog.articles)
+      .filter((article): article is NonNullable<typeof article> => article !== null)
+      .map((article) => {
+        const { publishedAt } = article;
+        return {
+          ...article,
+          publishedAt: new Intl.DateTimeFormat(`${language}-${country}`, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }).format(new Date(publishedAt!)),
+        };
+      });
 
     // Inject Static Article: Deseyne FDA Clearance
     articles.unshift({
@@ -133,7 +135,7 @@ export default function Journals() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {articles.map((article, i) => (
+                {(articles.filter(Boolean) as ArticleFragment[]).map((article, i) => (
                   <ArticleCard
                     blogHandle={BLOG_HANDLE.toLowerCase()}
                     article={article}
