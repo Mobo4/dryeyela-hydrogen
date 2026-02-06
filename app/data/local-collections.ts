@@ -18,7 +18,10 @@ function mapPrnToCollectionProduct(key: keyof typeof PRN_PRODUCTS) {
                 id: v.sku,
                 title: v.title,
                 price: { amount: v.price.toString(), currencyCode: p.currency },
-                compareAtPrice: v.savings ? { amount: (v.price + parseInt(v.savings.replace('$', ''))).toString(), currencyCode: p.currency } : null,
+                compareAtPrice: v.savings ? { 
+                    amount: (v.price + (typeof v.savings === 'string' ? parseFloat(v.savings.replace('$', '')) : v.savings)).toString(), 
+                    currencyCode: p.currency 
+                } : null,
                 image: { url: v.image, altText: p.title, width: 800, height: 800 },
                 selectedOptions: [{ name: 'Size', value: v.title }],
                 product: { handle: p.id, title: p.title }
