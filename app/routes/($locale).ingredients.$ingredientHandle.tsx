@@ -9,17 +9,26 @@ import {INGREDIENTS, SEO_CONFIG} from '~/data/navigation';
 import {Link} from '@remix-run/react';
 import {Heading, Text} from '~/components/Text';
 import {ProductSwimlane} from '~/components/ProductSwimlane';
-import {PRODUCTS_BY_FILTER_QUERY} from '~/data/queries';
+import {getProductsForIngredient} from '~/data/local-collections';
 import {PageHero, TrustBadges} from '~/components/sections';
 
 /**
  * Ingredient Page
- * 
- * Displays products containing a specific ingredient by searching product titles/tags.
+ *
+ * Displays products containing a specific ingredient from LOCAL_COLLECTIONS.
+ * Uses INGREDIENT_PRODUCT_MAPPINGS to match ingredients to products:
+ * - omega-3: PRN DE3, PRN Kids Omega, EyePromise products, MacuHealth
+ * - hypochlorous-acid: Avenova, Heyedrate, Optase Protect, OCuSOFT HypoChlor
+ * - tea-tree: Optase TTO products, Cliradex products
+ * - hyaluronic-acid: Optase Intense, Oasis, Systane, Refresh products
+ * - manuka-honey: (no products currently available)
  */
-export async function loader({params, context}: LoaderFunctionArgs) {
+export async function loader({params}: LoaderFunctionArgs) {
   const {ingredientHandle} = params;
-  const {storefront} = context;
+
+  if (!ingredientHandle) {
+    throw new Response('Ingredient handle required', {status: 400});
+  }
 
   const ingredient = INGREDIENTS.find((i) => i.handle === ingredientHandle);
 
@@ -27,36 +36,17 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     throw new Response('Ingredient not found', {status: 404});
   }
 
-  try {
-    // Fetch products with this ingredient (search by keywords)
-    const {products} = await storefront.query(PRODUCTS_BY_FILTER_QUERY, {
-      variables: {
-        first: 16,
-        query: ingredient.keywords.slice(0, 3).join(' OR '),
-        country: storefront.i18n.country,
-        language: storefront.i18n.language,
-      },
-    });
+  // Get products containing this ingredient from LOCAL_COLLECTIONS
+  const localProducts = getProductsForIngredient(ingredientHandle);
 
-    return json({
-      ingredient,
-      products,
-      seo: {
-        title: `${ingredient.title} Products for Dry Eye`,
-        description: ingredient.description,
-      },
-    });
-  } catch (error) {
-    console.error(`Error loading products for ingredient ${ingredient.title}:`, error);
-    return json({
-      ingredient,
-      products: {nodes: []},
-      seo: {
-        title: `${ingredient.title} Products for Dry Eye`,
-        description: ingredient.description,
-      },
-    });
-  }
+  return json({
+    ingredient,
+    products: {nodes: localProducts},
+    seo: {
+      title: `${ingredient.title} Products for Dry Eye`,
+      description: ingredient.description,
+    },
+  });
 }
 
 export const meta = ({data}: MetaArgs<typeof loader>) => {

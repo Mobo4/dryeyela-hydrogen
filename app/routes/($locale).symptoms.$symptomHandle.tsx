@@ -9,18 +9,48 @@ import {SYMPTOMS, SEO_CONFIG} from '~/data/navigation';
 import {Link} from '@remix-run/react';
 import {Heading, Text} from '~/components/Text';
 import {ProductSwimlane} from '~/components/ProductSwimlane';
-import {PRODUCTS_BY_FILTER_QUERY} from '~/data/queries';
+import {LOCAL_COLLECTIONS} from '~/data/local-collections';
 import {PageHero, TrustBadges} from '~/components/sections';
 
 /**
  * Symptom Page
- * 
+ *
  * Displays products recommended for treating a specific symptom.
- * Searches products by keywords/tags related to the symptom.
+ * Uses LOCAL_COLLECTIONS based on symptom's recommendedCategories mapping:
+ * - dry-gritty-eyes: eye-drops-lubricants, vitamins-supplements
+ * - burning-stinging-eyes: eye-drops-lubricants, eyelid-sprays
+ * - eye-redness: eye-drops-lubricants, eyelid-cleansers
+ * - watery-eyes: eye-drops-lubricants, vitamins-supplements
+ * - severe-chronic-dry-eye: eye-drops-lubricants, eye-masks, vitamins-supplements
+ * - blepharitis-mgd: eyelid-cleansers, eyelid-sprays, eye-masks
  */
-export async function loader({params, context}: LoaderFunctionArgs) {
+
+/**
+ * Get products for a symptom based on its recommendedCategories
+ */
+function getProductsForSymptom(symptom: typeof SYMPTOMS[0]) {
+  const recommendedCategories = symptom.recommendedCategories || [];
+  const products: any[] = [];
+  const seenIds = new Set<string>();
+
+  // Collect products from each recommended category
+  for (const categoryHandle of recommendedCategories) {
+    const categoryProducts = LOCAL_COLLECTIONS[categoryHandle] || [];
+    for (const product of categoryProducts) {
+      // Avoid duplicates
+      if (!seenIds.has(product.id)) {
+        seenIds.add(product.id);
+        products.push(product);
+      }
+    }
+  }
+
+  // Limit to 8 products for optimal display
+  return products.slice(0, 8);
+}
+
+export async function loader({params}: LoaderFunctionArgs) {
   const {symptomHandle} = params;
-  const {storefront} = context;
 
   const symptom = SYMPTOMS.find((s) => s.handle === symptomHandle);
 
@@ -28,36 +58,17 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     throw new Response('Symptom not found', {status: 404});
   }
 
-  try {
-    // Fetch products that might be relevant (using tags or keywords)
-    const {products} = await storefront.query(PRODUCTS_BY_FILTER_QUERY, {
-      variables: {
-        first: 12,
-        query: symptom.keywords.slice(0, 3).join(' OR '),
-        country: storefront.i18n.country,
-        language: storefront.i18n.language,
-      },
-    });
+  // Get products from LOCAL_COLLECTIONS based on symptom's recommendedCategories
+  const localProducts = getProductsForSymptom(symptom);
 
-    return json({
-      symptom,
-      products,
-      seo: {
-        title: `${symptom.title} Treatment Products`,
-        description: symptom.description,
-      },
-    });
-  } catch (error) {
-    console.error(`Error loading products for symptom ${symptom.title}:`, error);
-    return json({
-      symptom,
-      products: {nodes: []},
-      seo: {
-        title: `${symptom.title} Treatment Products`,
-        description: symptom.description,
-      },
-    });
-  }
+  return json({
+    symptom,
+    products: {nodes: localProducts},
+    seo: {
+      title: `${symptom.title} Treatment Products`,
+      description: symptom.description,
+    },
+  });
 }
 
 export const meta = ({data}: MetaArgs<typeof loader>) => {
