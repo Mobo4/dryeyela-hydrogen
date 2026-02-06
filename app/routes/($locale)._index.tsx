@@ -158,13 +158,15 @@ export default function Homepage() {
             </div>
           </div>
 
-          {/* Featured Products */}
+          {/* Featured Products - Using new carousel */}
           <Suspense fallback={
-            <div className="swimlane-container">
-              <div className="swimlane hiddenScroll">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="snap-start w-80 flex-shrink-0 h-[500px] bg-gray-100 rounded-2xl animate-pulse" />
-                ))}
+            <div className="py-12 md:py-16 lg:py-20">
+              <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12">
+                <div className="flex gap-6 overflow-hidden">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="flex-shrink-0 w-[280px] h-[500px] bg-gray-100 rounded-2xl animate-pulse" />
+                  ))}
+                </div>
               </div>
             </div>
           }>

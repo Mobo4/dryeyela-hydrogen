@@ -55,6 +55,10 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
     throw new Response('Missing collectionHandle param', { status: 400 });
   }
 
+  // Get fallback metadata FIRST (before any queries)
+  const fallbackMeta = getFallbackCollection(collectionHandle);
+  const relatedCollections = getRelatedCollections(collectionHandle, 3);
+
   const searchParams = new URL(request.url).searchParams;
 
   const { sortKey, reverse } = getSortValuesFromParam(
@@ -73,58 +77,68 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
     [] as ProductFilter[],
   );
 
-  const { collection, collections } = await context.storefront.query(
-    COLLECTION_QUERY,
-    {
-      variables: {
-        ...paginationVariables,
-        handle: collectionHandle,
-        filters,
-        sortKey,
-        reverse,
-        country: context.storefront.i18n.country,
-        language: context.storefront.i18n.language,
+  // Try to fetch from Shopify with error handling
+  let collection = null;
+  let collections = { edges: [] };
+  
+  try {
+    const result = await context.storefront.query(
+      COLLECTION_QUERY,
+      {
+        variables: {
+          ...paginationVariables,
+          handle: collectionHandle,
+          filters,
+          sortKey,
+          reverse,
+          country: context.storefront.i18n.country,
+          language: context.storefront.i18n.language,
+        },
       },
-    },
-  );
+    );
+    collection = result?.collection;
+    collections = result?.collections || { edges: [] };
+  } catch (error) {
+    console.warn(`[CollectionLoader] Shopify query failed for "${collectionHandle}":`, error);
+    // Continue to local fallback
+  }
 
-  // Get fallback metadata for missing collections
-  const fallbackMeta = getFallbackCollection(collectionHandle);
-  const relatedCollections = getRelatedCollections(collectionHandle, 3);
+  // Check for local fallback products FIRST (before checking Shopify collection)
+  const { LOCAL_COLLECTIONS } = await import('~/data/local-collections');
+  const localProducts = LOCAL_COLLECTIONS[collectionHandle];
 
-  // If collection doesn't exist in Shopify, check LOCAL fallbacks
-  if (!collection) {
-    const { LOCAL_COLLECTIONS } = await import('~/data/local-collections');
-    const localProducts = LOCAL_COLLECTIONS[collectionHandle];
+  // If collection doesn't exist in Shopify OR has no products, use LOCAL fallback
+  const hasShopifyProducts = collection?.products?.nodes?.length > 0;
+  
+  if (!hasShopifyProducts && localProducts && localProducts.length > 0) {
+    // Construct a virtual collection object with local products
+    const virtualCollection = {
+      id: `gid://shopify/Collection/local-${collectionHandle}`,
+      handle: collectionHandle,
+      title: fallbackMeta.title,
+      description: fallbackMeta.description,
+      products: {
+        filters: [],
+        nodes: localProducts,
+        pageInfo: { hasNextPage: false, hasPreviousPage: false }
+      }
+    };
 
-    if (localProducts && localProducts.length > 0) {
-      // Construct a virtual collection object
-      const virtualCollection = {
-        id: `gid://shopify/Collection/local-${collectionHandle}`,
-        handle: collectionHandle,
-        title: fallbackMeta.title,
-        description: fallbackMeta.description,
-        products: {
-          filters: [],
-          nodes: localProducts,
-          pageInfo: { hasNextPage: false, hasPreviousPage: false }
-        }
-      };
+    const seo = seoPayload.collection({ collection: virtualCollection, url: request.url });
 
-      const seo = seoPayload.collection({ collection: virtualCollection, url: request.url });
+    return json({
+      collection: virtualCollection,
+      collectionHandle,
+      fallbackMeta,
+      relatedCollections,
+      appliedFilters: [],
+      collections: flattenConnection(collections),
+      seo,
+    });
+  }
 
-      return json({
-        collection: virtualCollection,
-        collectionHandle,
-        fallbackMeta,
-        relatedCollections,
-        appliedFilters: [],
-        collections: flattenConnection(collections),
-        seo,
-      });
-    }
-
-    // REAL FALLBACK for truly unknown collections
+  // If no Shopify collection AND no local products, show "Coming Soon"
+  if (!collection || !hasShopifyProducts) {
     const seo = {
       title: fallbackMeta.title,
       description: fallbackMeta.description,
