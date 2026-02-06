@@ -2,12 +2,16 @@ import {Link} from '~/components/Link';
 import {Heading, Text} from '~/components/Text';
 
 type HeroVariant = 'primary' | 'secondary' | 'minimal';
+type HeroSize = 'small' | 'medium' | 'large';
+type HeroBackground = 'navy' | 'cream' | 'white';
 
 interface HeroSectionProps {
   title: string;
   subtitle?: string;
   description?: string;
   variant?: HeroVariant;
+  size?: HeroSize;
+  background?: HeroBackground;
   backgroundImage?: string;
   breadcrumbs?: Array<{label: string; to?: string}>;
   primaryCTA?: {label: string; to: string};
@@ -21,6 +25,8 @@ export function HeroSection({
   subtitle,
   description,
   variant = 'primary',
+  size = 'medium',
+  background,
   backgroundImage,
   breadcrumbs,
   primaryCTA,
@@ -28,11 +34,33 @@ export function HeroSection({
   badge,
   children,
 }: HeroSectionProps) {
-  const backgrounds = {
+  // Size-based padding classes
+  const sizeClasses = {
+    small: 'py-8 md:py-12 lg:py-14',
+    medium: 'py-12 md:py-16 lg:py-20',
+    large: 'py-16 md:py-20 lg:py-28',
+  };
+
+  // Background colors - background prop takes precedence over variant
+  const backgroundColors = {
+    navy: 'bg-besilos-navy',
+    cream: 'bg-besilos-cream',
+    white: 'bg-white',
+  };
+
+  const variantBackgrounds = {
     primary: 'bg-besilos-navy',
     secondary: 'bg-besilos-cream',
     minimal: 'bg-white',
   };
+
+  // Determine which background to use
+  const bgClass = background ? backgroundColors[background] : variantBackgrounds[variant];
+
+  // Determine variant for text colors based on background or variant
+  const effectiveVariant = background
+    ? (background === 'navy' ? 'primary' : background === 'cream' ? 'secondary' : 'minimal')
+    : variant;
 
   const textColors = {
     primary: {
@@ -55,11 +83,11 @@ export function HeroSection({
     },
   };
 
-  const colors = textColors[variant];
+  const colors = textColors[effectiveVariant];
 
   return (
     <section
-      className={`relative ${backgrounds[variant]} overflow-hidden`}
+      className={`relative ${bgClass} overflow-hidden`}
       style={
         backgroundImage
           ? {
@@ -71,7 +99,7 @@ export function HeroSection({
       }
     >
       {/* Subtle gradient overlay for primary variant */}
-      {variant === 'primary' && !backgroundImage && (
+      {effectiveVariant === 'primary' && !backgroundImage && (
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -81,7 +109,7 @@ export function HeroSection({
         />
       )}
 
-      <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
+      <div className={`relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12 ${sizeClasses[size]}`}>
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav className="mb-6">
@@ -154,7 +182,7 @@ export function HeroSection({
                 <Link
                   to={secondaryCTA.to}
                   className={`inline-flex items-center justify-center px-8 py-4 border-2 font-semibold rounded-full transition-colors ${
-                    variant === 'primary'
+                    effectiveVariant === 'primary'
                       ? 'border-besilos-cream/30 text-besilos-cream hover:bg-besilos-cream/10'
                       : 'border-besilos-navy/30 text-besilos-navy hover:bg-besilos-navy/10'
                   }`}

@@ -254,9 +254,9 @@ export default function GenericProductPage() {
               <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                 <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-4">Select Supply</h3>
                 <VariantSelector
-                  variants={product.variants}
-                  selectedVariant={selectedVariant}
-                  onSelect={setSelectedVariant}
+                  variants={product.variants as any}
+                  selectedVariant={selectedVariant as any}
+                  onSelect={setSelectedVariant as any}
                 />
 
                 <div className="mt-8 pt-6 border-t border-slate-100">

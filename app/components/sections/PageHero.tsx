@@ -21,7 +21,7 @@ export function PageHero({
   badge?: string;
   primaryCTA?: { label: string; to: string };
   secondaryCTA?: { label: string; to: string };
-  breadcrumbs?: Array<{ label: string; to: string }>;
+  breadcrumbs?: Array<{ label: string; to?: string }>;
   background?: 'gradient' | 'white' | 'navy';
 }) {
   const backgroundClasses = {
@@ -46,12 +46,16 @@ export function PageHero({
               {breadcrumbs.map((crumb, idx) => (
                 <li key={idx} className="flex items-center gap-2">
                   {idx > 0 && <span className={textColorMuted}>/</span>}
-                  <Link
-                    to={crumb.to}
-                    className={`${textColorMuted} hover:${textColor} transition-colors`}
-                  >
-                    {crumb.label}
-                  </Link>
+                  {crumb.to ? (
+                    <Link
+                      to={crumb.to}
+                      className={`${textColorMuted} hover:${textColor} transition-colors`}
+                    >
+                      {crumb.label}
+                    </Link>
+                  ) : (
+                    <span className={textColorMuted}>{crumb.label}</span>
+                  )}
                 </li>
               ))}
             </ol>

@@ -576,44 +576,9 @@ export const HOMEPAGE_FEATURED_PRODUCTS_QUERY = `#graphql
   @inContext(country: $country, language: $language) {
     products(first: 8) {
       nodes {
-        id
-        title
-        handle
-        vendor
-        publishedAt
-        featuredImage {
-          url
-          altText
-          width
-          height
-        }
-        priceRange {
-          minVariantPrice {
-            amount
-            currencyCode
-          }
-        }
-        variants(first: 1) {
-          nodes {
-            id
-            availableForSale
-            image {
-              url
-              altText
-              width
-              height
-            }
-            price {
-              amount
-              currencyCode
-            }
-            compareAtPrice {
-              amount
-              currencyCode
-            }
-          }
-        }
+        ...ProductCard
       }
     }
   }
-`;
+  ${PRODUCT_CARD_FRAGMENT}
+` as const;

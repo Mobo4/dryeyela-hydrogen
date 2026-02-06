@@ -1,12 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
-import type { HomepageFeaturedProductsQuery } from 'storefrontapi.generated';
+import type { ProductCardFragment } from 'storefrontapi.generated';
 
 const mockProducts = {
   nodes: new Array(12).fill(''),
 };
 
-type ProductCarouselProps = HomepageFeaturedProductsQuery & {
+type ProductsData = {
+  products: {
+    nodes: ProductCardFragment[];
+  };
+};
+
+type ProductCarouselProps = ProductsData & {
   title?: string;
   count?: number;
   className?: string;

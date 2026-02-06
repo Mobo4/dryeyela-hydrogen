@@ -94,7 +94,7 @@ export function ProductCard({
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
                 aspectRatio="4/5"
                 data={secondaryImage}
-                alt={secondaryImage && 'altText' in secondaryImage ? secondaryImage.altText : `Picture of ${product.title}`}
+                alt={secondaryImage && 'altText' in secondaryImage && typeof secondaryImage.altText === 'string' ? secondaryImage.altText : `Picture of ${product.title}`}
                 loading={loading}
               />
             )}

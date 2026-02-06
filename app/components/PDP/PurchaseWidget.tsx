@@ -1,10 +1,35 @@
 import { useState, useEffect } from 'react';
 import { Money, flattenConnection } from '@shopify/hydrogen';
+import type { MoneyV2 } from '@shopify/hydrogen/storefront-api-types';
 import { AddToCartButton } from '~/components/AddToCartButton';
 import { Text } from '~/components/Text';
 import clsx from 'clsx';
 
-export function PurchaseWidget({ product, selectedVariant }: any) {
+/**
+ * Represents a product variant with the minimum fields required by PurchaseWidget
+ */
+interface PurchaseVariant {
+    id: string;
+    title: string;
+    sku?: string | null;
+    price: Pick<MoneyV2, 'amount' | 'currencyCode'>;
+    availableForSale: boolean;
+}
+
+/**
+ * Props for the PurchaseWidget component
+ */
+interface PurchaseWidgetProps {
+    product: {
+        variants: {
+            nodes: PurchaseVariant[];
+        };
+        vendor?: string | null;
+    };
+    selectedVariant: PurchaseVariant | null;
+}
+
+export function PurchaseWidget({ product, selectedVariant }: PurchaseWidgetProps) {
     const [purchaseType, setPurchaseType] = useState('subscription'); // 'subscription' or 'one-time'
 
     const variants = flattenConnection(product.variants);
@@ -12,7 +37,7 @@ export function PurchaseWidget({ product, selectedVariant }: any) {
     const isPRN = product.vendor?.toLowerCase().includes('prn');
 
     // Group variants by supply duration.
-    const supplyOptions = variants.map((v) => {
+    const supplyOptions = variants.map((v: PurchaseVariant) => {
         const title = v.title.toLowerCase();
         let duration = 0;
         if (title.includes('1 month')) duration = 1;

@@ -1,4 +1,77 @@
-export const PRN_PRODUCTS = {
+export interface ProductReview {
+    id: string;
+    author: string;
+    rating: number;
+    title: string;
+    text: string;
+    date: string;
+}
+
+export interface ProductVariant {
+    id: string;
+    title: string;
+    price: number;
+    savings: number;
+    sku: string;
+    image: string;
+    recommended?: boolean;
+}
+
+export interface ProductBenefit {
+    title: string;
+    description: string;
+}
+
+export interface ProductFaq {
+    question: string;
+    answer: string;
+}
+
+export interface ProductImage {
+    src: string;
+    alt: string;
+}
+
+export interface ProductScience {
+    title: string;
+    description: string;
+    points: string[];
+}
+
+export interface ProductDoctorNote {
+    author: string;
+    role: string;
+    quote: string;
+    image: string;
+}
+
+export interface ProductSeoData {
+    title: string;
+    description: string;
+    url: string;
+}
+
+export interface PrnProduct {
+    id: string;
+    title: string;
+    subtitle: string;
+    price: number;
+    currency: string;
+    description: string;
+    handle?: string;
+    variants: ProductVariant[];
+    science?: ProductScience;
+    doctorNote?: ProductDoctorNote;
+    images: ProductImage[];
+    benefits: ProductBenefit[];
+    ingredients: string[];
+    faqs: ProductFaq[];
+    reviews?: ProductReview[];
+    relatedProducts?: string[];
+    seodata: ProductSeoData;
+}
+
+export const PRN_PRODUCTS: Record<string, PrnProduct> = {
     de3_omega: {
         id: 'de3-omega',
         title: 'De3 Omega Benefits®',

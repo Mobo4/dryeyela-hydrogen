@@ -1,11 +1,17 @@
-import type { HomepageFeaturedProductsQuery } from 'storefrontapi.generated';
+import type { ProductCardFragment } from 'storefrontapi.generated';
 import { ProductCarousel } from './ProductCarousel';
 
 const mockProducts = {
   nodes: new Array(12).fill(''),
 };
 
-type ProductSwimlaneProps = HomepageFeaturedProductsQuery & {
+type ProductsData = {
+  products: {
+    nodes: ProductCardFragment[];
+  };
+};
+
+type ProductSwimlaneProps = ProductsData & {
   title?: string;
   count?: number;
   className?: string;
