@@ -1,28 +1,76 @@
 import { PRN_PRODUCTS } from './prn-products';
+import type { CurrencyCode } from '@shopify/hydrogen/storefront-api-types';
 
-// Helper to transform PRN product to Shopify-like product node
-function mapPrnToCollectionProduct(key: keyof typeof PRN_PRODUCTS) {
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+
+interface ProductVariantNode {
+    id: string;
+    title: string;
+    availableForSale: boolean;
+    price: { amount: string; currencyCode: CurrencyCode };
+    compareAtPrice: { amount: string; currencyCode: CurrencyCode } | null;
+    image: { url: string; altText: string; width: number; height: number };
+    selectedOptions: { name: string; value: string }[];
+    product: { handle: string; title: string };
+}
+
+interface ProductImageNode {
+    url: string;
+    altText: string;
+    width: number;
+    height: number;
+}
+
+interface ProductMediaNode {
+    __typename: 'MediaImage';
+    id: string;
+    alt: string;
+    mediaContentType: 'IMAGE';
+    image: { id: string; url: string; width: number; height: number };
+    previewImage?: { url: string };
+}
+
+interface CollectionProduct {
+    id: string;
+    title: string;
+    handle: string;
+    vendor: string;
+    description: string;
+    publishedAt: string;
+    variants: { nodes: ProductVariantNode[] };
+    images: { nodes: ProductImageNode[] };
+    media: { nodes: ProductMediaNode[] };
+}
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Transform PRN product data to Shopify-like collection product format
+ */
+function mapPrnToCollectionProduct(key: keyof typeof PRN_PRODUCTS): CollectionProduct {
     const p = PRN_PRODUCTS[key];
     const firstVariant = p.variants[0];
+    const currencyCode = p.currency as CurrencyCode;
     return {
         id: p.id,
         title: p.title,
-        handle: p.id, // Using ID as handle for local routing logic
+        handle: p.id,
         vendor: 'PRN Vision',
         description: p.subtitle,
         publishedAt: new Date().toISOString(),
-        items: {
-            nodes: []
-        },
         variants: {
             nodes: p.variants.map(v => ({
                 id: v.sku,
                 title: v.title,
                 availableForSale: true,
-                price: { amount: v.price.toString(), currencyCode: p.currency },
+                price: { amount: v.price.toString(), currencyCode },
                 compareAtPrice: v.savings ? {
                     amount: (v.price + v.savings).toString(),
-                    currencyCode: p.currency
+                    currencyCode
                 } : null,
                 image: { url: v.image, altText: p.title, width: 800, height: 800 },
                 selectedOptions: [{ name: 'Size', value: v.title }],
@@ -36,98 +84,541 @@ function mapPrnToCollectionProduct(key: keyof typeof PRN_PRODUCTS) {
             nodes: [
                 {
                     __typename: 'MediaImage',
-                    image: { url: firstVariant.image, altText: p.title, width: 1000, height: 1000 }
+                    id: `gid://shopify/MediaImage/${p.id}`,
+                    alt: p.title,
+                    mediaContentType: 'IMAGE',
+                    image: { id: `gid://shopify/Image/${p.id}`, url: firstVariant.image, width: 1000, height: 1000 },
+                    previewImage: { url: firstVariant.image }
                 }
             ]
         }
     };
 }
 
-// Mock Product Generator
-function createMockProduct(id: string, title: string, price: string, image: string, type: string, vendor?: string) {
-    // Extract vendor from title if not provided
-    const productVendor = vendor || title.split(' ')[0];
-    
+// Category color schemes for placeholder images
+const CATEGORY_COLORS = {
+    eyeDrops: { bg: 'eff6ff', fg: '1e40af' },      // Blue tones
+    cleansers: { bg: 'f0fdf4', fg: '166534' },     // Green tones
+    sprays: { bg: 'fdf4ff', fg: '86198f' },        // Purple tones
+    masks: { bg: 'fff7ed', fg: '9a3412' },         // Orange tones
+    vitamins: { bg: 'fefce8', fg: '854d0e' },      // Yellow tones
+    contactLens: { bg: 'e0f2fe', fg: '0369a1' }    // Cyan tones
+} as const;
+
+/**
+ * Generate a styled placeholder image URL
+ */
+function generatePlaceholderImage(productName: string, category: keyof typeof CATEGORY_COLORS): string {
+    const colors = CATEGORY_COLORS[category];
+    const urlSafeName = productName.replace(/\s+/g, '+');
+    return `https://placehold.co/600x600/${colors.bg}/${colors.fg}?text=${urlSafeName}`;
+}
+
+/**
+ * Create a production-ready product object for local collections
+ */
+function createProduct(
+    handle: string,
+    title: string,
+    vendor: string,
+    price: string,
+    description: string,
+    category: keyof typeof CATEGORY_COLORS,
+    compareAtPrice?: string
+): CollectionProduct {
+    const imageUrl = generatePlaceholderImage(title, category);
+    const publishedAt = new Date().toISOString();
+    const currencyCode: CurrencyCode = 'USD';
+
     return {
-        id: `gid://shopify/Product/${id}`,
-        title: title,
-        handle: id,
-        vendor: productVendor,
-        description: `Premium ${type.toLowerCase()} for effective dry eye relief. Doctor recommended and clinically proven.`,
-        publishedAt: new Date().toISOString(),
+        id: `gid://shopify/Product/${handle}`,
+        title,
+        handle,
+        vendor,
+        description,
+        publishedAt,
         variants: {
             nodes: [{
-                id: `gid://shopify/ProductVariant/${id}`,
+                id: `gid://shopify/ProductVariant/${handle}`,
                 title: 'Default Title',
                 availableForSale: true,
-                price: { amount: price, currencyCode: 'USD' },
-                compareAtPrice: null,
-                image: { url: image, altText: title, width: 800, height: 800 },
+                price: { amount: price, currencyCode },
+                compareAtPrice: compareAtPrice
+                    ? { amount: compareAtPrice, currencyCode }
+                    : null,
+                image: { url: imageUrl, altText: title, width: 800, height: 800 },
                 selectedOptions: [{ name: 'Title', value: 'Default Title' }],
-                product: { handle: id, title: title }
+                product: { handle, title }
             }]
         },
         images: {
-            nodes: [{ url: image, altText: title, width: 800, height: 800 }]
+            nodes: [{ url: imageUrl, altText: title, width: 800, height: 800 }]
         },
         media: {
             nodes: [
                 {
                     __typename: 'MediaImage',
-                    image: { url: image, altText: title, width: 800, height: 800 }
+                    id: `gid://shopify/MediaImage/${handle}`,
+                    alt: title,
+                    mediaContentType: 'IMAGE',
+                    image: { id: `gid://shopify/Image/${handle}`, url: imageUrl, width: 800, height: 800 },
+                    previewImage: { url: imageUrl }
                 }
             ]
         }
     };
 }
 
-// Placeholder Images (Using generous placeholders that look like products)
-const IMAGES = {
-    drops: 'https://cdn.shopify.com/s/files/1/0000/0001/products/placeholder_drops.jpg?v=1', // Fallback will use local eventually
-    cleanser: 'https://placehold.co/600x600/e2e8f0/1e293b?text=Cleanser',
-    mask: 'https://placehold.co/600x600/e2e8f0/1e293b?text=Warm+Mask',
-    spray: 'https://placehold.co/600x600/e2e8f0/1e293b?text=Eyelid+Spray',
-    omega: PRN_PRODUCTS.de3_omega.variants[0].image
+// ============================================================================
+// PRODUCT DATA BY CATEGORY
+// ============================================================================
+
+/**
+ * Eye Drops & Lubricants - 8 products
+ * Preservative-free and lubricating drops for dry eye relief
+ */
+const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
+    createProduct(
+        'oasis-tears-plus',
+        'Oasis TEARS Plus',
+        'Oasis',
+        '29.95',
+        'Preservative-free glycerin drops with hyaluronic acid for long-lasting moisture and comfort.',
+        'eyeDrops'
+    ),
+    createProduct(
+        'oasis-tears-pf-30ct',
+        'Oasis TEARS PF 30ct',
+        'Oasis',
+        '24.95',
+        'Single-use preservative-free vials perfect for sensitive eyes and contact lens wearers.',
+        'eyeDrops'
+    ),
+    createProduct(
+        'optase-intense-drops',
+        'Optase Intense Drops',
+        'Optase',
+        '24.95',
+        '0.2% Hyaluronic acid formula providing intense hydration for moderate to severe dry eye.',
+        'eyeDrops'
+    ),
+    createProduct(
+        'retaine-mgd',
+        'Retaine MGD',
+        'Retaine',
+        '26.50',
+        'Lipid-enhanced formula that replenishes all 3 layers of the tear film for MGD relief.',
+        'eyeDrops'
+    ),
+    createProduct(
+        'systane-complete-pf',
+        'Systane Complete PF',
+        'Systane',
+        '22.99',
+        'Nano-droplet technology provides fast-acting relief for all types of dry eye.',
+        'eyeDrops'
+    ),
+    createProduct(
+        'systane-ultra-pf',
+        'Systane Ultra PF',
+        'Systane',
+        '18.99',
+        'Preservative-free extended protection formula ideal for sensitive eyes.',
+        'eyeDrops'
+    ),
+    createProduct(
+        'refresh-optive-pf',
+        'Refresh Optive PF',
+        'Refresh',
+        '19.99',
+        'Preservative-free single-use vials with dual-action formula for lasting comfort.',
+        'eyeDrops'
+    ),
+    createProduct(
+        'refresh-tears',
+        'Refresh Tears',
+        'Refresh',
+        '12.99',
+        'Original lubricant eye drop formula providing immediate relief for mild dry eye.',
+        'eyeDrops'
+    )
+];
+
+/**
+ * Eyelid Cleansers - 6 products
+ * Lid scrubs, wipes, and foaming cleansers for blepharitis and MGD
+ */
+const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
+    createProduct(
+        'optase-tto-lid-wipes',
+        'Optase TTO Lid Wipes',
+        'Optase',
+        '21.95',
+        'Tea tree oil-infused preservative-free wipes for daily eyelid hygiene and Demodex control.',
+        'cleansers'
+    ),
+    createProduct(
+        'ocusoft-lid-scrub-plus-foam',
+        'OCuSOFT Lid Scrub Plus Foam',
+        'OCuSOFT',
+        '24.50',
+        'Extra strength foaming cleanser with added moisturizers for moderate to severe conditions.',
+        'cleansers'
+    ),
+    createProduct(
+        'ocusoft-lid-scrub-plus-pads',
+        'OCuSOFT Lid Scrub Plus Pads',
+        'OCuSOFT',
+        '19.95',
+        'Pre-moistened pads (30ct) for convenient on-the-go eyelid cleansing.',
+        'cleansers'
+    ),
+    createProduct(
+        'ocusoft-lid-scrub-original',
+        'OCuSOFT Lid Scrub Original',
+        'OCuSOFT',
+        '16.95',
+        'Mild foaming cleanser for daily maintenance of eyelid hygiene.',
+        'cleansers'
+    ),
+    createProduct(
+        'cliradex-towelettes',
+        'Cliradex Towelettes',
+        'Cliradex',
+        '44.00',
+        '4-Terpineol natural cleanser derived from tea tree oil for effective Demodex treatment.',
+        'cleansers'
+    ),
+    createProduct(
+        'cliradex-light-foam',
+        'Cliradex Light Foam',
+        'Cliradex',
+        '32.00',
+        'Gentle daily foaming cleanser with natural 4-Terpineol for sensitive eyelids.',
+        'cleansers'
+    )
+];
+
+/**
+ * Eyelid Sprays - 5 products
+ * Hypochlorous acid and antimicrobial sprays for lid and lash care
+ */
+const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
+    createProduct(
+        'avenova-spray-20ml',
+        'Avenova Spray 20ml',
+        'Avenova',
+        '29.99',
+        'Pure 0.01% hypochlorous acid spray for daily eyelid and lash hygiene.',
+        'sprays'
+    ),
+    createProduct(
+        'avenova-spray-40ml',
+        'Avenova Spray 40ml',
+        'Avenova',
+        '49.99',
+        'Pure hypochlorous acid spray in a larger size for extended daily use.',
+        'sprays'
+    ),
+    createProduct(
+        'heyedrate-lid-lash',
+        'Heyedrate Lid & Lash',
+        'Heyedrate',
+        '24.95',
+        'Organic hypochlorous acid spray for natural lid and lash cleansing.',
+        'sprays'
+    ),
+    createProduct(
+        'optase-protect-spray',
+        'Optase Protect Spray',
+        'Optase',
+        '22.95',
+        'Antibacterial HOCl spray for maintaining healthy eyelid margins.',
+        'sprays'
+    ),
+    createProduct(
+        'ocusoft-hypochlor-spray',
+        'OCuSOFT HypoChlor Spray',
+        'OCuSOFT',
+        '19.95',
+        '0.02% HOCl formula for antimicrobial eyelid care and hygiene.',
+        'sprays'
+    )
+];
+
+/**
+ * Eye Masks - 5 products
+ * Warm compresses and heat masks for meibomian gland expression
+ */
+const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
+    createProduct(
+        'bruder-moist-heat-mask',
+        'Bruder Moist Heat Mask',
+        'Bruder',
+        '26.95',
+        'MediBeads microwave-activated mask providing consistent moist heat for MGD treatment.',
+        'masks'
+    ),
+    createProduct(
+        'bruder-single-eye-mask',
+        'Bruder Single Eye Mask',
+        'Bruder',
+        '19.95',
+        'Single eye targeted treatment mask for localized chalazion and stye relief.',
+        'masks'
+    ),
+    createProduct(
+        'optase-moist-heat-mask',
+        'Optase Moist Heat Mask',
+        'Optase',
+        '24.95',
+        'Dual-sided microwave mask with removable cover for customizable heat therapy.',
+        'masks'
+    ),
+    createProduct(
+        'eye-eco-tranquileyes',
+        'Eye Eco Tranquileyes',
+        'Eye Eco',
+        '45.00',
+        'Sleep mask with moisture retention technology for overnight dry eye protection.',
+        'masks'
+    ),
+    createProduct(
+        'therapearl-eye-mask',
+        'TheraPearl Eye Mask',
+        'TheraPearl',
+        '14.95',
+        'Hot or cold dual-temperature therapy mask for versatile eye comfort.',
+        'masks'
+    )
+];
+
+/**
+ * Vitamins & Supplements - 6 products
+ * Omega-3s and nutritional supplements for ocular health
+ */
+const VITAMINS_PRODUCTS: CollectionProduct[] = [
+    // PRN Products (mapped from prn-products.ts)
+    mapPrnToCollectionProduct('de3_omega'),
+    mapPrnToCollectionProduct('kids_omega'),
+    // Additional vitamin/supplement products
+    createProduct(
+        'macuhealth-plus',
+        'MacuHealth Plus+',
+        'MacuHealth',
+        '74.95',
+        'Triple carotenoid formula with Lutein, Meso-Zeaxanthin, and Zeaxanthin for macular support.',
+        'vitamins'
+    ),
+    createProduct(
+        'macuhealth-lmz3',
+        'MacuHealth LMZ3',
+        'MacuHealth',
+        '59.95',
+        'Lutein, Meso-Zeaxanthin, and Zeaxanthin in clinically proven ratios for eye health.',
+        'vitamins'
+    ),
+    createProduct(
+        'eyepromise-ez-tears',
+        'EyePromise EZ Tears',
+        'EyePromise',
+        '29.95',
+        '8 key nutrients specifically formulated to support healthy tear production.',
+        'vitamins'
+    ),
+    createProduct(
+        'eyepromise-restore',
+        'EyePromise Restore',
+        'EyePromise',
+        '49.95',
+        'Complete macular support formula with omega-3s and zeaxanthin for comprehensive eye nutrition.',
+        'vitamins'
+    )
+];
+
+/**
+ * Contact Lens Supplies - 5 products
+ * Specialty solutions for scleral and GP lenses
+ */
+const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
+    createProduct(
+        'menicon-lacripure-saline',
+        'Menicon LacriPure Saline',
+        'Menicon',
+        '22.00',
+        'Preservative-free saline solution specifically designed for scleral lens filling and rinsing.',
+        'contactLens'
+    ),
+    createProduct(
+        'tangible-clean',
+        'Tangible Clean',
+        'Tangible',
+        '25.00',
+        'Daily cleaner formulated for GP and scleral contact lenses to remove deposits.',
+        'contactLens'
+    ),
+    createProduct(
+        'tangible-boost',
+        'Tangible Boost',
+        'Tangible',
+        '32.00',
+        'Hydra-PEG wetting agent that improves lens surface wettability and comfort.',
+        'contactLens'
+    ),
+    createProduct(
+        'nutrilens-plus',
+        'NutriLens Plus',
+        'Contamac',
+        '28.00',
+        'Scleral lens conditioning solution that enhances lens surface hydration.',
+        'contactLens'
+    ),
+    createProduct(
+        'clear-care-plus',
+        'Clear Care Plus',
+        'Alcon',
+        '16.95',
+        'Hydrogen peroxide deep cleaning system with HydraGlyde moisture matrix.',
+        'contactLens'
+    )
+];
+
+// ============================================================================
+// EXPORTED COLLECTIONS
+// ============================================================================
+
+/**
+ * Complete local product collections organized by category handle
+ * Each category contains production-ready product data
+ */
+export const LOCAL_COLLECTIONS: Record<string, CollectionProduct[]> = {
+    // Category 1: Eye Drops & Lubricants (8 products)
+    'eye-drops-lubricants': EYE_DROPS_PRODUCTS,
+
+    // Category 2: Eyelid Cleansers (6 products)
+    'eyelid-cleansers': EYELID_CLEANSERS_PRODUCTS,
+
+    // Category 3: Eyelid Sprays (5 products)
+    'eyelid-sprays': EYELID_SPRAYS_PRODUCTS,
+
+    // Category 4: Eye Masks (5 products)
+    'eye-masks': EYE_MASKS_PRODUCTS,
+
+    // Category 5: Vitamins & Supplements (6 products)
+    'vitamins-supplements': VITAMINS_PRODUCTS,
+
+    // Category 6: Contact Lens Supplies (5 products)
+    'contact-lens-supplies': CONTACT_LENS_PRODUCTS
 };
 
-export const LOCAL_COLLECTIONS: Record<string, any[]> = {
-    // 1. Vitamins (Real Data)
-    'vitamins-supplements': [
-        mapPrnToCollectionProduct('de3_omega'),
-        mapPrnToCollectionProduct('kids_omega')
+/**
+ * Get all products across all categories
+ */
+export function getAllLocalProducts(): CollectionProduct[] {
+    return Object.values(LOCAL_COLLECTIONS).flat();
+}
+
+/**
+ * Get products by category handle
+ */
+export function getLocalCollectionProducts(handle: string): CollectionProduct[] | undefined {
+    return LOCAL_COLLECTIONS[handle];
+}
+
+/**
+ * Find a specific product by handle across all categories
+ */
+export function findLocalProductByHandle(handle: string): CollectionProduct | undefined {
+    for (const products of Object.values(LOCAL_COLLECTIONS)) {
+        const found = products.find(p => p.handle === handle);
+        if (found) return found;
+    }
+    return undefined;
+}
+
+/**
+ * Get product count by category
+ */
+export function getLocalCollectionCounts(): Record<string, number> {
+    const counts: Record<string, number> = {};
+    for (const [category, products] of Object.entries(LOCAL_COLLECTIONS)) {
+        counts[category] = products.length;
+    }
+    return counts;
+}
+
+// ============================================================================
+// INGREDIENT-TO-PRODUCT MAPPINGS
+// ============================================================================
+
+/**
+ * Maps ingredient handles to arrays of product handles that contain those ingredients.
+ * Used by the ingredient pages to display relevant products.
+ *
+ * Ingredient Mappings:
+ * - omega-3: PRN DE3, PRN Kids Omega, EyePromise products, MacuHealth
+ * - hypochlorous-acid: Avenova, Heyedrate, Optase Protect, OCuSOFT HypoChlor
+ * - tea-tree: Optase TTO products, Cliradex products
+ * - hyaluronic-acid: Optase Intense, I-Drop, most eye drops
+ * - manuka-honey: Currently no products in catalog
+ */
+export const INGREDIENT_PRODUCT_MAPPINGS: Record<string, string[]> = {
+    // Omega-3: PRN DE3, PRN Kids Omega, EyePromise products, MacuHealth
+    'omega-3': [
+        'de3-omega',           // PRN De3 Omega Benefits
+        'kids-omega',          // PRN Kids Omega
+        'eyepromise-ez-tears', // EyePromise EZ Tears
+        'eyepromise-restore',  // EyePromise Restore
+        'macuhealth-plus',     // MacuHealth Plus+
+        'macuhealth-lmz3'      // MacuHealth LMZ3
     ],
 
-    // 2. Eye Drops (Mock)
-    'eye-drops-lubricants': [
-        createMockProduct('oasis-tears', 'Oasis TEARS Plus', '29.95', 'https://placehold.co/600x600/eff6ff/1e40af?text=Oasis+Tears', 'Lubricant Eye Drops', 'Oasis'),
-        createMockProduct('optase-dry-eye', 'Optase Dry Eye Intense', '24.95', 'https://placehold.co/600x600/eff6ff/1e40af?text=Optase+Drops', 'Lubricant Eye Drops', 'Optase'),
-        createMockProduct('retaine-mgd', 'Retaine MGD', '26.50', 'https://placehold.co/600x600/eff6ff/1e40af?text=Retaine+MGD', 'Lipid Replenishment', 'Retaine'),
-        createMockProduct('systane-complete', 'Systane Complete', '18.99', 'https://placehold.co/600x600/eff6ff/1e40af?text=Systane', 'Lubricant Eye Drops', 'Systane')
+    // Hypochlorous Acid: Avenova, Heyedrate, Optase Protect, OCuSOFT HypoChlor
+    'hypochlorous-acid': [
+        'avenova-spray-20ml',    // Avenova Spray 20ml
+        'avenova-spray-40ml',    // Avenova Spray 40ml
+        'heyedrate-lid-lash',    // Heyedrate Lid & Lash
+        'optase-protect-spray',  // Optase Protect Spray
+        'ocusoft-hypochlor-spray' // OCuSOFT HypoChlor Spray
     ],
 
-    // 3. Eyelid Cleansers (Mock)
-    'eyelid-cleansers': [
-        createMockProduct('optase-tto', 'Optase TTO Lid Wipes', '21.95', 'https://placehold.co/600x600/f0fdf4/166534?text=Optase+Wipes', 'Eyelid Wipes', 'Optase'),
-        createMockProduct('ocusoft-plus', 'Ocusoft Lid Scrub Plus', '24.50', 'https://placehold.co/600x600/f0fdf4/166534?text=Ocusoft', 'Foaming Cleanser', 'Ocusoft'),
-        createMockProduct('cliradex-wipes', 'Cliradex Towelettes', '44.00', 'https://placehold.co/600x600/f0fdf4/166534?text=Cliradex', 'Natural Cleanser', 'Cliradex')
+    // Tea Tree Oil: Optase TTO products, Cliradex products
+    'tea-tree': [
+        'optase-tto-lid-wipes',  // Optase TTO Lid Wipes
+        'cliradex-towelettes',   // Cliradex Towelettes
+        'cliradex-light-foam'    // Cliradex Light Foam
     ],
 
-    // 4. Eyelid Sprays (Mock)
-    'eyelid-sprays': [
-        createMockProduct('avenova-spray', 'Avenova Spray', '29.99', 'https://placehold.co/600x600/fdf4ff/86198f?text=Avenova', 'Hypochlorous Acid', 'Avenova'),
-        createMockProduct('heyedrate-spray', 'Heyedrate Lid & Lash', '24.95', 'https://placehold.co/600x600/fdf4ff/86198f?text=Heyedrate', 'Eyelid Cleaner', 'Heyedrate')
+    // Hyaluronic Acid: Optase Intense, most eye drops
+    'hyaluronic-acid': [
+        'optase-intense-drops',  // Optase Intense Drops (0.2% HA)
+        'oasis-tears-plus',      // Oasis TEARS Plus
+        'oasis-tears-pf-30ct',   // Oasis TEARS PF
+        'systane-complete-pf',   // Systane Complete PF
+        'systane-ultra-pf',      // Systane Ultra PF
+        'refresh-optive-pf'      // Refresh Optive PF
     ],
 
-    // 5. Masks (Mock)
-    'eye-masks': [
-        createMockProduct('bruder-mask', 'Bruder Moist Heat Mask', '26.95', 'https://placehold.co/600x600/fff7ed/9a3412?text=Bruder+Mask', 'Compress', 'Bruder'),
-        createMockProduct('optase-mask', 'Optase Moist Heat Mask', '24.95', 'https://placehold.co/600x600/fff7ed/9a3412?text=Optase+Mask', 'Compress', 'Optase'),
-        createMockProduct('eye-eco-mask', 'Eye Eco Tranquileyes', '45.00', 'https://placehold.co/600x600/fff7ed/9a3412?text=Eye+Eco', 'Sleep Mask', 'Eye Eco')
-    ],
-
-    // 6. Contact Lens (Mock)
-    'contact-lens-supplies': [
-        createMockProduct('lacripure', 'Menicon LacriPure', '22.00', 'https://placehold.co/600x600/e0f2fe/0369a1?text=LacriPure', 'Saline Solution', 'Menicon'),
-        createMockProduct('tangible-clean', 'Tangible Clean', '25.00', 'https://placehold.co/600x600/e0f2fe/0369a1?text=Tangible', 'Multi-Purpose Solution', 'Tangible')
-    ]
+    // Manuka Honey: Currently no products with manuka honey in catalog
+    'manuka-honey': []
 };
+
+/**
+ * Get products for a specific ingredient
+ * Returns products from LOCAL_COLLECTIONS that match the ingredient mapping
+ */
+export function getProductsForIngredient(ingredientHandle: string): CollectionProduct[] {
+    const productHandles = INGREDIENT_PRODUCT_MAPPINGS[ingredientHandle] || [];
+    const products: CollectionProduct[] = [];
+
+    // Search through all collections to find matching product handles
+    for (const collectionProducts of Object.values(LOCAL_COLLECTIONS)) {
+        for (const product of collectionProducts) {
+            if (productHandles.includes(product.handle)) {
+                products.push(product);
+            }
+        }
+    }
+
+    return products;
+}
