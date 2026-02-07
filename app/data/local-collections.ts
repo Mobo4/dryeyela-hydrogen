@@ -188,7 +188,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Preservative-free glycerin drops with hyaluronic acid for long-lasting moisture and comfort.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-drops-oasistearspf-grey2-1-888034.jpg'
+        'https://eyecarecenteroc.com/products/oasis-tears-plus-preservative-free-lubricant-eye-drops-0-34-fl-oz-10ml.png'
     ),
     createProduct(
         'oasis-tears-pf-30ct',
@@ -198,7 +198,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Single-use preservative-free vials perfect for sensitive eyes and contact lens wearers.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-drops-oasistearspf-grey2-1-888034.jpg'
+        'https://eyecarecenteroc.com/products/oasis-tears-preservative-free-lubricant-eye-drops-30-vials.png'
     ),
     createProduct(
         'optase-intense-drops',
@@ -208,7 +208,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         '0.2% Hyaluronic acid formula providing intense hydration for moderate to severe dry eye.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-drops-optase-intensepf1.jpg'
+        'https://eyecarecenteroc.com/products/optase-dry-eye-intense-drops-10ml.png'
     ),
     createProduct(
         'retaine-mgd',
@@ -218,7 +218,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Lipid-enhanced formula that replenishes all 3 layers of the tear film for MGD relief.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-retaine-cmc-vials1.jpg'
+        'https://eyecarecenteroc.com/products/retaine-mgd-ophthalmic-emulsion-preservative-free-lubricant-eye-drops-30-single-dose-vials.png'
     ),
     createProduct(
         'systane-complete-pf',
@@ -228,7 +228,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Nano-droplet technology provides fast-acting relief for all types of dry eye.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-drops-systanepf2.jpg'
+        'https://eyecarecenteroc.com/products/systane-complete-pf-preservative-free-lubricant-eye-drops-30-sterile-single-use-vials.png'
     ),
     createProduct(
         'systane-ultra-pf',
@@ -238,7 +238,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Preservative-free extended protection formula ideal for sensitive eyes.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-drops-completepf-vials1-482177.jpg'
+        'https://eyecarecenteroc.com/products/alcon-systane-hydration-preservative-free-lubricant-eye-drops-30ct-vials-30-count-1.png'
     ),
     createProduct(
         'refresh-optive-pf',
@@ -248,7 +248,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Preservative-free single-use vials with dual-action formula for lasting comfort.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-drops-refresh-relievapf-vials1-692132.jpg'
+        'https://eyecarecenteroc.com/products/refresh-optive-preservative-free-lubricant-eye-drops-30-single-use-vials.png'
     ),
     createProduct(
         'refresh-tears',
@@ -258,7 +258,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
         'Original lubricant eye drop formula providing immediate relief for mild dry eye.',
         'eyeDrops',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-refresh-tearspf1-231411.jpg'
+        'https://eyecarecenteroc.com/products/refresh-tears-lubricant-eye-drops-0-5-fl-oz.png'
     )
 ];
 
@@ -275,7 +275,7 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Tea tree oil-infused preservative-free wipes for daily eyelid hygiene and Demodex control.',
         'cleansers',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-wipes-optase-tto2.jpg'
+        'https://eyecarecenteroc.com/products/optase-tea-tree-oil-lid-wipes-20ct.png'
     ),
     createProduct(
         'ocusoft-lid-scrub-plus-foam',
@@ -285,7 +285,7 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Extra strength foaming cleanser with added moisturizers for moderate to severe conditions.',
         'cleansers',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-foam-ocusoftplusplat1.jpg'
+        'https://eyecarecenteroc.com/products/ocusoft-lid-scrub-plus-foaming-eyelid-cleanser-50ml.png'
     ),
     createProduct(
         'ocusoft-lid-scrub-plus-pads',
@@ -295,7 +295,7 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Pre-moistened pads (30ct) for convenient on-the-go eyelid cleansing.',
         'cleansers',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-pads-ocusoftpads2.jpg'
+        'https://eyecarecenteroc.com/products/ocusoft-lid-scrub-plus-pre-moistened-pads-30-count.png'
     ),
     createProduct(
         'ocusoft-lid-scrub-original',
@@ -305,7 +305,7 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Mild foaming cleanser for daily maintenance of eyelid hygiene.',
         'cleansers',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-foam-ocusoftoriginal2.jpg'
+        'https://eyecarecenteroc.com/products/ocusoft-lid-scrub-original-foaming-eyelid-cleanser-50ml.png'
     ),
     createProduct(
         'cliradex-towelettes',
@@ -315,7 +315,7 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         '4-Terpineol natural cleanser derived from tea tree oil for effective Demodex treatment.',
         'cleansers',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-wipes-cliradex1_1.jpg'
+        'https://eyecarecenteroc.com/products/cliradex-24-pack.png'
     ),
     createProduct(
         'cliradex-light-foam',
@@ -325,7 +325,7 @@ const EYELID_CLEANSERS_PRODUCTS: CollectionProduct[] = [
         'Gentle daily foaming cleanser with natural 4-Terpineol for sensitive eyelids.',
         'cleansers',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/DER-Foam-CliradexLight01-1.jpg'
+        'https://eyecarecenteroc.com/products/cliradex-complete-kit-24-wipes-and-2-foam-cans.png'
     )
 ];
 
@@ -342,7 +342,7 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Pure 0.01% hypochlorous acid spray for daily eyelid and lash hygiene.',
         'sprays',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-spray-avenova1.jpg'
+        'https://eyecarecenteroc.com/products/avenova--hypochlorous-spray-solution-with-nova-wipes.png'
     ),
     createProduct(
         'avenova-spray-40ml',
@@ -352,7 +352,7 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Pure hypochlorous acid spray in a larger size for extended daily use.',
         'sprays',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-spray-avenova1-3pk.jpg'
+        'https://eyecarecenteroc.com/products/avenova--hypochlorous-spray-solution-20ml-or-40ml-bottles-2-pack-with-novawipes-professional-strength.png'
     ),
     createProduct(
         'heyedrate-lid-lash',
@@ -362,7 +362,7 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Organic hypochlorous acid spray for natural lid and lash cleansing.',
         'sprays',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-spray-heyedrate1.jpg'
+        'https://eyecarecenteroc.com/products/heyedrate-lid-and-lash-cleanser-1oz.png'
     ),
     createProduct(
         'optase-protect-spray',
@@ -372,7 +372,7 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         'Antibacterial HOCl spray for maintaining healthy eyelid margins.',
         'sprays',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-spray-optase-protect1.jpg'
+        'https://eyecarecenteroc.com/products/optase-protect-eyelid-cleansing-spray-100ml.png'
     ),
     createProduct(
         'ocusoft-hypochlor-spray',
@@ -382,7 +382,7 @@ const EYELID_SPRAYS_PRODUCTS: CollectionProduct[] = [
         '0.02% HOCl formula for antimicrobial eyelid care and hygiene.',
         'sprays',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-spray-ocusoft-hypochlor1.jpg'
+        'https://eyecarecenteroc.com/products/ocusoft-hypochlor-spray-2oz.png'
     )
 ];
 
@@ -399,7 +399,7 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'MediBeads microwave-activated mask providing consistent moist heat for MGD treatment.',
         'masks',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-mask-bruder1.jpg'
+        'https://eyecarecenteroc.com/products/bruder-mask.png'
     ),
     createProduct(
         'bruder-single-eye-mask',
@@ -409,7 +409,7 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Single eye targeted treatment mask for localized chalazion and stye relief.',
         'masks',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-mask-brudersingle1.jpg'
+        'https://eyecarecenteroc.com/products/bruder-moist-heat-eye-compress-single.png'
     ),
     createProduct(
         'optase-moist-heat-mask',
@@ -419,7 +419,7 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Dual-sided microwave mask with removable cover for customizable heat therapy.',
         'masks',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-mask-optase1.jpg'
+        'https://eyecarecenteroc.com/products/optase-moist-heat-mask-for-dry-eye-therapy.png'
     ),
     createProduct(
         'eye-eco-tranquileyes',
@@ -429,7 +429,7 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Sleep mask with moisture retention technology for overnight dry eye protection.',
         'masks',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-mask-tranquileyesxl1.jpg'
+        'https://eyecarecenteroc.com/products/tranquileyes-xl-advanced-sleep-mask-for-dry-eye.png'
     ),
     createProduct(
         'therapearl-eye-mask',
@@ -439,7 +439,7 @@ const EYE_MASKS_PRODUCTS: CollectionProduct[] = [
         'Hot or cold dual-temperature therapy mask for versatile eye comfort.',
         'masks',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-mask-therapearl1.jpg'
+        'https://eyecarecenteroc.com/products/therapearl-eye-mask-hot-cold-therapy.png'
     )
 ];
 
@@ -460,7 +460,7 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         'Triple carotenoid formula with Lutein, Meso-Zeaxanthin, and Zeaxanthin for macular support.',
         'vitamins',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-vitamins-macuhealth-tripleplus1.jpg'
+        'https://eyecarecenteroc.com/products/macuhealth-plus-triple-carotenoid-formula-90-softgels.png'
     ),
     createProduct(
         'macuhealth-lmz3',
@@ -470,7 +470,7 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         'Lutein, Meso-Zeaxanthin, and Zeaxanthin in clinically proven ratios for eye health.',
         'vitamins',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der3-vitamins-macuhealth1.jpg'
+        'https://eyecarecenteroc.com/products/macuhealth-triple-carotenoid-formula-90-softgels.png'
     ),
     createProduct(
         'eyepromise-ez-tears',
@@ -480,7 +480,7 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         '8 key nutrients specifically formulated to support healthy tear production.',
         'vitamins',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/eyepromise-vitamins-dvs1.jpg'
+        'https://eyecarecenteroc.com/products/eyepromise-ez-tears-omega-3-for-dry-eye-relief.png'
     ),
     createProduct(
         'eyepromise-restore',
@@ -490,7 +490,7 @@ const VITAMINS_PRODUCTS: CollectionProduct[] = [
         'Complete macular support formula with omega-3s and zeaxanthin for comprehensive eye nutrition.',
         'vitamins',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-vitamins-eyepromisemacular1.jpg'
+        'https://eyecarecenteroc.com/products/eyepromise-restore-complete-eye-health-formula.png'
     )
 ];
 
@@ -507,7 +507,7 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Preservative-free saline solution specifically designed for scleral lens filling and rinsing.',
         'contactLens',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-contacts-lacripure1-2pk.jpg'
+        'https://eyecarecenteroc.com/products/2-pack-of-menicon-lacripure-serile-saline-solution-98-vials-x-2-scleral-lenses.png'
     ),
     createProduct(
         'tangible-clean',
@@ -517,7 +517,7 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Daily cleaner formulated for GP and scleral contact lenses to remove deposits.',
         'contactLens',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-contacts-tangibleclean1-12oz-2pk.jpg'
+        'https://eyecarecenteroc.com/products/tangible-clean-multi-purpose-solution-12oz.png'
     ),
     createProduct(
         'tangible-boost',
@@ -527,7 +527,7 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Hydra-PEG wetting agent that improves lens surface wettability and comfort.',
         'contactLens',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-contacts-tangiblefill1.jpg'
+        'https://eyecarecenteroc.com/products/tangible-boost-scleral-lens-comfort-drops.png'
     ),
     createProduct(
         'nutrilens-plus',
@@ -537,7 +537,7 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Scleral lens conditioning solution that enhances lens surface hydration.',
         'contactLens',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-contacts-menicon-lenscase1.jpg'
+        'https://eyecarecenteroc.com/products/nutrifill-scleral-lens-filling-solution.png'
     ),
     createProduct(
         'clear-care-plus',
@@ -547,7 +547,7 @@ const CONTACT_LENS_PRODUCTS: CollectionProduct[] = [
         'Hydrogen peroxide deep cleaning system with HydraGlyde moisture matrix.',
         'contactLens',
         undefined,
-        'https://dryeyerescue.com/cdn/shop/files/der-contacts-clearcare1.jpg'
+        'https://eyecarecenteroc.com/products/clear-care-plus-cleaning-solution-with-lens-case-twin-pack-multi-12-oz-pack-of-2.png'
     )
 ];
 

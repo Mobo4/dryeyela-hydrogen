@@ -135,7 +135,7 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
 function NavDropdown({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <Popover className="relative">
-            {({ open }) => (
+            {({ open, close }) => (
                 <>
                     <Popover.Button className={`flex items-center gap-1 px-4 py-2 outline-none transition-colors ${open ? 'text-besilos-blue' : 'hover:text-besilos-blue'}`}>
                         {title}
@@ -151,7 +151,10 @@ function NavDropdown({ title, children }: { title: string; children: React.React
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-2"
                     >
-                        <Popover.Panel className="absolute left-0 z-50 mt-4 bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 overflow-hidden">
+                        <Popover.Panel
+                            className="absolute left-0 z-50 mt-4 bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 overflow-hidden"
+                            onClick={() => close()}
+                        >
                             {children}
                         </Popover.Panel>
                     </Transition>
