@@ -2,12 +2,16 @@ import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData, Link } from '@remix-run/react';
 import { Image } from '@shopify/hydrogen';
 import { Button } from '~/components/Button';
+import { ProductSwimlane } from '~/components/ProductSwimlane';
 import { routeHeaders } from '~/data/cache';
 import { seoPayload } from '~/lib/seo.server';
+import { PRODUCTS_SEARCH_QUERY } from '~/data/queries';
+import type { ProductCardFragment } from 'storefrontapi.generated';
 
 export const headers = routeHeaders;
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
+    const { storefront } = context;
     const seo = seoPayload.page({
         url: request.url,
         page: {
@@ -18,11 +22,38 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
             },
         },
     });
-    return json({ seo });
+
+    try {
+        // Search for EyePromise products by vendor name
+        const { products } = await storefront.query(PRODUCTS_SEARCH_QUERY, {
+            variables: {
+                query: 'vendor:"EyePromise" OR vendor:"Eye Promise"',
+                count: 8,
+                country: storefront.i18n.country,
+                language: storefront.i18n.language,
+            },
+        });
+
+        return json({
+            seo,
+            shopifyProducts: products,
+            error: null,
+        });
+    } catch (error) {
+        console.error('Error loading EyePromise products:', error);
+        return json({
+            seo,
+            shopifyProducts: { nodes: [] },
+            error: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
 }
 
 export default function EyePromisePage() {
-    const products = [
+    const { shopifyProducts, error } = useLoaderData<typeof loader>();
+
+    // Fallback local product data when Shopify query returns no results
+    const localProducts = [
         {
             title: "Dry Eye Starter Basket",
             label: "Best Seller",
@@ -124,42 +155,51 @@ export default function EyePromisePage() {
                         <div className="w-24 h-1 bg-prn-gold mx-auto rounded-full"></div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {products.map((product, idx) => (
-                            <Link
-                                key={idx}
-                                to={product.url}
-                                className="group flex flex-col bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-prn-blue/30 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                            >
-                                <div className="relative aspect-square bg-[#F4F4F4] flex items-center justify-center p-8 overflow-hidden">
-                                    <img
-                                        src={product.image}
-                                        alt={product.title}
-                                        className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                    {product.label && (
-                                        <span className="absolute top-4 right-4 bg-prn-gold text-prn-blue text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                                            {product.label}
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="p-6 flex flex-col flex-grow">
-                                    <h3 className="text-lg font-bold text-prn-blue mb-2 group-hover:text-besilos-primary transition-colors">
-                                        {product.title}
-                                    </h3>
-                                    {/* Fake Star Rating */}
-                                    <div className="flex text-prn-gold mb-3 text-sm">
-                                        {'★'.repeat(5)}
-                                        <span className="text-gray-400 ml-2 text-xs">(120+ Reviews)</span>
+                    {/* Shopify products when available */}
+                    {shopifyProducts && shopifyProducts.nodes && shopifyProducts.nodes.length > 0 ? (
+                        <ProductSwimlane
+                            products={{ nodes: shopifyProducts.nodes as ProductCardFragment[] }}
+                            count={8}
+                            title=""
+                        />
+                    ) : (
+                        /* Fallback to local product data */
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {localProducts.map((product, idx) => (
+                                <Link
+                                    key={idx}
+                                    to={product.url}
+                                    className="group flex flex-col bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-prn-blue/30 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                                >
+                                    <div className="relative aspect-square bg-[#F4F4F4] flex items-center justify-center p-8 overflow-hidden">
+                                        <img
+                                            src={product.image}
+                                            alt={product.title}
+                                            className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                        {product.label && (
+                                            <span className="absolute top-4 right-4 bg-prn-gold text-prn-blue text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                                {product.label}
+                                            </span>
+                                        )}
                                     </div>
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <span className="font-bold text-lg text-gray-900">{product.price}</span>
-                                        <span className="text-prn-blue font-semibold text-sm group-hover:underline">View Product &rarr;</span>
+                                    <div className="p-6 flex flex-col flex-grow">
+                                        <h3 className="text-lg font-bold text-prn-blue mb-2 group-hover:text-besilos-primary transition-colors">
+                                            {product.title}
+                                        </h3>
+                                        <div className="flex text-prn-gold mb-3 text-sm">
+                                            {'★'.repeat(5)}
+                                            <span className="text-gray-400 ml-2 text-xs">(120+ Reviews)</span>
+                                        </div>
+                                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                                            <span className="font-bold text-lg text-gray-900">{product.price}</span>
+                                            <span className="text-prn-blue font-semibold text-sm group-hover:underline">View Product &rarr;</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="text-center mt-12">
                         <Link to="/collections/all" className="inline-block border-b-2 border-prn-blue text-prn-blue font-bold hover:text-besilos-primary hover:border-besilos-primary transition-colors pb-1">

@@ -74,7 +74,7 @@ export default function IngredientsIndex() {
             return (
               <Link
                 key={ingredient.handle}
-                to={`/collections/${ingredient.handle}`}
+                to={`/ingredients/${ingredient.handle}`}
                 className="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-all p-8 border border-besilos-sage/20"
               >
                 <div className="text-4xl mb-4">{details.icon}</div>
