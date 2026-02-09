@@ -59,7 +59,7 @@ export function NotFound({type = 'page'}: {type?: string}) {
 
         {/* Inline trust note */}
         <div className="mt-10 text-center text-sm text-gray-500">
-          <p>Doctor-recommended dry eye products -- 20+ years of experience -- Free shipping over $50</p>
+          <p>Doctor-recommended dry eye products -- 20+ years of experience -- Free shipping over $100</p>
         </div>
       </div>
     </div>

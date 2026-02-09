@@ -322,7 +322,7 @@ export default function Collection() {
                 <span className="hidden md:inline">Selected by Dr. Bonakdar, OD</span>
                 <span className="md:hidden">Doctor Approved</span>
               </span>
-              <span className="hidden md:inline">Free Shipping $50+</span>
+              <span className="hidden md:inline">Free Shipping $100+</span>
             </div>
           </div>
         </div>

@@ -24,7 +24,7 @@ const badges = [
       </svg>
     ),
     title: 'Free Shipping',
-    description: 'On all orders over $50',
+    description: 'On all orders over $100',
   },
   {
     icon: (

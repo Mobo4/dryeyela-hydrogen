@@ -92,7 +92,7 @@ export const BRAND_CONFIG = {
   seo: {
     titleTemplate: '%s | DryEyeLA - Los Angeles Dry Eye Specialists',
     defaultTitle: 'DryEyeLA - Los Angeles Premier Dry Eye Products Store',
-    defaultDescription: 'Doctor-recommended dry eye products including eye drops, supplements, and treatments. Free shipping on orders over $50.',
+    defaultDescription: 'Doctor-recommended dry eye products including eye drops, supplements, and treatments. Free shipping on orders over $100.',
     keywords: [
       'dry eye products',
       'dry eye treatment Los Angeles',

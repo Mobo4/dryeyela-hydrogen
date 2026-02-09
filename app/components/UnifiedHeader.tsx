@@ -18,7 +18,7 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                 className="text-besilos-navy py-2 px-4 text-center text-sm font-medium"
                 style={{ backgroundColor: '#face52' }}
             >
-                <p>Free Shipping on Orders Over $50 | Doctor Verified Products</p>
+                <p>Free Shipping on Orders Over $100 | Doctor Verified Products</p>
             </div>
 
             {/* 2. Main Navigation Bar */}

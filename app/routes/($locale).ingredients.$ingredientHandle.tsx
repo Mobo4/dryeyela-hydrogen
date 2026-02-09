@@ -93,7 +93,7 @@ export default function IngredientPage() {
                 </svg>
                 Doctor Approved
               </span>
-              <span className="hidden md:inline">Free Shipping $50+</span>
+              <span className="hidden md:inline">Free Shipping $100+</span>
             </div>
           </div>
         </div>

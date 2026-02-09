@@ -274,7 +274,7 @@ export default function GenericProductPage() {
                     </span>
                   </button>
                   <p className="text-center text-xs text-slate-400 mt-3">
-                    Free Shipping on all US orders over $50
+                    Free Shipping on all US orders over $100
                   </p>
                 </div>
               </div>

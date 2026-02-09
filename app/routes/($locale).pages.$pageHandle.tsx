@@ -182,7 +182,7 @@ function getPageCTA(pageTitle: string) {
   if (lowercaseTitle.includes('shipping') || lowercaseTitle.includes('delivery')) {
     return {
       title: 'Ready to Order?',
-      description: 'Shop our collection and enjoy free shipping on orders over $50.',
+      description: 'Shop our collection and enjoy free shipping on orders over $100.',
       primaryCTA: {label: 'Shop Now', to: '/collections/all'},
       secondaryCTA: {label: 'Contact Support', to: '/pages/contact'},
     };
