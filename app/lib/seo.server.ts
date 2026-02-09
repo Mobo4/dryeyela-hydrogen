@@ -32,7 +32,7 @@ function root({
   return {
     title: shop?.name || 'DryEyeLA',
     titleTemplate: '%s | DryEyeLA - Los Angeles Dry Eye Specialists',
-    description: truncate(shop?.description ?? 'Los Angeles Premier Dry Eye Products Store - Doctor recommended eye drops, supplements, and treatments for dry eye relief. Free shipping on orders over $89.'),
+    description: truncate(shop?.description ?? 'Los Angeles Premier Dry Eye Products Store - Doctor recommended eye drops, supplements, and treatments for dry eye relief. Free shipping on orders over $50.'),
     handle: '@dryeyela',
     url,
     robots: {

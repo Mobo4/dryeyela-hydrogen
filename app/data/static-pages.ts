@@ -60,7 +60,7 @@ export const STATIC_PAGES: Record<string, {
         <div>
           <h3 class="text-xl font-bold text-[#152c52] mb-3">Do you offer free shipping?</h3>
           <p class="text-slate-600">
-            Yes! We offer free shipping on all orders over $100 within the United States.
+            Yes! We offer free shipping on all orders over $50 within the United States.
           </p>
         </div>
         
@@ -119,7 +119,7 @@ export const STATIC_PAGES: Record<string, {
           <div class="space-y-4">
             <div>
               <h3 class="text-xl font-bold text-[#152c52] mb-2">Free Shipping</h3>
-              <p class="text-slate-600">Free shipping on all orders over $100 within the United States.</p>
+              <p class="text-slate-600">Free shipping on all orders over $50 within the United States.</p>
             </div>
             <div>
               <h3 class="text-xl font-bold text-[#152c52] mb-2">Standard Shipping</h3>

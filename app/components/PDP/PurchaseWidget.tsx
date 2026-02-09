@@ -79,7 +79,7 @@ export function PurchaseWidget({ product, selectedVariant }: PurchaseWidgetProps
     return (
         <div className="flex flex-col gap-8 mt-4">
             {/* Supply Selector */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className={clsx("grid gap-3", supplyOptions.length === 1 ? "grid-cols-1" : supplyOptions.length === 2 ? "grid-cols-2" : "grid-cols-3")}>
                 {supplyOptions.map((option, idx) => (
                     <button
                         key={idx}

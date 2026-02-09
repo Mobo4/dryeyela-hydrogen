@@ -175,7 +175,7 @@ export const MAIN_NAVIGATION = {
 
 export const SEO_CONFIG = {
   siteName: 'DryEyeLA',
-  siteDescription: 'Los Angeles Premier Dry Eye Products Store - Doctor recommended eye drops, supplements, and treatments for dry eye relief. Free shipping on orders over $89.',
+  siteDescription: 'Los Angeles Premier Dry Eye Products Store - Doctor recommended eye drops, supplements, and treatments for dry eye relief. Free shipping on orders over $50.',
   titleTemplate: '%s | DryEyeLA - Los Angeles Dry Eye Specialists',
   defaultTitle: 'DryEyeLA - Los Angeles Premier Dry Eye Products Store',
   keywords: [

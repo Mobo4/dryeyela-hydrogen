@@ -1,9 +1,10 @@
-import { Link, useLocation, useParams } from '@remix-run/react';
+import { Link, useLocation, useParams, useRouteLoaderData, Await } from '@remix-run/react';
 import { Popover, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 import { IconAccount, IconBag, IconMenu, IconCaret } from '~/components/Icon';
 import { SearchAutocomplete } from '~/components/SearchAutocomplete';
 import { SHOP_CATEGORIES, BRANDS, SYMPTOMS } from '~/data/navigation';
+import type { RootLoader } from '~/root';
 
 export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; openMenu: () => void }) {
     const location = useLocation();
@@ -17,7 +18,7 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                 className="text-besilos-navy py-2 px-4 text-center text-sm font-medium"
                 style={{ backgroundColor: '#face52' }}
             >
-                <p>Free Shipping on Orders Over $100 | Doctor Verified Products</p>
+                <p>Free Shipping on Orders Over $50 | Doctor Verified Products</p>
             </div>
 
             {/* 2. Main Navigation Bar */}
@@ -110,12 +111,7 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                         </Link>
                     </div>
 
-                    <button onClick={openCart} className="p-3 relative text-besilos-navy hover:text-besilos-blue transition-colors group">
-                        <IconBag />
-                        <span className="absolute top-2 right-2 bg-besilos-blue text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                            0
-                        </span>
-                    </button>
+                    <CartBadge openCart={openCart} />
 
                     <button onClick={openMenu} className="lg:hidden p-3 text-besilos-navy hover:text-besilos-blue transition-colors">
                         <IconMenu />
@@ -129,6 +125,29 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                 </div>
             </div>
         </header>
+    );
+}
+
+function CartBadge({ openCart }: { openCart: () => void }) {
+    const rootData = useRouteLoaderData<RootLoader>('root');
+
+    return (
+        <button onClick={openCart} className="p-3 relative text-besilos-navy hover:text-besilos-blue transition-colors group">
+            <IconBag />
+            <Suspense fallback={null}>
+                <Await resolve={rootData?.cart}>
+                    {(cart) => {
+                        const count = cart?.totalQuantity || 0;
+                        if (count === 0) return null;
+                        return (
+                            <span className="absolute top-2 right-2 bg-besilos-blue text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+                                {count}
+                            </span>
+                        );
+                    }}
+                </Await>
+            </Suspense>
+        </button>
     );
 }
 

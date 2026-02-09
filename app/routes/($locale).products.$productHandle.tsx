@@ -19,7 +19,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { name: 'description', content: product.seodata.description },
     { property: 'og:title', content: product.seodata.title },
     { property: 'og:description', content: product.seodata.description },
-    { property: 'og:image', content: product.images[0].src },
+    { property: 'og:image', content: product.images?.[0]?.src || '' },
     { property: 'og:url', content: product.seodata.url },
     { property: 'og:type', content: 'product' },
     { name: 'twitter:card', content: 'summary_large_image' },
@@ -223,7 +223,7 @@ export default function GenericProductPage() {
               {/* Product Image - High resolution, sharp textures, dramatic but clear professional studio lighting */}
               <img
                 key={selectedVariant?.id || 'main'}
-                src={selectedVariant?.image || product.images[0].src}
+                src={selectedVariant?.image || product.images?.[0]?.src || ''}
                 alt={selectedVariant?.title || product.title}
                 className="w-full h-full object-contain p-8 md:p-12 relative z-10 transition-transform duration-500 group-hover:scale-105 animate-fade-in image-render-crisp-edges"
                 style={{ 
@@ -398,7 +398,7 @@ export default function GenericProductPage() {
           </div>
 
           <div className="order-1 lg:order-2">
-            {product.images[1] && (
+            {product.images?.[1] && (
               <div className="bg-white p-4 rounded-xl shadow-lg border border-slate-200 transform hover:scale-[1.02] transition-transform duration-500">
                 <img
                   src={product.images[1]?.src}

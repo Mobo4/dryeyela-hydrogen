@@ -146,13 +146,20 @@ export default function Homepage() {
               Clinically Backed Eye Care, Made Simple
             </Heading>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
-              {['Eye Hydration', 'Eyelid & Lash Health', 'Aging Eyes', 'Macular Health', 'Visual Performance'].map((concern) => (
+              {[
+                { label: 'Dry & Gritty Eyes', handle: 'dry-gritty-eyes' },
+                { label: 'Burning & Stinging', handle: 'burning-stinging-eyes' },
+                { label: 'Eye Redness', handle: 'eye-redness' },
+                { label: 'Watery Eyes', handle: 'watery-eyes' },
+                { label: 'Severe & Chronic Dry Eye', handle: 'severe-chronic-dry-eye' },
+                { label: 'Blepharitis & MGD', handle: 'blepharitis-mgd' },
+              ].map((concern) => (
                 <Link
-                  key={concern}
-                  to={`/symptoms/${concern.toLowerCase().replace(/\s+/g, '-')}`}
+                  key={concern.handle}
+                  to={`/symptoms/${concern.handle}`}
                   className="px-6 py-2 bg-gray-100 hover:bg-besilos-blue hover:text-white rounded-full text-sm font-semibold transition-all"
                 >
-                  {concern}
+                  {concern.label}
                 </Link>
               ))}
             </div>

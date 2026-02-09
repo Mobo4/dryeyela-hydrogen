@@ -23,7 +23,7 @@ const categoryCollections: CollectionMeta[] = SHOP_CATEGORIES.map((cat) => ({
   title: cat.title,
   description: cat.description,
   heroTitle: `Shop ${cat.title}`,
-  heroDescription: `Doctor-recommended ${cat.title.toLowerCase()} for dry eye relief. Free shipping on orders over $89.`,
+  heroDescription: `Doctor-recommended ${cat.title.toLowerCase()} for dry eye relief. Free shipping on orders over $50.`,
   keywords: cat.keywords,
   relatedCollections: SHOP_CATEGORIES.filter((c) => c.handle !== cat.handle)
     .slice(0, 3)

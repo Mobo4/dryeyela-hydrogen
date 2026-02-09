@@ -65,37 +65,37 @@ export default function EyePromisePage() {
             title: "EyePromise Restore",
             image: "https://prnvision.com/cdn/shop/files/ep_restore_60.jpg?v=1750779680&width=300",
             price: "$39.95",
-            url: "/collections/supplements"
+            url: "/collections/vitamins-supplements"
         },
         {
             title: "EyePromise EZ Tears™",
             image: "https://prnvision.com/cdn/shop/files/ep_ez_tears.jpg?v=1750779582&width=300",
             price: "$34.95",
-            url: "/collections/supplements"
+            url: "/collections/vitamins-supplements"
         },
         {
             title: "EyePromise Macular Health",
             image: "https://prnvision.com/cdn/shop/files/ep_macular_health_complete.jpg?v=1750779634&width=300",
             price: "$44.95",
-            url: "/collections/supplements"
+            url: "/collections/vitamins-supplements"
         },
         {
             title: "EyePromise Zeaxanthin + Lutein",
             image: "https://prnvision.com/cdn/shop/files/ep_zeaxanthin_lutein_180.jpg?v=1750779612&width=300",
             price: "$29.95",
-            url: "/collections/supplements"
+            url: "/collections/vitamins-supplements"
         },
         {
             title: "EyePromise Screen Shield™ Pro",
             image: "https://prnvision.com/cdn/shop/files/ep_screenshield.jpg?v=1750779541&width=300",
             price: "$32.95",
-            url: "/collections/supplements"
+            url: "/collections/vitamins-supplements"
         },
         {
             title: "EyePromise Vizual Edge™ Pro",
             image: "https://prnvision.com/cdn/shop/files/Vizual_Edge_Pro__66661.webp?v=1747749729&width=300",
             price: "$36.95",
-            url: "/collections/supplements"
+            url: "/collections/vitamins-supplements"
         }
     ];
 

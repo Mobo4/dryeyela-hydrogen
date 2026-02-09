@@ -27,19 +27,7 @@ export function ProductInfo({ title, vendor, description, reviews }: any) {
                 {title}
             </Heading>
 
-            {/* Ratings Placeholder */}
-            <div className="flex items-center gap-4">
-                <div className="flex text-besilos-gold">
-                    {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                        </svg>
-                    ))}
-                </div>
-                <Text size="fine" className="text-besilos-navy/60 font-medium">
-                    4.8 (40 Reviews)
-                </Text>
-            </div>
+            {/* Judge.me handles real reviews below the product section */}
 
             {/* Short Description - Scrollable for long text */}
             {description && (

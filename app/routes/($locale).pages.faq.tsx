@@ -19,7 +19,7 @@ const FAQS = [
         items: [
             {
                 question: 'How much does shipping cost?',
-                answer: 'We offer FREE standard shipping on all orders over $89 within the contiguous United States. For orders under $89, a flat shipping rate is calculated at checkout based on your location. We also offer expedited shipping options if you need your products sooner.',
+                answer: 'We offer FREE standard shipping on all orders over $50 within the contiguous United States. For orders under $50, a flat shipping rate is calculated at checkout based on your location. We also offer expedited shipping options if you need your products sooner.',
             },
             {
                 question: 'When will my order ship?',

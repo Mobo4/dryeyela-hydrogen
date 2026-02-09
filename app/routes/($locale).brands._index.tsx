@@ -176,7 +176,7 @@ export default function BrandsIndexPage() {
                   Free Shipping
                 </Heading>
                 <Text className="text-gray-600 text-sm">
-                  Free shipping on all orders over $89 within the USA.
+                  Free shipping on all orders over $50 within the USA.
                 </Text>
               </div>
             </div>

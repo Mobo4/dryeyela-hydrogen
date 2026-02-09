@@ -45,6 +45,7 @@ const BRAND_VENDOR_MAP: Record<string, string[]> = {
   eyepromise: ['EyePromise', 'Eyepromise', 'EYEPROMISE', 'Eye Promise', 'ZeaVision'],
   cliradex: ['Cliradex', 'CLIRADEX', 'Bio-Tissue', 'BioTissue'],
   'eye-eco': ['Eye Eco', 'EyeEco', 'Eyeeco', 'EYEECO', 'Eye-Eco'],
+  eyeeco: ['Eye Eco', 'EyeEco', 'Eyeeco', 'EYEECO', 'Eye-Eco'],
 };
 
 /**
