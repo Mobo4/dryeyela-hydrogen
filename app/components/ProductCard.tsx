@@ -188,7 +188,7 @@ export function ProductCard({
                 />
               )}
             </div>
-            <span className="text-xs text-besilos-navy/50 font-medium tracking-wide uppercase">
+            <span className="text-xs text-besilos-navy/50 font-medium tracking-wide">
               {product.vendor}
             </span>
           </div>

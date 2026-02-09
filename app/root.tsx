@@ -231,32 +231,30 @@ export default function App() {
   );
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary() {
   const routeError = useRouteError();
   const isRouteError = isRouteErrorResponse(routeError);
 
-  let title = 'Error';
   let pageType = 'page';
 
-  if (isRouteError) {
-    title = 'Not found';
-    if (routeError.status === 404) pageType = routeError.data || pageType;
+  if (isRouteError && routeError.status === 404) {
+    pageType = routeError.data || pageType;
   }
 
   return (
     <Layout>
-      {isRouteError ? (
-        <>
-          {routeError.status === 404 ? (
-            <NotFound type={pageType} />
-          ) : (
-            <GenericError
-              error={{ message: `${routeError.status} ${routeError.data}` }}
-            />
-          )}
-        </>
+      {isRouteError && routeError.status === 404 ? (
+        <NotFound type={pageType} />
       ) : (
-        <GenericError error={error instanceof Error ? error : undefined} />
+        <GenericError
+          error={
+            isRouteError
+              ? { message: `${routeError.status} ${routeError.data}` }
+              : routeError instanceof Error
+                ? routeError
+                : undefined
+          }
+        />
       )}
     </Layout>
   );

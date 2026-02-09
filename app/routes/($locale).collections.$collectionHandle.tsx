@@ -36,8 +36,6 @@ import {
   CTASection,
   EmptyState,
   CategoryCardsSection,
-  PageHero,
-  TrustBadges,
 } from '~/components/sections';
 import { VisualFilterBar } from '~/components/VisualFilterBar';
 import { getFallbackCollection, getRelatedCollections } from '~/data/collections';
@@ -292,31 +290,46 @@ export default function Collection() {
 
   return (
     <>
-      {/* Hero Section - Eyepromise Style */}
-      <PageHero
-        title={collection.title}
-        description={collection.description || fallbackMeta.heroDescription}
-        badge={productCount > 0 ? `${productCount}+ Products` : undefined}
-        breadcrumbs={[
-          { label: 'Home', to: '/' },
-          { label: 'Collections', to: '/collections' },
-          { label: collection.title },
-        ]}
-        background="gradient"
-      />
-
-      {/* Trust Badges */}
-      <TrustBadges
-        badges={[
-          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
-          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
-          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
-          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
-        ]}
-      />
+      {/* Compact Collection Header */}
+      <div className="bg-gradient-to-r from-besilos-navy to-besilos-navy/90 py-4 md:py-5">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8">
+          <nav className="text-xs text-white/60 mb-1.5 flex items-center gap-1.5">
+            <a href="/" className="hover:text-white transition-colors">Home</a>
+            <span>/</span>
+            <a href="/collections" className="hover:text-white transition-colors">Collections</a>
+            <span>/</span>
+            <span className="text-white/40">{collection.title}</span>
+          </nav>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-white leading-tight">
+                {collection.title}
+              </h1>
+              {(collection.description || fallbackMeta.heroDescription) && (
+                <p className="text-white/70 text-sm mt-0.5 line-clamp-1 max-w-2xl">
+                  {collection.description || fallbackMeta.heroDescription}
+                </p>
+              )}
+            </div>
+            <div className="flex items-center gap-3 md:gap-4 text-xs text-white/70 shrink-0">
+              {productCount > 0 && (
+                <span className="bg-white/10 px-3 py-1 rounded-full font-semibold">{productCount} Products</span>
+              )}
+              <span className="flex items-center gap-1">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span className="hidden md:inline">Selected by Dr. Bonakdar, OD</span>
+                <span className="md:hidden">Doctor Approved</span>
+              </span>
+              <span className="hidden md:inline">Free Shipping $50+</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Products Section */}
-      <Section className="py-12">
+      <Section className="py-6 md:py-8">
         <SortFilter
           filters={collection.products.filters as Filter[]}
           appliedFilters={appliedFilters as AppliedFilter[]}
