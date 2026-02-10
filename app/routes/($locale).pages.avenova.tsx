@@ -1,6 +1,7 @@
 import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData } from '@remix-run/react';
 import { Heading, Text } from '~/components/Text';
+import { Link } from '~/components/Link';
 import { ProductSwimlane } from '~/components/ProductSwimlane';
 import { PRODUCTS_SEARCH_QUERY } from '~/data/queries';
 import type { ProductCardFragment } from 'storefrontapi.generated';
@@ -110,10 +111,10 @@ export default function AvenovaPage() {
                             <Heading as="h2" size="heading" className="text-besilos-navy mb-2">Avenova Best Sellers</Heading>
                             <Text className="text-gray-500">Clinically proven solutions for premium eye care.</Text>
                         </div>
-                        <a href="/collections/all" className="text-besilos-blue font-bold hover:text-besilos-navy transition-colors flex items-center gap-2 group">
+                        <Link to="/collections/all" className="text-besilos-blue font-bold hover:text-besilos-navy transition-colors flex items-center gap-2 group">
                             View All Products
                             <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </a>
+                        </Link>
                     </div>
                     {products && products.nodes && products.nodes.length > 0 ? (
                         <ProductSwimlane

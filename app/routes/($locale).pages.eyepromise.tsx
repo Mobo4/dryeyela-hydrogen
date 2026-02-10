@@ -57,7 +57,7 @@ export default function EyePromisePage() {
         {
             title: "Dry Eye Starter Basket",
             label: "Best Seller",
-            image: "https://raw.githubusercontent.com/Mobo4/dryeyela-hydrogen/main/public/products_processed/dry-eye-starter-basket.png",
+            image: "/products_processed/dry-eye-starter-basket.png",
             price: "$69.00",
             url: "/products/dry-eye-starter-basket-omega-3-cleanser"
         },

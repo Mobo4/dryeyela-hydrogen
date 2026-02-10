@@ -21,7 +21,7 @@ export function GenericError({
             <span className="text-white/50">Error</span>
           </nav>
           <h1 className="text-2xl md:text-3xl font-bold text-white">
-            This page couldn't be loaded
+            This page could not be loaded
           </h1>
         </div>
       </div>
@@ -30,7 +30,7 @@ export function GenericError({
       <div className="max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-16">
         <div className="text-center mb-10">
           <p className="text-gray-600 text-lg mb-6 max-w-xl mx-auto">
-            We're sorry about that. Please try browsing our collections or head back to the homepage.
+            We are sorry about that. Please try browsing our collections or head back to the homepage.
           </p>
           <Link
             to="/"

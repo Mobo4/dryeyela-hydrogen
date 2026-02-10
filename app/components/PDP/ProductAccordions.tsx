@@ -7,7 +7,7 @@ export function ProductAccordions({ details }: any) {
     const sections = [
         { title: "Effective Relief for Eye Dryness", content: details },
         { title: "Clinical Benefits & Pure HOCl", content: "Patented formula for advanced lid hygiene and bacterial control." },
-        { title: "Shipping & Satisfaction Guarantee", content: "Free shipping on orders over $150. 100% satisfaction guaranteed." }
+        { title: "Shipping & Satisfaction Guarantee", content: "Free shipping on orders over $100. 100% satisfaction guaranteed." }
     ];
 
     return (

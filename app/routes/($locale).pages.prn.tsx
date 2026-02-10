@@ -1,6 +1,7 @@
 import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData } from '@remix-run/react';
 import { Heading, Text, Section } from '~/components/Text';
+import { Link } from '~/components/Link';
 import { ProductSwimlane } from '~/components/ProductSwimlane';
 import { Button } from '~/components/Button';
 import { getPrnProduct } from '~/data/prn-products';
@@ -173,7 +174,7 @@ function InfoCard({ title, desc }: { title: string; desc: string }) {
         <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 hover:border-blue-200 transition-colors">
             <h3 className="text-xl font-bold text-[#152c52] mb-3">{title}</h3>
             <p className="text-slate-600 leading-relaxed text-sm">{desc}</p>
-            <a href="/pages/about" className="inline-block mt-4 text-blue-600 font-bold text-sm hover:underline">Learn more →</a>
+            <Link to="/pages/about" className="inline-block mt-4 text-blue-600 font-bold text-sm hover:underline">Learn more →</Link>
         </div>
     );
 }
