@@ -64,13 +64,13 @@ export function PageHero({
 
         <div className="max-w-4xl mx-auto text-center">
           {badge && (
-            <div className={`inline-block px-4 py-1.5 ${background === 'navy' ? 'bg-white/10 backdrop-blur-sm border border-white/20 text-white' : 'bg-besilos-blue/10 text-besilos-blue'} rounded-full text-xs font-bold uppercase tracking-widest mb-6`}>
+            <div className={`inline-block px-4 py-1.5 ${background === 'navy' ? 'bg-white/10 backdrop-blur-sm border border-white/20 text-white' : 'bg-besilos-blue/10 text-besilos-blue'} rounded-full text-xs font-bold tracking-widest mb-6`}>
               {badge}
             </div>
           )}
           
           {subtitle && (
-            <Text className={`${textColorMuted} text-sm md:text-base uppercase tracking-widest mb-4 font-semibold`}>
+            <Text className={`${textColorMuted} text-sm md:text-base tracking-widest mb-4 font-semibold`}>
               {subtitle}
             </Text>
           )}
@@ -94,7 +94,7 @@ export function PageHero({
               {primaryCTA && (
                 <Link
                   to={primaryCTA.to}
-                  className={`inline-block ${background === 'navy' ? 'bg-white text-besilos-navy hover:bg-gray-100' : 'bg-besilos-navy text-white hover:bg-besilos-navy/90'} px-10 py-4 font-bold uppercase tracking-wider text-center transition-all transform hover:scale-105 active:scale-95 shadow-xl rounded-lg`}
+                  className={`inline-block ${background === 'navy' ? 'bg-white text-besilos-navy hover:bg-gray-100' : 'bg-besilos-navy text-white hover:bg-besilos-navy/90'} px-10 py-4 font-bold tracking-wider text-center transition-all transform hover:scale-105 active:scale-95 shadow-xl rounded-lg`}
                 >
                   {primaryCTA.label}
                 </Link>
@@ -102,7 +102,7 @@ export function PageHero({
               {secondaryCTA && (
                 <Link
                   to={secondaryCTA.to}
-                  className={`inline-block ${background === 'navy' ? 'bg-transparent text-white border-2 border-white/50 hover:bg-white/10' : 'bg-transparent text-besilos-navy border-2 border-besilos-navy hover:bg-gray-50'} px-10 py-4 font-bold uppercase tracking-wider text-center transition-all rounded-lg backdrop-blur-sm`}
+                  className={`inline-block ${background === 'navy' ? 'bg-transparent text-white border-2 border-white/50 hover:bg-white/10' : 'bg-transparent text-besilos-navy border-2 border-besilos-navy hover:bg-gray-50'} px-10 py-4 font-bold tracking-wider text-center transition-all rounded-lg backdrop-blur-sm`}
                 >
                   {secondaryCTA.label}
                 </Link>

@@ -38,7 +38,7 @@ export function VariantSelector({
                             }`}
                     >
                         {isRecommended && (
-                            <div className={`absolute -top-3 right-4 text-xs font-bold px-2 py-1 rounded-sm uppercase tracking-wider shadow-sm
+                            <div className={`absolute -top-3 right-4 text-xs font-bold px-2 py-1 rounded-sm tracking-wider shadow-sm
                                 ${isSelected ? 'bg-white text-[#c00000]' : 'bg-[#c00000] text-white'}`}>
                                 Recommended
                             </div>

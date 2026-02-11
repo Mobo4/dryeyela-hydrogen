@@ -1,7 +1,6 @@
 import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData } from '@remix-run/react';
 import { Disclosure, Transition } from '@headlessui/react';
-import { PageLayout } from '~/components/PageLayout';
 import { IconCaret } from '~/components/Icon';
 
 export async function loader({ context }: LoaderFunctionArgs) {
@@ -67,7 +66,6 @@ export default function FaqPage() {
     const { seo } = useLoaderData<typeof loader>();
 
     return (
-        <PageLayout>
             <div className="bg-besilos-cream/30 min-h-screen">
                 {/* Hero Section */}
                 <div className="relative isolate overflow-hidden bg-besilos-navy py-16 sm:py-24 lg:py-32">
@@ -137,6 +135,5 @@ export default function FaqPage() {
                     </div>
                 </div>
             </div>
-        </PageLayout>
     );
 }

@@ -24,7 +24,7 @@ export default function AboutPage() {
             {/* 2. Mission Statement */}
             <section className="py-20 md:py-28">
                 <div className="max-w-4xl mx-auto px-6 md:px-8 text-center">
-                    <span className="text-besilos-blue font-bold uppercase tracking-widest text-xs mb-6 block">The DryEyeLA Standard</span>
+                    <span className="text-besilos-blue font-bold tracking-widest text-xs mb-6 block">The DryEyeLA Standard</span>
                     <Heading as="h2" size="display" className="text-besilos-navy mb-8 leading-tight">
                         Curated by Specialists. <br />
                         Proven by Science.

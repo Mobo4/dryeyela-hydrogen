@@ -1,4 +1,5 @@
 import { Heading, Text } from '~/components/Text';
+import { toTitleCase } from '~/lib/utils';
 
 export function ProductInfo({ title, vendor, description, reviews }: any) {
     return (
@@ -14,10 +15,10 @@ export function ProductInfo({ title, vendor, description, reviews }: any) {
             {/* Vendor/Category */}
             <div className="flex items-center gap-2">
                 <span className="text-xs font-bold tracking-widest text-besilos-blue border-b border-besilos-blue/20 pb-0.5">
-                    {vendor}
+                    {toTitleCase(vendor)}
                 </span >
                 <span className="text-gray-300">|</span>
-                <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <span className="text-xs font-medium text-gray-500 tracking-wider">
                     Premium Eye Care
                 </span>
             </div>

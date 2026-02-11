@@ -1,8 +1,6 @@
 import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { useActionData, Form, useNavigation } from '@remix-run/react';
+import { useActionData } from '@remix-run/react';
 import { Heading, Text } from '~/components/Text';
-import { Input } from '~/components/Input';
-import { Button } from '~/components/Button';
 import { HeroSection } from '~/components/sections';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -10,20 +8,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    // This is where you would integrate with a 3rd party email service (SendGrid, Mailgun)
-    // or a CRM (Gorgias, Zendesk).
-    // For now, we simulate a successful submission.
-    const formData = await request.formData();
-    // const email = formData.get('email');
-    // const message = formData.get('message');
-
-    return json({ success: true, message: 'Thank you for contacting us. We will get back to you shortly.' });
+    // Contact form is not connected to an email service yet.
+    // Direct customers to email instead.
+    return json({
+        success: false,
+        message: 'Our contact form is being set up. Please email us directly at support@dryeyela.com for the fastest response.'
+    });
 }
 
 export default function ContactPage() {
     const actionData = useActionData<typeof action>();
-    const navigation = useNavigation();
-    const isSubmitting = navigation.state === 'submitting';
 
     return (
         <div className="contact-page bg-white">
@@ -43,7 +37,7 @@ export default function ContactPage() {
 
                     {/* Contact Information */}
                     <div>
-                        <span className="text-besilos-blue font-bold uppercase tracking-widest text-xs mb-3 block">Get in Touch</span>
+                        <span className="text-besilos-blue font-bold tracking-widest text-xs mb-3 block">Get in Touch</span>
                         <Heading as="h2" size="display" className="text-besilos-navy mb-6">We're Here to Help</Heading>
                         <Text className="text-xl text-besilos-navy/80 mb-10 leading-relaxed max-w-md">
                             Have questions about dry eye relief? Our team of specialists is ready to assist you in finding the perfect regimen.
@@ -58,10 +52,9 @@ export default function ContactPage() {
                             />
                             <ContactMethod
                                 icon={<IconPhone />}
-                                title="Call Us"
-                                content="(800) 555-0199" // Placeholder
-                                link="tel:+18005550199"
-                                note="Mon-Fri, 9am - 5pm PST"
+                                title="Hours"
+                                content="Mon-Fri, 9am - 5pm PST"
+                                note="Reach us via email for fastest response"
                             />
                             <ContactMethod
                                 icon={<IconLocation />}
@@ -72,74 +65,37 @@ export default function ContactPage() {
                         </div>
                     </div>
 
-                    {/* Contact Form */}
+                    {/* Contact - Direct Email CTA */}
                     <div className="bg-gray-50 p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm">
-                        {actionData?.success ? (
-                            <div className="h-full flex flex-col items-center justify-center text-center py-10">
-                                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <Heading as="h3" size="lead" className="mb-2 text-besilos-navy">Message Sent!</Heading>
-                                <Text>Thank you for reaching out. We'll be in touch shortly.</Text>
-                                <Button to="/" variant="secondary" className="mt-8">Return Home</Button>
+                        <div className="h-full flex flex-col items-center justify-center text-center py-6">
+                            <div className="w-20 h-20 bg-besilos-blue/10 text-besilos-blue rounded-full flex items-center justify-center mb-6">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
                             </div>
-                        ) : (
-                            <>
-                                <Heading as="h3" size="lead" className="mb-6 text-besilos-navy">Send a Message</Heading>
-                                <Form method="post" className="space-y-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <Input
-                                            type="text"
-                                            name="firstName"
-                                            placeholder="First Name"
-                                            required
-                                            className="bg-white"
-                                        />
-                                        <Input
-                                            type="text"
-                                            name="lastName"
-                                            placeholder="Last Name"
-                                            required
-                                            className="bg-white"
-                                        />
-                                    </div>
-                                    <Input
-                                        type="email"
-                                        name="email"
-                                        placeholder="Email Address"
-                                        required
-                                        className="bg-white"
-                                    />
-                                    <Input
-                                        type="tel"
-                                        name="phone"
-                                        placeholder="Phone Number (Optional)"
-                                        className="bg-white"
-                                    />
-                                    <div>
-                                        <label htmlFor="message" className="sr-only">Message</label>
-                                        <textarea
-                                            id="message"
-                                            name="message"
-                                            rows={4}
-                                            placeholder="How can we help you?"
-                                            required
-                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 focus:border-besilos-blue focus:ring-1 focus:ring-besilos-blue outline-none transition-all placeholder:text-gray-400 text-besilos-navy"
-                                        ></textarea>
-                                    </div>
-                                    <Button
-                                        type="submit"
-                                        variant="primary"
-                                        width="full"
-                                        disabled={isSubmitting}
-                                    >
-                                        {isSubmitting ? 'Sending...' : 'Send Message'}
-                                    </Button>
-                                </Form>
-                            </>
-                        )}
+                            <Heading as="h3" size="lead" className="mb-3 text-besilos-navy">Email Us Directly</Heading>
+                            <Text className="text-gray-600 mb-6 max-w-sm">
+                                For the fastest response, send us an email. We typically reply within one business day.
+                            </Text>
+                            <a
+                                href="mailto:support@dryeyela.com?subject=DryEyeLA%20Inquiry"
+                                className="inline-flex items-center gap-3 bg-besilos-navy text-white px-8 py-4 font-bold tracking-wider rounded-xl hover:bg-besilos-navy/90 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 mb-4"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                support@dryeyela.com
+                            </a>
+                            <p className="text-sm text-gray-500">Mon-Fri, 9am - 5pm PST</p>
+
+                            {actionData?.message && (
+                                <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
+                                    {actionData.message}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                 </div>
@@ -155,7 +111,7 @@ function ContactMethod({ icon, title, content, link, note }: { icon: React.React
                 {icon}
             </div>
             <div>
-                <h4 className="font-heading font-bold text-besilos-navy text-sm uppercase tracking-wider mb-1">{title}</h4>
+                <h4 className="font-heading font-bold text-besilos-navy text-sm tracking-wider mb-1">{title}</h4>
                 {link ? (
                     <a href={link} className="text-xl font-medium text-besilos-blue hover:text-besilos-navy transition-colors block">
                         {content}

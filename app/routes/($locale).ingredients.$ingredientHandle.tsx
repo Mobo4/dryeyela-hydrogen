@@ -122,7 +122,7 @@ export default function IngredientPage() {
               </Text>
               <Link
                 to="/collections/all"
-                className="inline-block bg-besilos-navy text-white px-6 py-3 font-bold uppercase tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
+                className="inline-block bg-besilos-navy text-white px-6 py-3 font-bold tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
               >
                 Browse All Products
               </Link>
@@ -170,13 +170,13 @@ export default function IngredientPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/pages/contact"
-              className="inline-block bg-white text-besilos-navy px-6 py-3 font-bold uppercase tracking-wider rounded-lg hover:bg-gray-100 transition-all shadow-lg text-sm"
+              className="inline-block bg-white text-besilos-navy px-6 py-3 font-bold tracking-wider rounded-lg hover:bg-gray-100 transition-all shadow-lg text-sm"
             >
               Get Recommendations
             </Link>
             <Link
               to="/collections/all"
-              className="inline-block bg-transparent text-white border-2 border-white/50 px-6 py-3 font-bold uppercase tracking-wider rounded-lg hover:bg-white/10 transition-all text-sm"
+              className="inline-block bg-transparent text-white border-2 border-white/50 px-6 py-3 font-bold tracking-wider rounded-lg hover:bg-white/10 transition-all text-sm"
             >
               Browse All Products
             </Link>

@@ -17,7 +17,7 @@ export function ProductAccordions({ details }: any) {
                     {({ open }) => (
                         <>
                             <Disclosure.Button className="flex items-center justify-between w-full py-6 text-left outline-none">
-                                <Heading as="h4" size="copy" className="font-bold text-besilos-navy uppercase tracking-wider text-xs">
+                                <Heading as="h4" size="copy" className="font-bold text-besilos-navy tracking-wider text-xs">
                                     {section.title}
                                 </Heading>
                                 <IconCaret direction={open ? 'up' : 'down'} className="text-besilos-blue" />

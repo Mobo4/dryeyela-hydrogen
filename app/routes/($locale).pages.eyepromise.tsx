@@ -138,10 +138,10 @@ export default function EyePromisePage() {
             <div className="bg-prn-gray py-6 border-b border-gray-200">
                 <div className="container mx-auto px-6 flex justify-center items-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
                     {/* Placeholders for logos (NSF, etc) - using text for now or simple icons */}
-                    <span className="font-bold text-lg">GUARANTEED</span>
-                    <span className="font-bold text-lg">DOCTOR RECOMMENDED</span>
-                    <span className="font-bold text-lg">SCIENCE BASED</span>
-                    <span className="font-bold text-lg">NSF CERTIFIED SPORT</span>
+                    <span className="font-bold text-lg">Guaranteed</span>
+                    <span className="font-bold text-lg">Doctor Recommended</span>
+                    <span className="font-bold text-lg">Science Based</span>
+                    <span className="font-bold text-lg">NSF Certified Sport</span>
                 </div>
             </div>
 

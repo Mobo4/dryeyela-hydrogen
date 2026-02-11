@@ -28,8 +28,8 @@ export const STATIC_PAGES: Record<string, {
           </div>
           
           <div>
-            <h3 class="text-xl font-bold text-[#152c52] mb-2">Phone</h3>
-            <p class="text-slate-600">(310) 555-0123</p>
+            <h3 class="text-xl font-bold text-[#152c52] mb-2">Hours</h3>
+            <p class="text-slate-600">Reach us via email for fastest response</p>
           </div>
           
           <div>

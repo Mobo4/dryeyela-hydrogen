@@ -91,7 +91,7 @@ export function PurchaseWidget({ product, selectedVariant }: PurchaseWidgetProps
                                 : "border-gray-100 hover:border-gray-200 bg-white"
                         )}
                     >
-                        <Text className="text-[10px] uppercase tracking-tighter font-bold text-besilos-navy mb-1">{option.title}</Text>
+                        <Text className="text-[10px] tracking-tighter font-bold text-besilos-navy mb-1">{option.title}</Text>
                         <Text size="fine" className="text-gray-400 mb-2">{option.subtitle}</Text>
                         <Text className="font-bold text-besilos-navy">
                             <Money data={option.price} withoutTrailingZeros />
@@ -113,7 +113,7 @@ export function PurchaseWidget({ product, selectedVariant }: PurchaseWidgetProps
                     )}
                 >
                     {purchaseType === 'subscription' && (
-                        <div className="absolute top-0 right-6 -translate-y-1/2 bg-yellow-400 text-besilos-navy text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
+                        <div className="absolute top-0 right-6 -translate-y-1/2 bg-yellow-400 text-besilos-navy text-[10px] font-bold px-3 py-1 rounded-full tracking-widest shadow-sm">
                             Save 5%
                         </div>
                     )}
@@ -162,7 +162,7 @@ export function PurchaseWidget({ product, selectedVariant }: PurchaseWidgetProps
             <div className="flex flex-col gap-4 mt-2">
                 <AddToCartButton
                     lines={[{ merchandiseId: currentVariant.id, quantity: 1 }]}
-                    className="w-full py-5 bg-besilos-navy text-white rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-besilos-blue transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-xl"
+                    className="w-full py-5 bg-besilos-navy text-white rounded-xl font-bold tracking-widest text-sm hover:bg-besilos-blue transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-xl"
                 >
                     Add To Cart
                 </AddToCartButton>
@@ -179,7 +179,7 @@ export function PurchaseWidget({ product, selectedVariant }: PurchaseWidgetProps
 
 function TrustItem({ icon, text }: { icon: string; text: string }) {
     return (
-        <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 tracking-widest">
             <span>{icon}</span>
             <span>{text}</span>
         </div>

@@ -52,14 +52,25 @@ export const BRANDS = [
   { name: 'Bausch + Lomb', handle: 'bausch-lomb', description: 'Bausch + Lomb eye care products' },
   { name: 'Systane', handle: 'systane', description: 'Systane lubricant eye drops' },
   { name: 'Refresh', handle: 'refresh', description: 'Refresh artificial tears' },
-  { name: 'Ocusoft', handle: 'ocusoft', description: 'Ocusoft eyelid cleansers' },
+  { name: 'OCuSOFT', handle: 'ocusoft', description: 'OCuSOFT eyelid cleansers' },
   { name: 'Retaine', handle: 'retaine', description: 'Retaine MGD eye drops' },
   { name: 'Menicon', handle: 'menicon', description: 'Menicon Lacripure saline solution' },
   { name: 'Tangible', handle: 'tangible', description: 'Tangible scleral lens care' },
   { name: 'Heyedrate', handle: 'heyedrate', description: 'Heyedrate eyelid cleanser and supplements' },
   { name: 'EyePromise', handle: 'eyepromise', description: 'EyePromise eye vitamins' },
   { name: 'Cliradex', handle: 'cliradex', description: 'Cliradex eyelid cleansers' },
-  { name: 'Eye Eco', handle: 'eyeeco', description: 'Eye Eco moisture products' },
+  { name: 'Eye Eco', handle: 'eye-eco', description: 'Eye Eco moisture goggles and dry eye products' },
+  { name: 'NovaBay', handle: 'novabay', description: 'NovaBay Avenova antimicrobial spray' },
+  { name: 'Nordic Naturals', handle: 'nordic-naturals', description: 'Nordic Naturals omega-3 supplements' },
+  { name: 'We Love Eyes', handle: 'we-love-eyes', description: 'We Love Eyes tea tree eyelid cleansers' },
+  { name: 'BioTissue', handle: 'biotissue', description: 'BioTissue regenerative eye care' },
+  { name: 'Allergan', handle: 'allergan', description: 'Allergan eye care and dry eye products' },
+  { name: 'Regener-Eyes', handle: 'regener-eyes', description: 'Regener-Eyes biologic eye drops' },
+  { name: 'Zocular', handle: 'zocular', description: 'Zocular eyelid hygiene products' },
+  { name: 'iVIZIA', handle: 'ivizia', description: 'iVIZIA lubricant eye drops' },
+  { name: 'Contamac', handle: 'contamac', description: 'Contamac contact lens materials' },
+  { name: 'Fortifeye', handle: 'fortifeye', description: 'Fortifeye eye vitamins and supplements' },
+  { name: 'Pure Encapsulations', handle: 'pure-encapsulations', description: 'Pure Encapsulations supplements' },
 ];
 
 export const SYMPTOMS = [
@@ -138,12 +149,13 @@ export const INGREDIENTS = [
     description: 'Hyaluronic acid eye drops for superior moisture retention.',
     keywords: ['hyaluronic acid', 'HA', 'moisture', 'hydration'],
   },
-  {
-    title: 'Manuka Honey',
-    handle: 'manuka-honey',
-    description: 'Manuka honey products for natural eyelid care.',
-    keywords: ['manuka honey', 'natural', 'antibacterial'],
-  },
+  // Manuka Honey - hidden until products are available in the catalog
+  // {
+  //   title: 'Manuka Honey',
+  //   handle: 'manuka-honey',
+  //   description: 'Manuka honey products for natural eyelid care.',
+  //   keywords: ['manuka honey', 'natural', 'antibacterial'],
+  // },
 ];
 
 export const MAIN_NAVIGATION = {

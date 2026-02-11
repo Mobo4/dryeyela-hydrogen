@@ -83,7 +83,7 @@ export default function Homepage() {
         <div className="absolute bottom-20 left-10 w-40 h-40 bg-besilos-blue/10 rounded-full blur-3xl"></div>
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-white/20 animate-fade-in">
+            <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-sm text-white rounded-full text-xs font-bold tracking-widest mb-6 border border-white/20 animate-fade-in">
               Science-Backed Eye Care
             </div>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white leading-[1.1] mb-6 animate-fade-in">
@@ -95,13 +95,13 @@ export default function Homepage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
               <Link
                 to={hero.ctaLink}
-                className="inline-block bg-white text-besilos-navy px-10 py-4 font-bold uppercase tracking-wider hover:bg-gray-100 text-center transition-all transform hover:scale-105 active:scale-95 shadow-xl rounded-lg"
+                className="inline-block bg-white text-besilos-navy px-10 py-4 font-bold tracking-wider hover:bg-gray-100 text-center transition-all transform hover:scale-105 active:scale-95 shadow-xl rounded-lg"
               >
                 {hero.ctaText}
               </Link>
               <Link
                 to="/pages/about"
-                className="inline-block bg-transparent text-white border-2 border-white/50 px-10 py-4 font-bold uppercase tracking-wider hover:bg-white/10 text-center transition-all rounded-lg backdrop-blur-sm"
+                className="inline-block bg-transparent text-white border-2 border-white/50 px-10 py-4 font-bold tracking-wider hover:bg-white/10 text-center transition-all rounded-lg backdrop-blur-sm"
               >
                 About DryEyeLA
               </Link>
@@ -115,24 +115,24 @@ export default function Homepage() {
         <div className="max-w-[1600px] mx-auto px-4 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
             <TrustBadge
-              number="4,500+"
-              label="Customer Reviews"
+              number="Rx"
+              label="Doctor Selected"
               linkTo="/pages/about"
             />
             <TrustBadge
-              number="20+"
-              label="Years Experience"
-              linkTo="/pages/about"
+              number="PF"
+              label="Preservative-Free Options"
+              linkTo="/collections/eye-drops-lubricants"
             />
             <TrustBadge
-              number="100K+"
-              label="Monthly Subscriptions"
-              linkTo="/collections/all"
+              number="$100+"
+              label="Free Shipping"
+              linkTo="/pages/shipping-returns"
             />
             <TrustBadge
-              number="100%"
-              label="Doctor Approved"
-              linkTo="/pages/about"
+              number="30-Day"
+              label="Easy Returns"
+              linkTo="/pages/shipping-returns"
             />
           </div>
         </div>
@@ -203,7 +203,7 @@ export default function Homepage() {
           <div className="text-center mt-12">
             <Link 
               to="/collections/all" 
-              className="inline-flex items-center gap-2 text-besilos-blue font-semibold hover:text-besilos-navy transition-colors group text-sm uppercase tracking-wider"
+              className="inline-flex items-center gap-2 text-besilos-blue font-semibold hover:text-besilos-navy transition-colors group text-sm tracking-wider"
             >
               View All Products
               <span className="group-hover:translate-x-1 transition-transform text-lg">→</span>
@@ -216,7 +216,7 @@ export default function Homepage() {
       <section className="py-20 md:py-32 bg-white">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8">
           <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1.5 bg-besilos-gold/10 text-besilos-navy rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+            <span className="inline-block px-4 py-1.5 bg-besilos-gold/10 text-besilos-navy rounded-full text-xs font-bold tracking-widest mb-4">
               Shop by Category
             </span>
             <Heading as="h2" size="display" className="text-besilos-navy mb-4 text-4xl md:text-5xl">
@@ -259,51 +259,58 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* 5. Doctor Testimonials - Eyepromise Style */}
+      {/* 5. Why Choose DryEyeLA - Factual Selling Points */}
       <section className="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8">
           <div className="text-center mb-16">
             <Heading as="h2" size="display" className="text-besilos-navy mb-4 text-4xl md:text-5xl">
-              Trusted by Doctors
+              Why Choose DryEyeLA
             </Heading>
             <Text className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Eye care professionals trust DryEyeLA for their patients' eye health needs.
+              Science-backed eye care you can trust, curated for real results.
             </Text>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                name: 'Dr. Sarah Chen, OD',
-                location: 'Los Angeles, CA',
-                quote: 'DryEyeLA products have been essential in my practice. The quality and effectiveness are unmatched, and my patients consistently see improvement.',
+                title: 'Doctor-Curated Selection',
+                description: 'Every product in our catalog is selected based on clinical evidence and professional eye care standards. We only carry brands trusted by optometrists and ophthalmologists.',
+                icon: (
+                  <svg className="w-10 h-10 text-besilos-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                ),
               },
               {
-                name: 'Dr. Michael Rodriguez, OD, FAAO',
-                location: 'San Francisco, CA',
-                quote: 'I recommend DryEyeLA to all my dry eye patients. The curated selection and clinical backing give me confidence in every product.',
+                title: 'Clinically Proven Products',
+                description: 'We carry preservative-free formulations and pharmaceutical-grade products backed by peer-reviewed research and clinical trials for dry eye relief.',
+                icon: (
+                  <svg className="w-10 h-10 text-besilos-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                ),
               },
               {
-                name: 'Dr. Jennifer Park, OD',
-                location: 'San Diego, CA',
-                quote: 'The comprehensive product range and expert curation make DryEyeLA my go-to resource for patient care. Outstanding results every time.',
+                title: 'Comprehensive Eye Care',
+                description: 'From lubricating drops and lid care to omega-3 supplements and warm compresses, we offer a complete range of products to address every aspect of dry eye management.',
+                icon: (
+                  <svg className="w-10 h-10 text-besilos-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                ),
               },
-            ].map((testimonial, idx) => (
+            ].map((item, idx) => (
               <div key={idx} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                    </svg>
-                  ))}
+                <div className="w-16 h-16 bg-besilos-blue/10 rounded-xl flex items-center justify-center mb-6">
+                  {item.icon}
                 </div>
-                <p className="text-gray-700 text-lg mb-6 italic leading-relaxed">
-                  "{testimonial.quote}"
+                <h3 className="text-xl font-bold text-besilos-navy mb-4">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {item.description}
                 </p>
-                <div className="pt-4 border-t border-gray-100">
-                  <div className="font-bold text-besilos-navy">{testimonial.name}</div>
-                  <div className="text-gray-500 text-sm">{testimonial.location}</div>
-                </div>
               </div>
             ))}
           </div>
@@ -399,7 +406,7 @@ export default function Homepage() {
               </div>
             </div>
             <div className="order-1 lg:order-2">
-              <div className="inline-block px-4 py-1.5 bg-besilos-blue/10 text-besilos-blue rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+              <div className="inline-block px-4 py-1.5 bg-besilos-blue/10 text-besilos-blue rounded-full text-xs font-bold tracking-widest mb-6">
                 {education.badge}
               </div>
               <Heading as="h2" size="display" className="text-besilos-navy mb-6 text-4xl md:text-5xl lg:text-6xl">
@@ -418,7 +425,7 @@ export default function Homepage() {
               </ul>
               <Link
                 to={education.ctaLink}
-                className="inline-flex items-center gap-3 bg-besilos-navy text-white px-8 py-4 font-bold uppercase tracking-wider hover:bg-besilos-navy/90 transition-all rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="inline-flex items-center gap-3 bg-besilos-navy text-white px-8 py-4 font-bold tracking-wider hover:bg-besilos-navy/90 transition-all rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 {education.ctaText}
                 <span className="text-xl">→</span>
@@ -453,7 +460,7 @@ export default function Homepage() {
               />
               <button
                 type="submit"
-                className="bg-besilos-navy text-white px-8 py-4 font-bold uppercase tracking-wider rounded-xl hover:bg-besilos-navy/90 transition-all shadow-lg hover:shadow-xl"
+                className="bg-besilos-navy text-white px-8 py-4 font-bold tracking-wider rounded-xl hover:bg-besilos-navy/90 transition-all shadow-lg hover:shadow-xl"
               >
                 Subscribe
               </button>
@@ -470,7 +477,7 @@ function TrustBadge({ number, label, linkTo }: { number: string; label: string; 
   const content = (
     <>
       <div className="text-4xl md:text-5xl font-bold text-besilos-navy mb-2">{number}</div>
-      <div className="text-sm md:text-base text-gray-600 font-medium uppercase tracking-wider">{label}</div>
+      <div className="text-sm md:text-base text-gray-600 font-medium tracking-wider">{label}</div>
     </>
   );
 
@@ -495,7 +502,7 @@ function FeatureItem({ icon, label, linkTo }: { icon: React.ReactNode; label: st
       <div className="w-20 h-20 flex-shrink-0 flex items-center justify-center bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl shadow-lg group-hover:bg-white/20 group-hover:border-white/40 transition-all duration-300 group-hover:scale-110 mb-4">
         {icon}
       </div>
-      <span className="font-heading font-bold uppercase tracking-wider text-white text-sm md:text-base leading-tight">
+      <span className="font-heading font-bold tracking-wider text-white text-sm md:text-base leading-tight">
         {label}
       </span>
       <span className="text-white/60 text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity">

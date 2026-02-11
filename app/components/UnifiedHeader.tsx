@@ -36,7 +36,7 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                             const parent = target.parentElement;
                             if (parent && !parent.querySelector('.logo-fallback')) {
                                 const fallback = document.createElement('div');
-                                fallback.className = 'logo-fallback text-besilos-navy font-bold text-xl md:text-2xl uppercase tracking-wider';
+                                fallback.className = 'logo-fallback text-besilos-navy font-bold text-xl md:text-2xl tracking-wider';
                                 fallback.textContent = 'DryEyeLA';
                                 parent.appendChild(fallback);
                             }
@@ -45,7 +45,7 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                 </Link>
 
                 {/* Primary Nav with Mega Menus */}
-                <nav className="hidden lg:flex items-center gap-2 font-medium text-besilos-navy text-sm uppercase tracking-widest">
+                <nav className="hidden lg:flex items-center gap-2 font-medium text-besilos-navy text-sm tracking-widest">
                     <Link to="/" className="px-4 py-2 hover:text-besilos-blue transition-colors">Home</Link>
 
                     {/* By Category */}
@@ -118,7 +118,7 @@ export function UnifiedHeader({ openCart, openMenu }: { openCart: () => void; op
                     </button>
 
                     <div className="hidden xl:block ml-4">
-                        <Link to="/collections/all" className="bg-besilos-navy text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-besilos-blue transition-all shadow-md">
+                        <Link to="/collections/all" className="bg-besilos-navy text-white px-6 py-2.5 rounded-full text-xs font-bold tracking-widest hover:bg-besilos-blue transition-all shadow-md">
                             Shop All
                         </Link>
                     </div>

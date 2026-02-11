@@ -7,7 +7,7 @@ import { Text } from '~/components/Text';
 import { Link } from '~/components/Link';
 import { Button } from '~/components/Button';
 import { AddToCartButton } from '~/components/AddToCartButton';
-import { isDiscounted, isNewArrival } from '~/lib/utils';
+import { isDiscounted, isNewArrival, toTitleCase } from '~/lib/utils';
 import { getProductPlaceholder } from '~/lib/placeholders';
 
 // Helper to check if an image URL is from Shopify CDN
@@ -148,7 +148,7 @@ export function ProductCard({
             <Text
               as="label"
               size="fine"
-              className="absolute top-3 right-3 text-right text-xs font-medium tracking-wide uppercase"
+              className="absolute top-3 right-3 text-right text-xs font-medium tracking-wide"
             >
               {cardLabel && (
                 <span className="backdrop-blur-md bg-white/70 text-besilos-navy px-3 py-1 rounded-full shadow-sm border border-besilos-blue/10">
@@ -189,7 +189,7 @@ export function ProductCard({
               )}
             </div>
             <span className="text-xs text-besilos-navy/50 font-medium tracking-wide">
-              {product.vendor}
+              {toTitleCase(product.vendor)}
             </span>
           </div>
         </div>

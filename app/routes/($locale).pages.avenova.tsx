@@ -73,7 +73,7 @@ export default function AvenovaPage() {
                             </p>
                             <a
                                 href="/collections/all"
-                                className="inline-block bg-besilos-navy text-white px-10 py-4 font-bold uppercase tracking-wider hover:bg-besilos-navy/90 transition-all transform hover:scale-105 active:scale-95 shadow-xl"
+                                className="inline-block bg-besilos-navy text-white px-10 py-4 font-bold tracking-wider hover:bg-besilos-navy/90 transition-all transform hover:scale-105 active:scale-95 shadow-xl"
                             >
                                 Shop All
                             </a>
@@ -145,7 +145,7 @@ export default function AvenovaPage() {
                             />
                         </div>
                         <div className="lg:pl-10">
-                            <div className="inline-block px-4 py-1 bg-besilos-blue/10 text-besilos-blue rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+                            <div className="inline-block px-4 py-1 bg-besilos-blue/10 text-besilos-blue rounded-full text-xs font-bold tracking-widest mb-6">
                                 The Gold Standard
                             </div>
                             <Heading as="h2" size="heading" className="text-besilos-navy mb-8 text-4xl md:text-5xl">Why Avenova?</Heading>
@@ -180,7 +180,7 @@ function FeatureItem({ icon, label }: { icon: React.ReactNode; label: string }) 
             <div className="w-14 h-14 flex-shrink-0 flex items-center justify-center bg-white/5 border border-white/20 rounded-2xl shadow-inner backdrop-blur-sm group-hover:bg-white/10 transition-colors">
                 {icon}
             </div>
-            <span className="font-heading font-bold uppercase tracking-widest text-white text-sm md:text-base leading-tight max-w-[180px]">
+            <span className="font-heading font-bold tracking-widest text-white text-sm md:text-base leading-tight max-w-[180px]">
                 {label}
             </span>
         </li>

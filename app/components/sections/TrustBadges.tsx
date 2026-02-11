@@ -23,7 +23,7 @@ export function TrustBadges({
             const content = (
               <>
                 <div className="text-4xl md:text-5xl font-bold text-besilos-navy mb-2">{badge.number}</div>
-                <div className="text-sm md:text-base text-gray-600 font-medium uppercase tracking-wider">{badge.label}</div>
+                <div className="text-sm md:text-base text-gray-600 font-medium tracking-wider">{badge.label}</div>
               </>
             );
 

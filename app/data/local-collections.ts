@@ -182,7 +182,7 @@ function createProduct(
 const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
     createProduct(
         'oasis-tears-plus',
-        'Oasis TEARS Plus',
+        'Oasis Tears Plus',
         'Oasis',
         '29.95',
         'Preservative-free glycerin drops with hyaluronic acid for long-lasting moisture and comfort.',
@@ -192,7 +192,7 @@ const EYE_DROPS_PRODUCTS: CollectionProduct[] = [
     ),
     createProduct(
         'oasis-tears-pf-30ct',
-        'Oasis TEARS PF 30ct',
+        'Oasis Tears PF 30ct',
         'Oasis',
         '24.95',
         'Single-use preservative-free vials perfect for sensitive eyes and contact lens wearers.',
@@ -660,8 +660,8 @@ export const INGREDIENT_PRODUCT_MAPPINGS: Record<string, string[]> = {
     // Hyaluronic Acid: Optase Intense, most eye drops
     'hyaluronic-acid': [
         'optase-intense-drops',  // Optase Intense Drops (0.2% HA)
-        'oasis-tears-plus',      // Oasis TEARS Plus
-        'oasis-tears-pf-30ct',   // Oasis TEARS PF
+        'oasis-tears-plus',      // Oasis Tears Plus
+        'oasis-tears-pf-30ct',   // Oasis Tears PF
         'systane-complete-pf',   // Systane Complete PF
         'systane-ultra-pf',      // Systane Ultra PF
         'refresh-optive-pf'      // Refresh Optive PF

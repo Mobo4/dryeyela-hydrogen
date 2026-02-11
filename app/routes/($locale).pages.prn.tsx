@@ -58,7 +58,7 @@ export default function PRNPage() {
 
                 <div className="max-w-[1600px] mx-auto px-4 md:px-8 relative z-10 grid md:grid-cols-2 gap-12 items-center">
                     <div>
-                        <span className="inline-block py-1 px-3 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-widest mb-6">
+                        <span className="inline-block py-1 px-3 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold tracking-widest mb-6">
                             Doctor Recommended
                         </span>
                         <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
@@ -162,7 +162,7 @@ function FeatureItem({ icon, label }: { icon: React.ReactNode; label: string }) 
             <div className="text-blue-500">
                 {icon}
             </div>
-            <span className="font-bold text-[#152c52] text-sm md:text-base uppercase tracking-wider">
+            <span className="font-bold text-[#152c52] text-sm md:text-base tracking-wider">
                 {label}
             </span>
         </li>

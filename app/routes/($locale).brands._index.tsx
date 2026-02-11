@@ -63,14 +63,10 @@ export default function BrandsIndexPage() {
       {/* Trust Badges */}
       <TrustBadges
         badges={[
-          {number: '100%', label: 'Doctor Approved', linkTo: '/pages/about'},
-          {number: '20+', label: 'Years Experience', linkTo: '/pages/about'},
-          {number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about'},
-          {
-            number: '100K+',
-            label: 'Monthly Subscriptions',
-            linkTo: '/collections/all',
-          },
+          {number: 'Rx', label: 'Doctor Selected', linkTo: '/pages/about'},
+          {number: 'PF', label: 'Preservative-Free Options', linkTo: '/collections/eye-drops-lubricants'},
+          {number: '$100+', label: 'Free Shipping', linkTo: '/pages/shipping-returns'},
+          {number: '30-Day', label: 'Easy Returns', linkTo: '/pages/shipping-returns'},
         ]}
       />
 
@@ -115,7 +111,7 @@ export default function BrandsIndexPage() {
                   </Text>
 
                   {/* Shop Now Link */}
-                  <div className="flex items-center gap-2 text-besilos-blue font-semibold uppercase tracking-wider text-sm group-hover:gap-3 transition-all">
+                  <div className="flex items-center gap-2 text-besilos-blue font-semibold tracking-wider text-sm group-hover:gap-3 transition-all">
                     <span>Shop Now</span>
                     <svg
                       className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
@@ -204,13 +200,13 @@ export default function BrandsIndexPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/pages/contact"
-                className="inline-block bg-besilos-navy text-white px-8 py-4 font-bold uppercase tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
+                className="inline-block bg-besilos-navy text-white px-8 py-4 font-bold tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
               >
                 Get Recommendations
               </Link>
               <Link
                 to="/collections/all"
-                className="inline-block bg-transparent text-besilos-navy border-2 border-besilos-navy px-8 py-4 font-bold uppercase tracking-wider rounded-lg hover:bg-gray-50 transition-all"
+                className="inline-block bg-transparent text-besilos-navy border-2 border-besilos-navy px-8 py-4 font-bold tracking-wider rounded-lg hover:bg-gray-50 transition-all"
               >
                 Browse All Products
               </Link>

@@ -44,10 +44,10 @@ export default function SymptomsIndex() {
       {/* Trust Badges */}
       <TrustBadges
         badges={[
-          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
-          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
-          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
-          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+          { number: 'Rx', label: 'Doctor Selected', linkTo: '/pages/about' },
+          { number: 'PF', label: 'Preservative-Free Options', linkTo: '/collections/eye-drops-lubricants' },
+          { number: '$100+', label: 'Free Shipping', linkTo: '/pages/shipping-returns' },
+          { number: '30-Day', label: 'Easy Returns', linkTo: '/pages/shipping-returns' },
         ]}
       />
 

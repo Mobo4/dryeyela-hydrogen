@@ -39,22 +39,40 @@ function root({
       noIndex: false,
       noFollow: false,
     },
-    jsonLd: {
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: shop.name || 'DryEyeLA',
-      logo: shop.brand?.logo?.image?.url,
-      sameAs: [
-        'https://www.instagram.com/dryeyela',
-        'https://www.facebook.com/dryeyela',
-      ],
-      url,
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: `${url}search?q={search_term}`,
-        query: "required name='search_term'",
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: shop.name || 'DryEyeLA',
+        logo: shop.brand?.logo?.image?.url,
+        sameAs: [
+          'https://www.instagram.com/dryeyela',
+          'https://www.facebook.com/dryeyela',
+        ],
+        url,
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: `${url}search?q={search_term}`,
+          query: "required name='search_term'",
+        },
       },
-    },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Store',
+        name: 'DryEyeLA',
+        description:
+          'Doctor-recommended dry eye products. Shop preservative-free eye drops, omega-3 supplements, eyelid cleansers, and heated eye masks from trusted brands.',
+        url: 'https://dryeyela.com',
+        logo: shop.brand?.logo?.image?.url,
+        sameAs: [
+          'https://www.instagram.com/dryeyela',
+          'https://www.facebook.com/dryeyela',
+        ],
+        priceRange: '$$',
+        currenciesAccepted: 'USD',
+        paymentAccepted: 'Credit Card, Debit Card, Shopify Pay, Apple Pay, Google Pay',
+      },
+    ],
   };
 }
 
@@ -461,7 +479,7 @@ function policies({
   return {
     title: 'Policies',
     titleTemplate: '%s | Policies',
-    description: 'Hydroge store policies',
+    description: 'DryEyeLA store policies',
     jsonLd: [
       {
         '@context': 'https://schema.org',

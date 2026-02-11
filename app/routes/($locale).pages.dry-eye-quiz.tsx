@@ -189,16 +189,16 @@ function getResults(score: number): ResultData {
 
 export default function DryEyeQuizPage() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [answers, setAnswers] = useState<Record<string, {value: string; points: number}>>({});
   const [showResults, setShowResults] = useState(false);
 
-  const totalScore = Object.values(answers).reduce((sum, val) => sum + val, 0);
+  const totalScore = Object.values(answers).reduce((sum, a) => sum + a.points, 0);
   const progress = ((currentStep + 1) / QUESTIONS.length) * 100;
   const currentQuestion = QUESTIONS[currentStep];
   const isAnswered = currentQuestion && answers[currentQuestion.id] !== undefined;
 
-  function handleSelect(questionId: string, points: number) {
-    setAnswers((prev) => ({...prev, [questionId]: points}));
+  function handleSelect(questionId: string, value: string, points: number) {
+    setAnswers((prev) => ({...prev, [questionId]: {value, points}}));
   }
 
   function goNext() {
@@ -358,14 +358,13 @@ export default function DryEyeQuizPage() {
 
             <div className="space-y-3">
               {currentQuestion.options.map((option) => {
-                const isSelected = answers[currentQuestion.id] === option.points &&
-                  Object.keys(answers).includes(currentQuestion.id);
+                const isSelected = answers[currentQuestion.id]?.value === option.value;
                 return (
                   <button
                     key={option.value}
                     type="button"
                     onClick={() =>
-                      handleSelect(currentQuestion.id, option.points)
+                      handleSelect(currentQuestion.id, option.value, option.points)
                     }
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                       isSelected

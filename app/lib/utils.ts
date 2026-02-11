@@ -298,6 +298,108 @@ export function parseAsCurrency(value: number, locale: I18nLocale) {
  * @param url
  * @returns `true` if local `false`if external domain
  */
+/**
+ * Converts a vendor/brand name to proper title case.
+ * Handles ALL CAPS names from Shopify (e.g., "OPTASE" -> "Optase").
+ * Preserves special casing for known brand names and plus signs.
+ */
+const BRAND_DISPLAY_NAMES: Record<string, string> = {
+  // PRN family
+  'prn': 'PRN',
+  'prn vision': 'PRN Vision',
+  'prn vision group': 'PRN Vision',
+  'prn omega': 'PRN Omega',
+  'prn - physician recommended nutriceuticals': 'PRN - Physician Recommended Nutriceuticals',
+  // OcuSoft family
+  'ocusoft': 'OcuSoft',
+  'ocu-soft': 'OcuSoft',
+  'ocusoft retaine': 'OcuSoft Retaine',
+  // MacuHealth
+  'macuhealth': 'MacuHealth',
+  'macu health': 'MacuHealth',
+  // EyePromise / ZeaVision
+  'eyepromise': 'EyePromise',
+  'eye promise': 'EyePromise',
+  'zeavision': 'ZeaVision',
+  // Bausch + Lomb
+  'bausch + lomb': 'Bausch + Lomb',
+  'bausch & lomb': 'Bausch + Lomb',
+  'bausch and lomb': 'Bausch + Lomb',
+  'bausch+lomb': 'Bausch + Lomb',
+  'b+l': 'Bausch + Lomb',
+  'b&l': 'Bausch + Lomb',
+  // Eye Eco
+  'eye eco': 'Eye Eco',
+  'eyeeco': 'Eye Eco',
+  'eye-eco': 'Eye Eco',
+  // NovaBay
+  'novabay': 'NovaBay',
+  'nova bay': 'NovaBay',
+  // BioTissue / Cliradex
+  'biotissue': 'BioTissue',
+  'bio-tissue': 'BioTissue',
+  // Heyedrate / Eye Love
+  'heyedrate': 'Heyedrate',
+  'eye love': 'Eye Love',
+  'eyelove': 'Eye Love',
+  // Contamac
+  'contamac': 'Contamac',
+  // Eyevance
+  'eyevance': 'Eyevance',
+  // Lunovus
+  'lunovus': 'Lunovus',
+  // Tangible
+  'tangible': 'Tangible',
+  'tangible science': 'Tangible Science',
+  'tangible hydra-peg': 'Tangible Hydra-PEG',
+  // Bruder
+  'bruder': 'Bruder',
+  'bruder healthcare': 'Bruder Healthcare',
+  // ScienceBased Health
+  'sciencebased health': 'ScienceBased Health',
+  // Oasis Medical
+  'oasis medical': 'Oasis Medical',
+  'oasis': 'Oasis',
+  'oasis tears': 'Oasis Tears',
+  // iVIZIA
+  'ivizia': 'iVIZIA',
+  // NuSight Medical
+  'nusight medical': 'NuSight Medical',
+  // Abbreviations
+  'hydra-peg': 'Hydra-PEG',
+  'dha': 'DHA',
+  'epa': 'EPA',
+};
+
+export function toTitleCase(name: string | null | undefined): string {
+  if (!name) return '';
+
+  // Check for known brand display names (case-insensitive)
+  const lowerName = name.toLowerCase().trim();
+  if (BRAND_DISPLAY_NAMES[lowerName]) {
+    return BRAND_DISPLAY_NAMES[lowerName];
+  }
+
+  // Generic title case: capitalize first letter of each word, lowercase the rest
+  return name
+    .toLowerCase()
+    .split(/(\s+)/)
+    .map((word) => {
+      if (word.trim() === '') return word; // preserve whitespace
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join('');
+}
+
+/**
+ * Normalizes vendor names from Shopify.
+ * Converts ALL CAPS vendor names to proper display format.
+ * Alias for toTitleCase with vendor-specific handling.
+ */
+export function formatVendorName(vendor: string): string {
+  return toTitleCase(vendor);
+}
+
 export function isLocalPath(url: string) {
   try {
     // We don't want to redirect cross domain,

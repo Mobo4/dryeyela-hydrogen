@@ -118,7 +118,7 @@ export default function Search() {
               className="w-full px-6 py-4 pr-24 rounded-full border-2 border-gray-200 focus:border-besilos-blue bg-white text-besilos-navy placeholder:text-gray-400 shadow-lg"
             />
             <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-besilos-navy text-white font-bold uppercase tracking-wider rounded-full hover:bg-besilos-navy/90 transition-colors shadow-lg"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-besilos-navy text-white font-bold tracking-wider rounded-full hover:bg-besilos-navy/90 transition-colors shadow-lg"
               type="submit"
             >
               Search
@@ -136,10 +136,10 @@ export default function Search() {
       {/* Trust Badges */}
       <TrustBadges
         badges={[
-          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
-          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
-          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
-          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+          { number: 'Rx', label: 'Doctor Selected', linkTo: '/pages/about' },
+          { number: 'PF', label: 'Preservative-Free Options', linkTo: '/collections/eye-drops-lubricants' },
+          { number: '$100+', label: 'Free Shipping', linkTo: '/pages/shipping-returns' },
+          { number: '30-Day', label: 'Easy Returns', linkTo: '/pages/shipping-returns' },
         ]}
       />
 

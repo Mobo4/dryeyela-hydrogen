@@ -145,7 +145,7 @@ export function HeroSection({
             <Text
               as="p"
               size="fine"
-              className={`${colors.subtitle} uppercase tracking-widest mb-3`}
+              className={`${colors.subtitle} tracking-widest mb-3`}
             >
               {subtitle}
             </Text>

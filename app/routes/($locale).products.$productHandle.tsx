@@ -258,7 +258,7 @@ export default function GenericProductPage() {
             {/* Variant Selector */}
             {product.variants && product.variants.length > 0 && selectedVariant && (
               <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-4">Select Supply</h3>
+                <h3 className="text-sm font-bold text-slate-900 tracking-widest mb-4">Select Supply</h3>
                 <VariantSelector
                   variants={product.variants as any}
                   selectedVariant={selectedVariant as any}
@@ -303,7 +303,7 @@ export default function GenericProductPage() {
               </blockquote>
               <div>
                 <cite className="font-bold text-lg not-italic block">{product.doctorNote.author}</cite>
-                <span className="text-blue-300 text-sm uppercase tracking-wider">{product.doctorNote.role}</span>
+                <span className="text-blue-300 text-sm tracking-wider">{product.doctorNote.role}</span>
               </div>
             </div>
           </div>
@@ -405,7 +405,7 @@ export default function GenericProductPage() {
                   alt="Comparison Chart"
                   className="w-full h-auto rounded-lg"
                 />
-                <p className="text-center text-xs text-slate-400 mt-4 uppercase tracking-wider">Market Comparison</p>
+                <p className="text-center text-xs text-slate-400 mt-4 tracking-wider">Market Comparison</p>
               </div>
             )}
           </div>
@@ -435,10 +435,10 @@ export default function GenericProductPage() {
       {/* Trust Badges */}
       <TrustBadges
         badges={[
-          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
-          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
-          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
-          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+          { number: 'Rx', label: 'Doctor Selected', linkTo: '/pages/about' },
+          { number: 'PF', label: 'Preservative-Free Options', linkTo: '/collections/eye-drops-lubricants' },
+          { number: '$100+', label: 'Free Shipping', linkTo: '/pages/shipping-returns' },
+          { number: '30-Day', label: 'Easy Returns', linkTo: '/pages/shipping-returns' },
         ]}
       />
 

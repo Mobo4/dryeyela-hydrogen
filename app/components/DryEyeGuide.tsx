@@ -15,7 +15,7 @@ export function DryEyeGuide() {
 
       <div className="w-full max-w-4xl mx-auto text-center relative z-10 space-y-8 px-4">
         <div className="space-y-4">
-          <Text className="text-besilos-primary font-bold tracking-wider uppercase text-sm">
+          <Text className="text-besilos-primary font-bold tracking-wider text-sm">
             Free Educational Resource
           </Text>
           <Heading as="h2" size="display" className="text-white">

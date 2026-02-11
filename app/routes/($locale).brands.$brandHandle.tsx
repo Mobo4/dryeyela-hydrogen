@@ -20,12 +20,27 @@ import {PRODUCTS_BY_FILTER_QUERY} from '~/data/queries';
  * matching when vendors use different naming conventions.
  */
 const BRAND_VENDOR_MAP: Record<string, string[]> = {
-  prn: ['PRN', 'PRN Vision', 'PRN Omega'],
+  // --- Existing brands (updated with full duplicate-casing coverage) ---
+  prn: [
+    'PRN',
+    'PRN Vision',
+    'PRN Omega',
+    'PRN - PHYSICIAN RECOMMENDED NUTRICEUTICALS',
+    'PRN - Physician Recommended Nutriceuticals',
+  ],
   optase: ['Optase', 'OPTASE', 'optase', 'OPTASE Ltd', 'Optase Ltd'],
-  'oasis-tears': ['Oasis Tears', 'Oasis', 'OASIS', 'Oasis Medical', 'OasisTears'],
+  'oasis-tears': [
+    'Oasis Tears',
+    'Oasis',
+    'OASIS',
+    'Oasis Medical',
+    'OASIS MEDICAL',
+    'OasisTears',
+  ],
   macuhealth: ['MacuHealth', 'Macuhealth', 'MACUHEALTH', 'Macu Health'],
   bruder: ['Bruder', 'BRUDER', 'Bruder Healthcare', 'Bruder Moist Heat'],
-  avenova: ['Avenova', 'AVENOVA', 'NovaBay'],
+  avenova: ['Avenova', 'AVENOVA'],
+  novabay: ['NovaBay', 'NOVABAY', 'Nova Bay'],
   'bausch-lomb': [
     'Bausch + Lomb',
     'Bausch & Lomb',
@@ -34,9 +49,11 @@ const BRAND_VENDOR_MAP: Record<string, string[]> = {
     'B&L',
     'BAUSCH + LOMB',
     'BAUSCH & LOMB',
+    'BAUSCH+LOMB',
   ],
   systane: ['Systane', 'SYSTANE', 'Alcon', 'ALCON', 'Alcon Systane'],
-  refresh: ['Refresh', 'REFRESH', 'Allergan', 'ALLERGAN', 'Allergan Refresh'],
+  refresh: ['Refresh', 'REFRESH', 'Allergan Refresh'],
+  allergan: ['Allergan', 'ALLERGAN'],
   ocusoft: ['Ocusoft', 'OCuSOFT', 'OCUSOFT', 'OcuSoft', 'Ocu-Soft'],
   retaine: ['Retaine', 'RETAINE', 'OCuSOFT Retaine'],
   menicon: ['Menicon', 'MENICON', 'Menicon Co'],
@@ -45,7 +62,50 @@ const BRAND_VENDOR_MAP: Record<string, string[]> = {
   eyepromise: ['EyePromise', 'Eyepromise', 'EYEPROMISE', 'Eye Promise', 'ZeaVision'],
   cliradex: ['Cliradex', 'CLIRADEX', 'Bio-Tissue', 'BioTissue'],
   'eye-eco': ['Eye Eco', 'EyeEco', 'Eyeeco', 'EYEECO', 'Eye-Eco'],
-  eyeeco: ['Eye Eco', 'EyeEco', 'Eyeeco', 'EYEECO', 'Eye-Eco'],
+
+  // --- Duplicate-casing consolidation groups ---
+  contamac: ['Contamac', 'CONTAMAC'],
+  eyevance: ['Eyevance', 'EYEVANCE'],
+  lunovus: ['Lunovus', 'LUNOVUS'],
+  'nusight-medical': ['NuSight Medical', 'Nusight Medical', 'NUSIGHT MEDICAL'],
+  'sciencebased-health': ['ScienceBased Health', 'SCIENCEBASED HEALTH'],
+
+  // --- Additional vendors not previously mapped ---
+  'johnson-and-johnson': ['Johnson and Johnson', 'Johnson & Johnson', 'J&J'],
+  'i-med-pharma': ['I-Med Pharma', 'I-MED PHARMA', 'IMed Pharma'],
+  fortifeye: ['Fortifeye', 'FORTIFEYE', 'Fortifeye Vitamins'],
+  'twenty-twenty': ['Twenty Twenty', 'TWENTY TWENTY', '20/20'],
+  ivizia: ['iVIZIA', 'IVIZIA', 'Ivizia'],
+  'natural-ophthalmics': ['Natural Ophthalmics', 'NATURAL OPHTHALMICS'],
+  'the-eye-doctor': ['The Eye Doctor', 'THE EYE DOCTOR'],
+  'eyes-are-the-story': ['Eyes are the Story', 'EYES ARE THE STORY'],
+  'nordic-naturals': ['Nordic Naturals', 'NORDIC NATURALS'],
+  'we-love-eyes': ['We Love Eyes', 'WE LOVE EYES'],
+  'focus-vitamins': ['Focus Vitamins', 'FOCUS VITAMINS'],
+  dmv: ['DMV', 'Dmv'],
+  'dry-eye-drink': ['Dry Eye Drink', 'DRY EYE DRINK'],
+  eyegiene: ['Eyegiene', 'EYEGIENE'],
+  healthycell: ['HealthyCell', 'HEALTHYCELL', 'Healthycell'],
+  'hydrus-performance': ['Hydrus Performance', 'HYDRUS PERFORMANCE', 'Hydrus'],
+  myboclean: ['MyboClean', 'MYBOCLEAN', 'Myboclean'],
+  noveha: ['Noveha', 'NOVEHA'],
+  'regener-eyes': ['Regener-Eyes', 'REGENER-EYES', 'RegenerEyes'],
+  'm2-biologics': ['M2 Biologics', 'M2 BIOLOGICS'],
+  zocular: ['Zocular', 'ZOCULAR'],
+  nulids: ['Nulids', 'NULIDS', 'NuLids'],
+  emc: ['EMC', 'Emc'],
+  'wizard-research': ['Wizard Research', 'WIZARD RESEARCH'],
+  'dry-eye-rescue': ['Dry Eye Rescue', 'DRY EYE RESCUE'],
+  eyetamins: ['Eyetamins', 'EYETAMINS'],
+  'i-chek': ['I-Chek', 'I-CHEK', 'iChek'],
+  visuscience: ['VisuScience', 'VISUSCIENCE', 'Visuscience'],
+  nanodropper: ['Nanodropper', 'NANODROPPER'],
+  'sunnie-natural': ['Sunnie Natural', 'SUNNIE NATURAL'],
+  melcare: ['Melcare', 'MELCARE'],
+  purifeyed: ['Purifeyed', 'PURIFEYED'],
+  'tear-restore': ['Tear Restore', 'TEAR RESTORE', 'TearRestore'],
+  'pure-encapsulations': ['Pure Encapsulations', 'PURE ENCAPSULATIONS'],
+  biotissue: ['BioTissue', 'BIOTISSUE', 'Bio-Tissue', 'Biotissue'],
 };
 
 /**
@@ -207,7 +267,7 @@ export default function BrandPage() {
               </Text>
               <Link
                 to="/brands"
-                className="inline-block bg-besilos-navy text-white px-6 py-3 font-bold uppercase tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
+                className="inline-block bg-besilos-navy text-white px-6 py-3 font-bold tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
               >
                 Browse All Brands
               </Link>
@@ -249,13 +309,13 @@ export default function BrandPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/pages/contact"
-              className="inline-block bg-white text-besilos-navy px-6 py-3 font-bold uppercase tracking-wider rounded-lg hover:bg-gray-100 transition-all shadow-lg text-sm"
+              className="inline-block bg-white text-besilos-navy px-6 py-3 font-bold tracking-wider rounded-lg hover:bg-gray-100 transition-all shadow-lg text-sm"
             >
               Get Recommendations
             </Link>
             <Link
               to="/collections/all"
-              className="inline-block bg-transparent text-white border-2 border-white/50 px-6 py-3 font-bold uppercase tracking-wider rounded-lg hover:bg-white/10 transition-all text-sm"
+              className="inline-block bg-transparent text-white border-2 border-white/50 px-6 py-3 font-bold tracking-wider rounded-lg hover:bg-white/10 transition-all text-sm"
             >
               Browse All Products
             </Link>

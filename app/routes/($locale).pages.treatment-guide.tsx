@@ -143,7 +143,7 @@ export default function TreatmentGuidePage() {
                       <treatment.icon />
                     </div>
                     <div>
-                      <span className="text-sm font-bold text-besilos-sage uppercase tracking-wider">
+                      <span className="text-sm font-bold text-besilos-sage tracking-wider">
                         Step {index + 1}
                       </span>
                       <h3 className="text-2xl md:text-3xl font-bold text-besilos-navy">

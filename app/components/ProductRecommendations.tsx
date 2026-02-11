@@ -39,7 +39,7 @@ export function ProductRecommendations({ products }: ProductRecommendationsProps
                                 <p className="text-sm text-slate-500 mb-3">{product.subtitle}</p>
                                 <div className="flex justify-between items-center">
                                     <span className="font-bold text-[#152c52]">${product.price}</span>
-                                    <span className="text-xs text-[#356ecb] font-semibold uppercase tracking-wider">View Product</span>
+                                    <span className="text-xs text-[#356ecb] font-semibold tracking-wider">View Product</span>
                                 </div>
                             </div>
                         </Link>

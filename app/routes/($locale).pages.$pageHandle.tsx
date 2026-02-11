@@ -93,10 +93,10 @@ export default function Page() {
       {/* Trust Badges */}
       <TrustBadges
         badges={[
-          { number: '100%', label: 'Doctor Approved', linkTo: '/pages/about' },
-          { number: '20+', label: 'Years Experience', linkTo: '/pages/about' },
-          { number: '4,500+', label: 'Customer Reviews', linkTo: '/pages/about' },
-          { number: '100K+', label: 'Monthly Subscriptions', linkTo: '/collections/all' },
+          { number: 'Rx', label: 'Doctor Selected', linkTo: '/pages/about' },
+          { number: 'PF', label: 'Preservative-Free Options', linkTo: '/collections/eye-drops-lubricants' },
+          { number: '$100+', label: 'Free Shipping', linkTo: '/pages/shipping-returns' },
+          { number: '30-Day', label: 'Easy Returns', linkTo: '/pages/shipping-returns' },
         ]}
       />
 
@@ -127,7 +127,7 @@ export default function Page() {
               {ctaContent.primaryCTA && (
                 <Link
                   to={ctaContent.primaryCTA.to}
-                  className="inline-block bg-besilos-navy text-white px-8 py-4 font-bold uppercase tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
+                  className="inline-block bg-besilos-navy text-white px-8 py-4 font-bold tracking-wider rounded-lg hover:bg-besilos-navy/90 transition-all shadow-lg"
                 >
                   {ctaContent.primaryCTA.label}
                 </Link>
@@ -135,7 +135,7 @@ export default function Page() {
               {ctaContent.secondaryCTA && (
                 <Link
                   to={ctaContent.secondaryCTA.to}
-                  className="inline-block bg-transparent text-besilos-navy border-2 border-besilos-navy px-8 py-4 font-bold uppercase tracking-wider rounded-lg hover:bg-gray-50 transition-all"
+                  className="inline-block bg-transparent text-besilos-navy border-2 border-besilos-navy px-8 py-4 font-bold tracking-wider rounded-lg hover:bg-gray-50 transition-all"
                 >
                   {ctaContent.secondaryCTA.label}
                 </Link>
